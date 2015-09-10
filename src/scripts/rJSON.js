@@ -1,0 +1,249 @@
+// generate all graph tables to allow early references
+module.exports = (function() {
+    "use strict";
+    // allows cloning of primitive value objects & arrays
+    // TODO: should be an external dependency that is required
+    function deepCopy(o) {
+        var newO,
+            i;
+
+        if (typeof o !== "object" || !o) {
+            return o;
+        } else if (Object.prototype.toString.apply(o) === "[object Array]") {
+            newO = [];
+            for (i = 0; i < o.length; i += 1) {
+                newO[i] = deepCopy(o[i]);
+            }
+            return newO;
+        } else {
+            newO = {};
+            for (i in o) {
+                if (o.hasOwnProperty(i)) {
+                    newO[i] = deepCopy(o[i]);
+                }
+            }
+            return newO;
+        }
+    }
+
+    function getData(id, pk, data) {
+        var o,
+            i;
+
+        if (id) { // return specific data object
+            i = data.length;
+            while (i) {
+                i--;
+                if (data[i][pk] === id) {
+                    o = data[i];
+                    i = 0;
+                }
+            }
+            return o;
+        } else if (id === undefined) { // return all data objects
+            return data;
+        } else if (id === null) {
+            return null;
+        }
+    }
+
+    function makeData(model, d) {
+        // aggregates should be non-enumerable (simplifies updating own data)
+        var o,
+            missingFields = [];
+
+        // validate that all necessary fields are provided
+        if (!Object.keys(model.fields).every(function(key) {
+                if (!model.fields[key].allowNull && !model.fields[key].hasOwnProperty("defaultValue")) {
+                    if (!d[key]) {
+                        missingFields.push(key);
+                        return false;
+                    }
+                }
+
+                return true;
+            })) {
+            throw Error ("data creation rejected, mandatory fields not provided:\n" + missingFields);
+        }
+
+        //data.push(o);
+        return dataFactory(model, d);;
+    }
+
+    function getRequiredFields(model) {
+        var req = [];
+
+        // get models' own required fields
+        Object.keys(model.fields).forEach(function(key) {
+            if (!model.fields[key].allowNull && model.fields[key].defaultValue === undefined) {
+                req.push(key);
+            }
+        });
+
+        // what about "extends" relations
+        if (model.extends) {
+            // remove the local field that is the extension point
+            req = req.filter(function(r) {
+                return r !== model.extends.local;
+            });
+
+            // recursively get required fields
+            req = req.concat(db[model.extends.table].requiredFields());
+        }
+
+        return req;
+    }
+
+    function dataTypeChecker() {
+
+    }
+
+    function dataFactory(model, d) {
+        var data = {},
+            face;
+
+        // generate public face and its prototype
+        if (model.extends) {
+            // make sure prototype has required data with proper key names
+            d[model.extends.foreign] = d[model.extends.local];
+
+            // create the prototype
+            face = Object.create(db[model.extends.table].post(d));
+        } else {
+            face = Object.create(null);
+        }
+
+        // generate public face field descriptors
+        Object.keys(model.fields).forEach(function(key) {
+            var field = model.fields[key];
+
+            // create initial property
+            Object.defineProperty(face, key, {
+                enumerable: true,
+                configurable: true
+            });
+
+            // creating field "getter"
+            if (model.extends && model.extends.local === key) {
+                // add getter for the parent data
+                Object.defineProperty(face, key, {
+                    get: function() {
+                        return Object.getPrototypeOf(this)[model.extends.foreign];
+                    },
+                    enumerable: true
+                });
+            } else {
+                // add getter for own data
+                Object.defineProperty(face, key, {
+                    get: function() {
+                        return data[key];
+                    }
+                });
+            }
+
+            // creating field "setter"
+            // usually only auto-increment fields are read-only
+            if (field.writable) {
+                Object.defineProperty(face, key, {
+                    set: function(v) {
+                        var type = field.dataType;
+                        // TODO: create external dataType controller to make code dryer
+                        data[key] = v;
+                    }
+                });
+            }
+        });
+
+        // set initial data
+        Object.keys(face).forEach(function(key) {
+            var value;
+
+            // we already filtered for mandatory fields, so we can assume defaultValues
+            if (d[key] === undefined) {
+                value = model.fields[key].defaultValue;
+            } else {
+                value = d[key];
+            }
+
+            if (Object.getOwnPropertyDescriptor(face, key).writable) {
+                face[key] = value;
+            } else {
+                // set data directly since "set" is blocking on face
+                data[key] = value;
+            }
+        });
+
+        // add aggregates to face
+        if (model.aggregates) {
+            model.aggregates.forEach(function(agg) {
+                // add alias as property
+                if (agg.cardinality === "many") {
+                    Object.defineProperty(face, agg.alias, {
+                        get: function() {
+                            return db[agg.foreignTable].get().filter(function(d) {
+                                return d[agg.foreignField] === this[agg.localField];
+                            }, this);
+                        },
+                        configurable: true,
+                        enumerable: true
+                    });
+                } else {
+                    Object.defineProperty(face, agg.alias, {
+                        get: function() {
+                            return db[agg.foreignTable].get(this[agg.localField]);
+                        },
+                        configurable: true,
+                        enumerable: true
+                    });
+                }
+            });
+        }
+
+        // freeze and return
+        return Object.freeze(face);
+    }
+
+    function tableFactory(m) {
+        var data = [],
+            model = deepCopy(m);
+
+        return {
+            get: function(id) {
+                return getData(id, model.primary, data);
+            },
+            post: function(d) {
+                var obj;
+
+                // make sure pk is unique
+                if (data.some(function(existing) {
+                        return existing[model.primary] === d[model.primary];
+                    })) {
+                    throw Error ("provided " + model.primary + ": " + d[model.primary] + " is already in use");
+                } else {
+                    obj = makeData(model, d);
+                    data.push(obj);
+                    return obj;
+                }
+            },
+            requiredFields: function() {
+                return getRequiredFields(model);
+            }
+        };
+    }
+
+    // builds the relational JSON database
+    function buildDatabase(graph) {
+        var db = {};
+
+        // create db tables
+        Object.keys(graph).forEach(function(key) {
+            db[key] = tableFactory(graph[key]);
+        });
+
+        return db;
+    }
+
+    return function(graph) {
+        return buildDatabase(graph);
+    };
+}());

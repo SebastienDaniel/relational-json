@@ -1,0 +1,45 @@
+{
+  "name": "sebastiendaniel-rjson",
+  "description": "Relation data model for JSON objects",
+  "keywords": [
+    "relational",
+    "data",
+    "model",
+    "json"
+  ],
+  "version": "0.0.1",
+  "author": {
+    "name": "Sebastien Daniel",
+    "email": "info@sebastiendaniel.ca",
+    "url": "http://www.sebastiendaniel.ca/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SebastienDaniel/rJSON.git"
+  },
+  "bugs": {
+    "url": "https://www.github.com/SebastienDaniel/rJSON/issues"
+  },
+  "license": {
+    "type": "MIT License",
+    "url": "https://www.github.com/SebastienDaniel/rJSON/license"
+  },
+  "main": "rJSON.min.js",
+  "files": [
+    "rJSON.min.js",
+    "test",
+    "license",
+    "README.md"
+  ],
+  "private": false,
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "grunt": "^0.4.5",
+    "grunt-browserify": "^4.0.0",
+    "grunt-contrib-jshint": "^0.11.0",
+    "grunt-contrib-uglify": "^0.8.0",
+    "grunt-jscs": "^1.5.0",
+    "grunt-mocha-test": "^0.12.7",
+    "mocha": "^2.3.2"
+  }
+}

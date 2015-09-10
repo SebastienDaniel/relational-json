@@ -1,0 +1,27 @@
+{
+  "browser": true,
+  "curly": true,
+  "eqeqeq": true,
+  "eqnull": true,
+  "esnext": true,
+  "immed": true,
+  "newcap": true,
+  "strict": true,
+  "freeze": true,
+  "funcscope": true,
+  "futurehostile": true,
+  "latedef": true,
+  "noarg": true,
+  "node": true,
+  "nonew": true,
+  "undef": true,
+  //"unused": true,
+  "worker": true,
+  "globals": {
+    "ajax": true,
+    "ERP": true,
+    "ct": true,
+    "_": true,
+    "Mustache": true
+  }
+}
