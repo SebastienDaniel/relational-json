@@ -67,7 +67,7 @@ module.exports = (function() {
         }
 
         //data.push(o);
-        return dataFactory(model, d);;
+        return dataFactory.call(this, model, d);
     }
 
     function getRequiredFields(model) {
@@ -100,8 +100,10 @@ module.exports = (function() {
 
     function dataFactory(model, d) {
         var data = {},
+            db = this,
             face;
 
+        console.log(this);
         // generate public face and its prototype
         if (model.extends) {
             // make sure prototype has required data with proper key names
@@ -205,6 +207,7 @@ module.exports = (function() {
 
     function tableFactory(m) {
         var data = [],
+            db = this,
             model = deepCopy(m);
 
         return {
@@ -220,13 +223,13 @@ module.exports = (function() {
                     })) {
                     throw Error ("provided " + model.primary + ": " + d[model.primary] + " is already in use");
                 } else {
-                    obj = makeData(model, d);
+                    obj = makeData.call(db, model, d);
                     data.push(obj);
                     return obj;
                 }
             },
             requiredFields: function() {
-                return getRequiredFields(model);
+                return getRequiredFields.call(db, model);
             }
         };
     }
@@ -237,7 +240,7 @@ module.exports = (function() {
 
         // create db tables
         Object.keys(graph).forEach(function(key) {
-            db[key] = tableFactory(graph[key]);
+            db[key] = tableFactory.call(db, graph[key]);
         });
 
         return db;
