@@ -103,7 +103,6 @@ module.exports = (function() {
             db = this,
             face;
 
-        console.log(this);
         // generate public face and its prototype
         if (model.extends) {
             // make sure prototype has required data with proper key names
