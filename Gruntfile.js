@@ -43,6 +43,5 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-browserify");
     grunt.loadNpmTasks("grunt-mocha-test");
 
-    grunt.registerTask("build", ["test", "uglify:prod"]);
     grunt.registerTask("test", ["jshint", "jscs", "mochaTest"]);
 };
