@@ -6,7 +6,6 @@
 module.exports = (function() {
     function recursivePopulate(mold, data) {
         Object.keys(mold).forEach(function(key) {
-
             // if data isn't as deep as mold
             if (!data[key]) {
                 delete mold[key];
@@ -23,21 +22,20 @@ module.exports = (function() {
                     // make a COPY of the mold, otherwise you'll get references to the same mold object
                     var obj = {};
                     Object.keys(mold[key]).forEach(function(key) {
-                        obj[key] = undefined
+                        obj[key] = undefined;
                     });
 
                     return recursivePopulate(obj, d);
                 }).filter(function(f) {
                     // keep only objects with data
                     if (f && Object.keys(f).length > 0) {
-                        return true
+                        return true;
                     }
                 });
 
             // apply the primitive value to mold key
             } else if (Object.prototype.toString.call(mold[key]) !== "[object Object]" && Object.prototype.toString.call(data[key]) !== "[object Array]") {
                 mold[key] = data[key];
-
             }
         });
 
@@ -56,14 +54,14 @@ module.exports = (function() {
             return d.map(function(d) {
                 var obj = {};
                 Object.keys(m).forEach(function(key) {
-                    obj[key] = undefined
+                    obj[key] = undefined;
                 });
 
                 return recursivePopulate(obj, d);
             }).filter(function(f) {
                 // keep only objects with data
                 if (f && Object.keys(f).length > 0) {
-                    return true
+                    return true;
                 }
             });
         } else {
