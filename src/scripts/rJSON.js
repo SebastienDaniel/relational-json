@@ -1,6 +1,7 @@
 // generate all graph tables to allow early references
 module.exports = (function() {
     "use strict";
+    /*jshint validthis: true */
     // allows cloning of primitive value objects & arrays
     // TODO: should be an external dependency that is required
     function deepCopy(o) {
@@ -94,8 +95,54 @@ module.exports = (function() {
         return req;
     }
 
-    function dataTypeChecker() {
+    function validateDataType(type, value) {
+        // expected types: string, integer, float, date, time, datetime, boolean
+        var trueType = Object.prototype.toString.call(value),
+            res = false;
 
+        switch (type) {
+            case "string": {
+                res = trueType === "[object String]";
+                break;
+            }
+
+            case "integer": {
+                res = trueType === "[object Number]" && /^[0-9]*$/.test(value.toString());
+                break;
+            }
+
+            case "float": {
+                res = trueType === "[object Number]" && /^[0-9]*\.?[0-9]*$/.test(value.toString());
+                break;
+            }
+
+            case "boolean": {
+                res = trueType === "[object Boolean]" && (value === true || value === false);
+                break;
+            }
+
+            case "date": {
+                // validates iso format: yyyy-mm-dd
+                res = trueType === "[object String]" && /(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))$/.test(value);
+                break;
+            }
+
+            case "datetime": {
+                res = trueType === "[object String]" && /^([0-2][0-9]{3})\-([0-1][0-9])\-([0-3][0-9])T([0-5][0-9])\:([0-5][0-9])\:([0-5][0-9])(Z|([\-\+]([0-1][0-9])\:00))$/.test(value);
+                break;
+            }
+
+            case "time": {
+                res = trueType === "[object String]" && /^(0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){1,2}(\.[0-9]*)?$/.test(value);
+                break;
+            }
+
+            default: {
+                throw new Error("Incompatible dataType:" + type);
+            }
+        }
+
+        return res;
     }
 
     function dataFactory(model, d) {
@@ -148,8 +195,10 @@ module.exports = (function() {
                 Object.defineProperty(face, key, {
                     set: function(v) {
                         var type = field.dataType;
-                        // TODO: create external dataType controller to make code dryer
-                        data[key] = v;
+
+                        if (validateDataType(type, v)) {
+                            data[key] = v;
+                        }
                     }
                 });
             }
