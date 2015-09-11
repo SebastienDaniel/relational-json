@@ -31,6 +31,18 @@ describe("rJSON", function() {
                         "allowNull": false,
                         "dataType": "string",
                         "writable": false
+                    },
+                    created_on: {
+                        allowNull: true,
+                        defaultValue: null,
+                        dataType: "datetime",
+                        writable: true
+                    },
+                    started_on: {
+                        allowNull: true,
+                        defaultValue: null,
+                        dataType: "date",
+                        writable: true
                     }
                 },
                 "primary": "id"
@@ -71,6 +83,22 @@ describe("rJSON", function() {
 
             db.SalesSource.get(10).key = "new_key";
             assert.equal("old_key", db.SalesSource.get(10).key);
+        });
+    });
+
+    describe("setting values", function() {
+        it("should allow valid data", function() {
+            db.Industry.get(1).name = "administration";
+            assert.equal("administration", db.Industry.get(1).name);
+
+            assert.equal(null, db.SalesSource.get(10).started_on);
+            db.SalesSource.get(10).started_on = "2015-01-01";
+            assert.equal("2015-01-01", db.SalesSource.get(10).started_on);
+        });
+
+        it("should ignore invalid data", function() {
+            db.Industry.get(1).name = 1;
+            assert.equal("administration", db.Industry.get(1).name);
         });
     });
 });
