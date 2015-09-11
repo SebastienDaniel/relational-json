@@ -288,7 +288,11 @@ module.exports = (function() {
 
         // create db tables
         Object.keys(graph).forEach(function(key) {
-            db[key] = tableFactory.call(db, graph[key]);
+            if (!graph[key].primary || !graph[key].fields) {
+                throw new Error("Graph table " + key + " has no fields or no primary key");
+            } else {
+                db[key] = tableFactory.call(db, graph[key]);
+            }
         });
 
         return db;
