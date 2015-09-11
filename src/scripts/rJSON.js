@@ -31,7 +31,7 @@ module.exports = (function() {
         var o,
             i;
 
-        if (id) { // return specific data object
+        if (id !== null && id !== undefined) { // return specific data object
             i = data.length;
             while (i) {
                 i--;
