@@ -107,17 +107,18 @@ module.exports = (function() {
             }
 
             case "integer": {
-                res = trueType === "[object Number]" && /^[0-9]*$/.test(value.toString());
+
+                res = trueType === "[object Number]" && /^[-+]?\d{1,20}$/.test(value.toString());
                 break;
             }
 
             case "float": {
-                res = trueType === "[object Number]" && /^[0-9]*\.?[0-9]*$/.test(value.toString());
+                res = trueType === "[object Number]" && /^[-+]?\d{1,20}(?:\.\d{1,20})?$/.test(value.toString());
                 break;
             }
 
             case "boolean": {
-                res = trueType === "[object Boolean]" && (value === true || value === false);
+                res = trueType === "[object Boolean]" && (value === true || value === false) || (value === 1 || value === 0);
                 break;
             }
 
@@ -128,12 +129,12 @@ module.exports = (function() {
             }
 
             case "datetime": {
-                res = trueType === "[object String]" && /^([0-2][0-9]{3})\-([0-1][0-9])\-([0-3][0-9])T([0-5][0-9])\:([0-5][0-9])\:([0-5][0-9])(Z|([\-\+]([0-1][0-9])\:00))$/.test(value);
+                res = trueType === "[object String]" && /^(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))(T| )(0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){1,2}(\.[0-9]{1,3})?\Z?$/.test(value);
                 break;
             }
 
             case "time": {
-                res = trueType === "[object String]" && /^(0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){1,2}(\.[0-9]*)?$/.test(value);
+                res = trueType === "[object String]" && /^(0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){1,2}(\.[0-9]{1,3})?$/.test(value);
                 break;
             }
 
