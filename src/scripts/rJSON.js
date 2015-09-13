@@ -107,7 +107,6 @@ module.exports = (function() {
             }
 
             case "integer": {
-
                 res = trueType === "[object Number]" && /^[-+]?\d{1,20}$/.test(value.toString());
                 break;
             }
