@@ -1,5 +1,5 @@
 {
-  "name": "sebastiendaniel-rjson",
+  "name": "sebastiendaniel-relational-json",
   "description": "Relation data model for JSON objects",
   "keywords": [
     "relational",
@@ -15,18 +15,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/SebastienDaniel/rJSON.git"
+    "url": "https://github.com/SebastienDaniel/relational-json.git"
   },
   "bugs": {
-    "url": "https://www.github.com/SebastienDaniel/rJSON/issues"
+    "url": "https://www.github.com/SebastienDaniel/relational-json/issues"
   },
   "license": {
     "type": "MIT License",
-    "url": "https://www.github.com/SebastienDaniel/rJSON/license"
+    "url": "https://www.github.com/SebastienDaniel/relational-json/license"
   },
-  "main": "rJSON.min.js",
+  "main": "relational-json.min.js",
   "files": [
-    "rJSON.min.js",
+    "relational-json.min.js",
     "test",
     "license",
     "README.md"
