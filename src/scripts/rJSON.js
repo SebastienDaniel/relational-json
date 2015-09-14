@@ -41,7 +41,7 @@ module.exports = (function() {
             return null;
         }
     }
-    
+
     function getInheritanceChain(tableName) {
         var chain = [],
             ext,
@@ -138,12 +138,17 @@ module.exports = (function() {
         return req;
     }
 
-    function validateDataType(type, value) {
+    function validateDataType(field, value) {
         // expected types: string, integer, float, date, time, datetime, boolean
         var trueType = Object.prototype.toString.call(value),
             res = false;
 
-        switch (type) {
+        // if allow null and value === null, return true
+        if (field.allowNull === true && value === null) {
+            return true;
+        }
+
+        switch (field.dataType) {
             case "string": {
                 res = trueType === "[object String]";
                 break;
@@ -237,9 +242,10 @@ module.exports = (function() {
             if (field.writable) {
                 Object.defineProperty(face, key, {
                     set: function(v) {
-                        var type = field.dataType;
+                        var type = field.dataType,
+                            fieldModel = model.fields[key];
 
-                        if (validateDataType(type, v)) {
+                        if (validateDataType(fieldModel, v)) {
                             data[key] = v;
                         }
                     }
@@ -250,6 +256,11 @@ module.exports = (function() {
         // set initial data
         Object.keys(face).forEach(function(key) {
             var value;
+
+            // completely ignore extended fields
+            if (model.extends && key === model.extends.local) {
+                return;
+            }
 
             // we already filtered for mandatory fields, so we can assume defaultValues
             if (d[key] === undefined) {
@@ -262,7 +273,13 @@ module.exports = (function() {
                 face[key] = value;
             } else {
                 // set data directly since "set" is blocking on face
-                data[key] = value;
+                // validate dataType first
+                if (validateDataType(model.fields[key], value)) {
+                    data[key] = value;
+                } else {
+                    console.log(value);
+                    throw Error("\n" + key + " expects " + model.fields[key].dataType + " data type.\nProvided: " + Object.prototype.toString.call(value));
+                }
             }
         });
 
@@ -327,13 +344,12 @@ module.exports = (function() {
                 }
             },
             getAggregateInfo: function(tableName) {
-                var aL = model.aggregates.length,
-                    i = 0,
+                var i = model.aggregates.length,
                     match = false;
 
-                while (match === false && i < aL) {
+                while (match === false && i) {
+                    i--;
                     match = model.aggregates[i].foreignTable === tableName;
-                    i++;
                 }
 
                 if (match) {
@@ -348,10 +364,10 @@ module.exports = (function() {
             getPrimaryField: function() {
                 return model.primary;
             },
-            getInheritanceChain: function () {
+            getInheritanceChain: function() {
                 return getInheritanceChain.call(db, tableName);
             }
-        }
+        };
     }
 
     // builds the relational JSON database
