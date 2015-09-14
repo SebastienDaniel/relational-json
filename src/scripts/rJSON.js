@@ -27,10 +27,10 @@ module.exports = (function() {
         }
     }
 
-    function getFurthestAncestorField(table) {
-        var p = this[table].getExtensionInfo();
+    function getFurthestAncestorField(tableName) {
+        var p = this[tableName].getExtensionInfo();
 
-        if (p !== null) {
+        if (p) {
             // peak one step further
             if (getFurthestAncestorField.call(this, p.table) !== null) {
                 return getFurthestAncestorField.call(this, p.table);
@@ -40,6 +40,29 @@ module.exports = (function() {
         } else {
             return null;
         }
+    }
+    
+    function getInheritanceChain(tableName) {
+        var chain = [],
+            ext,
+            stopLoop = false;
+
+        while (stopLoop === false) {
+            // push currentTable name
+            chain.push(tableName);
+
+            // get extension info
+            ext = this[tableName].getExtensionInfo();
+
+            // if extends, keep looping
+            if (ext) {
+                tableName = ext.table;
+            } else {
+                stopLoop = true;
+            }
+        }
+
+        return chain;
     }
 
     function getData(id, pk, data) {
@@ -109,7 +132,7 @@ module.exports = (function() {
             });
 
             // recursively get required fields
-            req = req.concat(this[model.extends.table].requiredFields());
+            req = req.concat(this[model.extends.table].getRequiredFields());
         }
 
         return req;
@@ -289,15 +312,12 @@ module.exports = (function() {
                 if (data.some(function(existing) {
                         return existing[model.primary] === d[model.primary];
                     })) {
-                    throw Error ("provided " + model.primary + ": " + d[model.primary] + " is already in use");
+                    throw Error("provided " + model.primary + ": " + d[model.primary] + " is already in use");
                 } else {
                     obj = makeData.call(db, model, d, getFurthestAncestorField.call(db, tableName));
                     data.push(obj);
                     return obj;
                 }
-            },
-            requiredFields: function() {
-                return getRequiredFields.call(db, model);
             },
             getExtensionInfo: function() {
                 if (model.extends) {
@@ -305,8 +325,33 @@ module.exports = (function() {
                 } else {
                     return null;
                 }
+            },
+            getAggregateInfo: function(tableName) {
+                var aL = model.aggregates.length,
+                    i = 0,
+                    match = false;
+
+                while (match === false && i < aL) {
+                    match = model.aggregates[i].foreignTable === tableName;
+                    i++;
+                }
+
+                if (match) {
+                    return model.aggregates[i];
+                } else {
+                    return undefined;
+                }
+            },
+            getRequiredFields: function() {
+                return getRequiredFields.call(db, model);
+            },
+            getPrimaryField: function() {
+                return model.primary;
+            },
+            getInheritanceChain: function () {
+                return getInheritanceChain.call(db, tableName);
             }
-        };
+        }
     }
 
     // builds the relational JSON database
