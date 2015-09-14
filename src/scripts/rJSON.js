@@ -27,6 +27,21 @@ module.exports = (function() {
         }
     }
 
+    function getFurthestAncestorField(table) {
+        var p = this[table].getExtensionInfo();
+
+        if (p !== null) {
+            // peak one step further
+            if (getFurthestAncestorField.call(this, p.table) !== null) {
+                return getFurthestAncestorField.call(this, p.table);
+            } else {
+                return p.foreign;
+            }
+        } else {
+            return null;
+        }
+    }
+
     function getData(id, pk, data) {
         var o,
             i;
@@ -48,7 +63,7 @@ module.exports = (function() {
         }
     }
 
-    function makeData(model, d) {
+    function makeData(model, d, ancestorField) {
         // aggregates should be non-enumerable (simplifies updating own data)
         var o,
             missingFields = [];
@@ -57,13 +72,18 @@ module.exports = (function() {
         if (!Object.keys(model.fields).every(function(key) {
                 if (!model.fields[key].allowNull && !model.fields[key].hasOwnProperty("defaultValue")) {
                     if (!d[key]) {
-                        missingFields.push(key);
-                        return false;
+                        if (model.extends && model.extends.local === key && d[ancestorField]) {
+                            return true;
+                        } else {
+                            missingFields.push(key);
+                            return false;
+                        }
                     }
                 }
 
                 return true;
             })) {
+            console.log("THROWING ERROR");
             throw Error ("data creation rejected, mandatory fields not provided:\n" + missingFields);
         }
 
@@ -89,7 +109,7 @@ module.exports = (function() {
             });
 
             // recursively get required fields
-            req = req.concat(db[model.extends.table].requiredFields());
+            req = req.concat(this[model.extends.table].requiredFields());
         }
 
         return req;
@@ -153,7 +173,7 @@ module.exports = (function() {
         // generate public face and its prototype
         if (model.extends) {
             // make sure prototype has required data with proper key names
-            d[model.extends.foreign] = d[model.extends.local];
+            //d[model.extends.foreign] = d[model.extends.local];
 
             // create the prototype
             face = Object.create(db[model.extends.table].post(d));
@@ -253,7 +273,7 @@ module.exports = (function() {
         return Object.freeze(face);
     }
 
-    function tableFactory(m) {
+    function tableFactory(m, tableName) {
         var data = [],
             db = this,
             model = deepCopy(m);
@@ -271,13 +291,20 @@ module.exports = (function() {
                     })) {
                     throw Error ("provided " + model.primary + ": " + d[model.primary] + " is already in use");
                 } else {
-                    obj = makeData.call(db, model, d);
+                    obj = makeData.call(db, model, d, getFurthestAncestorField.call(db, tableName));
                     data.push(obj);
                     return obj;
                 }
             },
             requiredFields: function() {
                 return getRequiredFields.call(db, model);
+            },
+            getExtensionInfo: function() {
+                if (model.extends) {
+                    return model.extends;
+                } else {
+                    return null;
+                }
             }
         };
     }
@@ -291,7 +318,7 @@ module.exports = (function() {
             if (!graph[key].primary || !graph[key].fields) {
                 throw new Error("Graph table " + key + " has no fields or no primary key");
             } else {
-                db[key] = tableFactory.call(db, graph[key]);
+                db[key] = tableFactory.call(db, graph[key], key);
             }
         });
 

@@ -495,7 +495,7 @@ describe("dataType control", function() {
 describe("rJSON extension", function() {
     var graph = {
             Person: {
-                primary: "id",
+                primary: "person_id",
                 fields: {
                     person_id: {
                         dataType: "integer",
@@ -537,7 +537,14 @@ describe("rJSON extension", function() {
         },
         db = rJSON(graph);
 
-    db.Person.post({person_id:1,name:"bob",age:30,created_on:"2015-01-01"});
+    db.Person.post({id:1,name:"bob",age:30,created_on:"2015-01-01"});
+
+
+    it("should list required fields by taking inheritance into account", function() {
+        expect(db.Person.requiredFields()).to.eql(["name", "age", "id", "created_on"]);
+        //expect(db.Person.get(1).created_on).to.equal("2015-01-01");
+
+    });
 
     it("should allow field inheritance", function() {
         expect(db.Person.get(1).created_on).to.equal("2015-01-01");
@@ -559,6 +566,20 @@ describe("rJSON extension", function() {
         db.Person.get(1).created_on = "2016-01-01";
         expect(db.Person.get(1).created_on).to.equal("2016-01-01");
         expect(db.People.get(1).created_on).to.equal("2016-01-01");
+    });
+
+    it("should get parent", function() {
+        expect(db.Person.getExtensionInfo().table).to.equal("People");
+        expect(db.Person.getExtensionInfo().local).to.equal("person_id");
+        expect(db.Person.getExtensionInfo().foreign).to.equal("id");
+    });
+
+    it("should ignore missing extension field", function() {
+        expect(function() {
+            db.Person.post({id:2,name:"bobbine",age:20,created_on:"2015-03-10"});
+        }).to.not.throw('all good');
+
+        expect(db.Person.get(2).name).to.equal("bobbine");
     });
 });
 

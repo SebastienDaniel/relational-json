@@ -17,7 +17,7 @@ module.exports = function(grunt) {
                     compress: true
                 },
                 files: {
-                    "utilities.min.js": ["src/scripts/**/*.js"]
+                    "relational-json.min.js": ["src/scripts/rJSON.js"]
                 }
             }
         },
@@ -44,4 +44,5 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-mocha-test");
 
     grunt.registerTask("test", ["jshint", "jscs", "mochaTest"]);
+    grunt.registerTask("build", ["uglify:prod"]);
 };
