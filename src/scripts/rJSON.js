@@ -70,6 +70,14 @@ module.exports = (function() {
             i;
 
         if (id !== null && id !== undefined) { // return specific data object
+            // id must be an integer
+            if (!/^[+-]?[0-9]*$/.test(id)) {
+                throw Error("cannot get data from id: " + id);
+            } else {
+                // make sure it's integer
+                id = parseInt(id, 10);
+            }
+
             i = data.length;
             while (i) {
                 i--;
