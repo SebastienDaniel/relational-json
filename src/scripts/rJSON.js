@@ -258,6 +258,10 @@ module.exports = (function() {
                         }
                     }
                 });
+            } else {
+                Object.defineProperty(face, key, {
+                    set: function() {} // empty setter to avoid ERROR in strict mode
+                });
             }
         });
 
@@ -321,9 +325,10 @@ module.exports = (function() {
         return Object.freeze(face);
     }
 
-    function tableFactory(m, tableName) {
+    function tableFactory(m, tn) {
         var data = [],
             db = this,
+            name = tn,
             model = deepCopy(m);
 
         return {
@@ -339,14 +344,14 @@ module.exports = (function() {
                     })) {
                     throw Error("provided " + model.primary + ": " + d[model.primary] + " is already in use");
                 } else {
-                    obj = makeData.call(db, model, d, getFurthestAncestorField.call(db, tableName));
+                    obj = makeData.call(db, model, d, getFurthestAncestorField.call(db, name));
                     data.push(obj);
                     return obj;
                 }
             },
             getExtensionInfo: function() {
                 if (model.extends) {
-                    return model.extends;
+                    return deepCopy(model.extends);
                 } else {
                     return null;
                 }
@@ -357,7 +362,7 @@ module.exports = (function() {
 
                 while (match === false && i) {
                     i--;
-                    match = model.aggregates[i].foreignTable === tableName;
+                    match = (model.aggregates[i].foreignTable === tableName) || (model.aggregates[i].alias === tableName);
                 }
 
                 if (match) {
@@ -373,7 +378,10 @@ module.exports = (function() {
                 return model.primary;
             },
             getInheritanceChain: function() {
-                return getInheritanceChain.call(db, tableName);
+                return getInheritanceChain.call(db, name);
+            },
+            getName: function() {
+                return name;
             }
         };
     }
