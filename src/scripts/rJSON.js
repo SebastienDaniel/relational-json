@@ -99,22 +99,20 @@ module.exports = (function() {
         var o,
             missingFields = [];
 
-        // validate that all necessary fields are provided
-        if (!Object.keys(model.fields).every(function(key) {
-                if (!model.fields[key].allowNull && !model.fields[key].hasOwnProperty("defaultValue")) {
-                    if (!d[key]) {
-                        if (model.extends && model.extends.local === key && d[ancestorField]) {
-                            return true;
-                        } else {
-                            missingFields.push(key);
-                            return false;
-                        }
+        Object.keys(model.fields).forEach(function(key) {
+            if (!model.fields[key].allowNull && !model.fields[key].hasOwnProperty("defaultValue")) {
+                if (!d[key]) {
+                    if (model.extends && model.extends.local === key && d[ancestorField]) {
+                        return;
+                    } else {
+                        missingFields.push(key);
                     }
                 }
+            }
+        });
 
-                return true;
-            })) {
-            console.log("THROWING ERROR");
+        // validate that all necessary fields are provided
+        if (missingFields.length > 0) {
             throw Error ("data creation rejected, mandatory fields not provided:\n" + missingFields);
         }
 

@@ -7,14 +7,14 @@ var assert = require("chai").assert,
 describe("rJSON extension", function() {
     var graph = {
             Client: {
-                primary: "id",
+                primary: "client_id",
                 extends: {
                     table: "Person",
-                    local: "id",
+                    local: "client_id",
                     foreign: "person_id"
                 },
                 fields: {
-                    id: {
+                    client_id: {
                         dataType: "integer",
                         writable: false,
                         allowNull: false
