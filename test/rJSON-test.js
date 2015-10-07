@@ -16,6 +16,12 @@ describe("rJSON", function() {
                         "allowNull": false,
                         "dataType": "string",
                         "writable": true
+                    },
+                    age: {
+                        allowNull: false,
+                        dataType: "integer",
+                        writable: true,
+                        defaultValue: 1
                     }
                 },
                 "primary": "id"
@@ -97,9 +103,13 @@ describe("rJSON", function() {
         });
 
         it("should ignore invalid data", function() {
-            db.Industry.get(1).name = 1;
-            assert.equal("administration", db.Industry.get(1).name);
+            db.Industry.get(1).age = "no";
+            assert.equal(1, db.Industry.get(1).age);
         });
+
+        it("should allow 0 for int types", function() {
+
+        })
     });
 
     describe("getPrimaryField", function() {

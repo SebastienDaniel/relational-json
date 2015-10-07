@@ -66,12 +66,17 @@ describe("dataType control", function() {
         now.integer = 2;
         expect(now.integer).to.equal(2);
         expect(db.awesome.get(2).integer).to.equal(2);
+        console.log("logging 2");
+        console.log(now.integer);
 
         now.integer = 0;
-        expect(now.integer).to.equal(0);
-        expect(db.awesome.get(0).integer).to.equal(0);
+        expect(now.integer).to.eql(0);
+        expect(db.awesome.get(0).integer).to.eql(0);
+        console.log("logging 0");
+        console.log(now.integer);
+        console.log(typeof(now.integer));
 
-        // should be rejected
+        // should be approved
         now.integer = -1;
         expect(now.integer).to.equal(-1);
         expect(db.awesome.get(-1).integer).to.equal(-1);

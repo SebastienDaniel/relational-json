@@ -101,7 +101,7 @@ module.exports = (function() {
 
         Object.keys(model.fields).forEach(function(key) {
             if (!model.fields[key].allowNull && !model.fields[key].hasOwnProperty("defaultValue")) {
-                if (!d[key]) {
+                if (d[key] === undefined) {
                     if (model.extends && model.extends.local === key && d[ancestorField]) {
                         return;
                     } else {
@@ -355,8 +355,15 @@ module.exports = (function() {
                 }
             },
             getAggregateInfo: function(tableName) {
-                var i = model.aggregates.length,
+                var i,
+                    match;
+
+                if (model.aggregates) {
+                    i = model.aggregates.length;
                     match = false;
+                } else {
+                    return undefined;
+                }
 
                 while (match === false && i) {
                     i--;
@@ -365,6 +372,21 @@ module.exports = (function() {
 
                 if (match) {
                     return model.aggregates[i];
+                } else {
+                    return undefined;
+                }
+            },
+            getAggregateTableFromField: function(fieldName) {
+                var i = model.aggregates.length,
+                    match = false;
+
+                while (match === false && i) {
+                    i--;
+                    match = model.aggregates[i].localField === fieldName;
+                }
+
+                if (match) {
+                    return db[model.aggregates[i].foreignTable];
                 } else {
                     return undefined;
                 }

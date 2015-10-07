@@ -7,7 +7,7 @@
     "model",
     "json"
   ],
-  "version": "1.0.9",
+  "version": "1.0.14",
   "author": {
     "name": "Sebastien Daniel",
     "email": "info@sebastiendaniel.ca",
@@ -24,9 +24,9 @@
     "type": "MIT License",
     "url": "https://www.github.com/SebastienDaniel/relational-json/license"
   },
-  "main": "relational-json.min.js",
+  "main": "src/scripts/rJSON.js",
   "files": [
-    "relational-json.min.js",
+    "src/scripts/rJSON.js",
     "test",
     "license",
     "README.md"
