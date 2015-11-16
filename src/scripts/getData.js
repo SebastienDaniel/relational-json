@@ -1,32 +1,34 @@
-module.exports = function getData(id, pk, data) {
+/**
+ * Essentially an array.find() equivalent, but with a fallback to return all data
+ * if no id is provided. It also only gets data based on primary-key matching
+ * @param {string|number} [id] - primary key value to find
+ * @param {string} [pk="id"] - primary key field
+ * @param {Array} data - array of data to search
+ * @returns {object|Array}
+ */
+// TODO: if data is ALWAYS sorted by ID (done at POST), we can make certain assumptions and increase lookup-speed on large arrays
+module.exports = function getData(data, id, pk) {
     var o,
-        i;
+        i = 0,
+        dL;
 
-    if (id !== null && id !== undefined) { // return specific data object
-        // id must be an integer
-        try {
-            if (!/^[+-]?[0-9]*$/.test(id)) {
-                throw Error("cannot get data from id: " + id);
-            } else {
-                // make sure it's integer
-                id = parseInt(id, 10);
-            }
-        } catch (msg) {
-            console.log(msg);
-        }
+    // pk should default to "id"
+    pk = pk || "id";
 
-        i = data.length;
-        while (i) {
-            i--;
+    if (id) { // return specific data object
+        dL = data.length;
+        while (i < dL) {
             if (data[i][pk] === id) {
                 o = data[i];
-                i = 0;
+                i = dL;
             }
+            i++;
         }
+
         return o;
     } else if (id === undefined) { // return all data objects
         return data;
-    } else if (id === null) {
+    } else {
         return null;
     }
 };
