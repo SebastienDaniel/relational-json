@@ -63,13 +63,32 @@ module.exports = function tableFactory(tn, fullModel, db) {
         delete: function(id) {
             recursiveDelete(id, data, name, fullModel, db);
         },
-        meta: {
-            pk: function() {
-                return m.primary;
+        // meta-data about the table
+        meta: Object.create(null, {
+            pk: {
+                get: function() {
+                    return m.primary;
+                },
+                enumerable: true
             },
-            requiredFields: function() {
-                return getRequiredFields(m, fullModel);
+            requiredFields: {
+                get: function() {
+                    return getRequiredFields(m, fullModel);
+                },
+                enumerable: true
+            },
+            /**
+             * return a alias:tableName map of aggregate relations
+             */
+            aliasMap: {
+                get: function() {
+                    return m.aggregates.reduce(function(pV, cV) {
+                        pV[cV.alias] = cV.foreignTable;
+                        return pV;
+                    }, {});
+                },
+                enumerable: true
             }
-        }
+        })
     };
 };
