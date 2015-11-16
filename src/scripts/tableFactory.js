@@ -19,7 +19,7 @@ module.exports = function tableFactory(tn, fullModel, db) {
             var obj;
 
             // make sure pk is unique
-            if (isPrimaryKeyUsed(m.primary, d[m.primary], data)) {
+            if (isPrimaryKeyUsed(data, d[m.primary], m.primary)) {
                 console.log(data);
                 throw Error("provided " + m.primary + ": " + d[m.primary] + " is already in use in " + name);
             } else {
@@ -61,6 +61,11 @@ module.exports = function tableFactory(tn, fullModel, db) {
         // DELETE
         delete: function(id) {
             recursiveDelete(id, data, name, fullModel, db);
+        },
+        meta: {
+            pk: function() {
+                return m.primary;
+            }
         }
     };
 };

@@ -6,7 +6,7 @@ module.exports = function dataFactory(model, d, db) {
     // generate row and its prototype
     if (model.extends) {
         // make sure prototype has required data with proper key names
-        //d[model.extends.foreign] = d[model.extends.local];
+        d[model.extends.foreign] = d[model.extends.local];
 
         // create the prototype
         row = Object.create(db[model.extends.table].post(d));

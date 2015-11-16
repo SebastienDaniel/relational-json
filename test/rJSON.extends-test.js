@@ -64,7 +64,7 @@ describe("rJSON extension", function() {
         },
         db = rJSON(graph);
 
-    db.Person.post({id:1,name:"bob",age:30,created_on:"2015-01-01"});
+    db.Person.post({person_id:1,name:"bob",age:30,created_on:"2015-01-01"});
 
     it("should allow field inheritance", function() {
         expect(db.Person.get(1).created_on).to.equal("2015-01-01");
@@ -90,7 +90,7 @@ describe("rJSON extension", function() {
 
     it("should ignore missing extension field", function() {
         expect(function() {
-            db.Person.post({id:2,name:"bobbine",age:20,created_on:"2015-03-10"});
+            db.Person.post({person_id:2,name:"bobbine",age:20,created_on:"2015-03-10"});
         }).to.not.throw('all good');
 
         expect(db.Person.get(2).name).to.equal("bobbine");

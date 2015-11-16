@@ -4,7 +4,7 @@ var chai = require("chai"),
 
 describe("immutability", function() {
     var p = db.Person.post({
-        id: 11,
+        entity_id: 11,
         first_name: "Sebastien",
         last_name: "Daniel",
         gender: "m",
@@ -51,7 +51,7 @@ describe("immutability", function() {
             pastSpecific = db.Person.get(11);
 
         db.Person.post({
-            id: 22,
+            entity_id: 22,
             first_name: "Kelly",
             last_name: "Parnia",
             gender: "f",
