@@ -1,5 +1,3 @@
-"use strict";
-/*jshint validthis: true */
 var deepCopy = require("./deepCopy"),
     getRequiredFields = require("./getRequiredFields"),
     tableFactory = require("./tableFactory"),
@@ -9,6 +7,7 @@ var deepCopy = require("./deepCopy"),
 
 // builds the relational JSON database
 function buildDatabase(graph) {
+    "use strict";
     var db = Object.create(null, {}),
         // store a copy of the model
         fullModel = deepCopy(graph);
@@ -18,7 +17,7 @@ function buildDatabase(graph) {
         if (!graph[key].primary || !graph[key].fields) {
             throw new Error("Graph table " + key + " has no fields or no primary key");
         } else {
-            db[key] = tableFactory(key, graph, db);
+            db[key] = tableFactory(key, fullModel, db);
         }
     });
 
@@ -26,5 +25,6 @@ function buildDatabase(graph) {
 }
 
 module.exports = function(graph) {
+    "use strict";
     return buildDatabase(graph);
 };

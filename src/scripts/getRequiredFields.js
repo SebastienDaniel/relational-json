@@ -6,6 +6,7 @@
  * @returns {Array}
  */
 module.exports = function getRequiredFields(model, fullModel) {
+    "use strict";
     var req = [];
 
     // get models' own required fields

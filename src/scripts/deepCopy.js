@@ -5,6 +5,7 @@
  * @returns {object|Array}
  */
 module.exports = function deepCopy(o) {
+    "use strict";
     var newO,
         i;
 

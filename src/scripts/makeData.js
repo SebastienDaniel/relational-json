@@ -2,6 +2,7 @@ var dataFactory = require("./dataFactory"),
     validateDataType = require("./validateDataType");
 
 module.exports = function makeData(model, d, ancestorField, db) {
+    "use strict";
     var missingFields = [];
 
     // make sure all fields are respected

@@ -7,6 +7,7 @@
  * @returns {boolean}
  */
 module.exports = function(data, pkValue, pkName) {
+    "use strict";
     var dL = data.length,
         i;
 

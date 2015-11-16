@@ -1,6 +1,7 @@
 var getData = require("./getData");
 
 function recursiveDelete(id, data, tableName, fullModel, db) {
+    "use strict";
     var target = getData(data, id, fullModel[tableName].primary);
 
     if (!target) {

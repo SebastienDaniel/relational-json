@@ -8,6 +8,7 @@
  */
 // TODO: if data is ALWAYS sorted by ID (done at POST), we can make certain assumptions and increase lookup-speed on large arrays
 module.exports = function getData(data, id, pk) {
+    "use strict";
     var o,
         i = 0,
         dL;

@@ -5,6 +5,7 @@ var getData = require("./getData"),
     makeData = require("./makeData");
 
 module.exports = function tableFactory(tn, fullModel, db) {
+    "use strict";
     var data = [],          // private object store
         m = fullModel[tn],  // own portion of graph
         name = tn;          // own name

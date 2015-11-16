@@ -5,6 +5,7 @@
  * @returns {*}
  */
 module.exports = function getFurthestAncestorField(tableName, fullModel) {
+    "use strict";
     var p = fullModel[tableName].extends;
 
     if (p) {

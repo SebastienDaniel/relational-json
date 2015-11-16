@@ -5,6 +5,7 @@
  * @returns {Array}
  */
 module.exports = function getInheritanceChain(tableName, fullModel) {
+    "use strict";
     var chain = [],
         ext,
         stopLoop = false;

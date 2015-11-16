@@ -5,6 +5,7 @@
  * @returns {boolean}
  */
 module.exports = function validateDataType(field, value) {
+    "use strict";
     // expected types: string, integer, float, date, time, datetime, boolean
     var trueType = Object.prototype.toString.call(value),
         res = false;
@@ -61,7 +62,7 @@ module.exports = function validateDataType(field, value) {
         }
 
         default: {
-            throw new Error("Incompatible dataType:" + type);
+            throw new Error("Incompatible dataType:" + trueType);
         }
     }
 
