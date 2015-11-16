@@ -66,6 +66,9 @@ module.exports = function tableFactory(tn, fullModel, db) {
         meta: {
             pk: function() {
                 return m.primary;
+            },
+            requiredFields: function() {
+                return getRequiredFields(m, fullModel);
             }
         }
     };

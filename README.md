@@ -1,8 +1,8 @@
 rJSON
 ===========
-Relation data mapping in JSON-like syntax
+Relation data mapping in JSON-like syntax. No more data duplication!
 
-rJSON expects a JSON object composed of "table" abstractions, containing Table ownerships, fields & owners. Below is an example three table graph with a bit of everything in it:
+rJSON expects a JSON object composed of "table" abstractions (SQL-like), containing Table ownerships, fields & owners. Below is an example three table graph with a bit of everything in it:
 
 **basic structure**
 ```js

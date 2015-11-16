@@ -1,6 +1,6 @@
 var chai = require("chai"),
     expect = require("chai").expect,
-    db = require("../src/scripts/rJSON")(require("./test-graph.json"));
+    db = require("../src/scripts")(require("./test-graph.json"));
 
 describe("immutability", function() {
     var p = db.Person.post({

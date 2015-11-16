@@ -1,7 +1,7 @@
 var assert = require("chai").assert,
     should = require("chai").should(),
     expect = require("chai").expect,
-    rJSON = require("../src/scripts/rJSON.js");
+    rJSON = require("../src/scripts");
 
 describe("rJSON", function() {
     var graph = {
