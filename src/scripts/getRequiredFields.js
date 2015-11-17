@@ -19,7 +19,7 @@ module.exports = function getRequiredFields(model, fullModel) {
     // what about "extends" relations
     if (model.extends) {
         // remove the local field that is the extension point
-        req.splice(req.indexOf(model.extends.local), 1);
+        // req.splice(req.indexOf(model.extends.local), 1);
 
         // recursively get required fields
         req = req.concat(getRequiredFields(fullModel[model.extends.table], fullModel));

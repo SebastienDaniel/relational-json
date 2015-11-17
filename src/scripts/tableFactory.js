@@ -23,7 +23,6 @@ module.exports = function tableFactory(tn, fullModel, db) {
 
             // make sure pk is unique
             if (isPrimaryKeyUsed(data, d[m.primary], m.primary)) {
-                console.log(data);
                 throw Error("provided " + m.primary + ": " + d[m.primary] + " is already in use in " + name);
             } else {
                 obj = makeData(m, d, getFurthestAncestorField(name, fullModel), db);
