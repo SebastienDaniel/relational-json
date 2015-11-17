@@ -28,10 +28,10 @@ describe("immutability", function() {
     it("should create a new data object on PUT", function() {
         expect(p).to.eql(p);
 
-        var p2 = db.Person.put(11, {
+        var p2 = db.Person.put({
             first_name: "Bobby",
             last_name: "McGinnee"
-        });
+        }, 11);
 
         expect(p).to.not.eql(p2);
         expect(db.Person.get(11).first_name).to.eql("Bobby");
@@ -66,10 +66,25 @@ describe("immutability", function() {
     it("shouldn't create a new collection on PUT", function() {
         var past = db.Person.get();
 
-        db.Person.put(11, {
+        db.Person.put({
             first_name: "ginette"
-        });
+        }, 11);
 
         expect(past).to.equal(db.Person.get());
+    });
+
+    it("should look in data bundle if no pkValue is provided", function() {
+        var p2 = db.Person.put({
+            entity_id: 11,
+            first_name: "Majin",
+            last_name: "Buu"
+        });
+
+        expect(p).to.not.eql(p2);
+        expect(db.Person.get(11).first_name).to.eql("Majin");
+        expect(db.Person.get(11).last_name).to.eql("Buu");
+        expect(db.Person.get(11).gender).to.eql("m");
+        expect(db.Person.get(11).created_by).to.eql(1);
+        expect(db.Person.get(11).created_on).to.eql("2015-01-01T12:30:59");
     });
 });

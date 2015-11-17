@@ -34,9 +34,9 @@ module.exports = function tableFactory(tn, fullModel, db) {
             }
         },
         // UPDATE
-        put: function(pkValue, d) {
+        put: function(d, pkValue) {
             // find current object
-            var current = getData(data, pkValue, m.primary),
+            var current = getData(data, pkValue || d[m.primary], m.primary),
                 obj,
                 k;
 
