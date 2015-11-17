@@ -1,5 +1,6 @@
 var getData = require("./getData"),
     getFurthestAncestorField = require("./getFurthestAncestorField"),
+    getRequiredFields = require("./getRequiredFields"),
     isPrimaryKeyUsed = require("./isPrimaryKeyUsed"),
     recursiveDelete = require("./recursiveDelete"),
     makeData = require("./makeData");
