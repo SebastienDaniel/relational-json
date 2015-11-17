@@ -1,5 +1,6 @@
 var getData = require("./getData"),
     getFurthestAncestorField = require("./getFurthestAncestorField"),
+    getInheritanceChain = require("./getInheritanceChain"),
     getRequiredFields = require("./getRequiredFields"),
     isPrimaryKeyUsed = require("./isPrimaryKeyUsed"),
     recursiveDelete = require("./recursiveDelete"),
@@ -83,7 +84,9 @@ module.exports = function tableFactory(tn, fullModel, db) {
              */
             aliasMap: {
                 get: function() {
-                    return m.aggregates.reduce(function(pV, cV) {
+                    return getInheritanceChain(name, fullModel).reduce(function(pV, cV) {
+                        return pV.concat(fullModel[cV].aggregates);
+                    }, []).reduce(function(pV, cV) {
                         pV[cV.alias] = cV.foreignTable;
                         return pV;
                     }, {});

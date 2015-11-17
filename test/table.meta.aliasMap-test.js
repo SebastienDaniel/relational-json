@@ -5,21 +5,26 @@ var deepCopy = require("../src/scripts/deepCopy"),
 
 describe("table.meta.aliasMap", function() {
     it("should return alias:tableName object map of aggregate relations", function() {
-        expect(db.Entity.meta.aliasMap).to.eql({});
+        expect(db.Entity.meta.aliasMap).to.eql({
+            ExternalLinks: "ExternalLink"
+        });
 
         expect(db.InternalEntity.meta.aliasMap).to.eql({
             ModifiedBy: "InternalEntity",
-            InternalEntities: "InternalEntity"
+            InternalEntities: "InternalEntity",
+            ExternalLinks: "ExternalLink"
         });
 
         expect(db.Person.meta.aliasMap).to.eql({
-            Organization: "Organization"
+            Organization: "Organization",
+            ExternalLinks: "ExternalLink"
         });
 
         expect(db.Organization.meta.aliasMap).to.eql({
             ParentOrganization: "Organization",
             Organizations: "Organization",
-            Persons: "Person"
+            Persons: "Person",
+            ExternalLinks: "ExternalLink"
         });
     });
 });
