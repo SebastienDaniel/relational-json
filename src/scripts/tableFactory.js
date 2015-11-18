@@ -44,15 +44,15 @@ module.exports = function tableFactory(tn, fullModel, db) {
                 throw Error("Cannot update a non-existent Object, id: " + pkValue);
             }
 
-            // compile new values
+            // compile new values, keeping only own values
             for (k in current) {
-                if (d[k] === undefined) {
+                if (d[k] === undefined && typeof current[k] !== "object") {
                     d[k] = current[k];
                 }
             }
 
             // create a new object with makeData
-            this.delete(pkValue);
+            this.delete(pkValue || d[m.primary]);
             obj = makeData(m, d, getFurthestAncestorField(name, fullModel), db);
 
             // inject it into data array at specific place (keep ids in order)

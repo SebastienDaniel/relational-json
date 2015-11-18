@@ -10,6 +10,7 @@ function recursiveDelete(id, data, tableName, fullModel, db) {
 
     // check for parent
     if (fullModel[tableName].extends) {
+        // delete parent
         db[fullModel[tableName].extends.table].delete(id);
     }
 

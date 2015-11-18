@@ -1,0 +1,2892 @@
+{
+    "RefIndustry": {
+        "fields": {
+            "id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": false
+            },
+            "name": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "nace_code": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            },
+            "naics_code": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            },
+            "key": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "deleted": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "deleted_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "id",
+        "aggregates": [
+            {
+                "foreignTable": "Organization",
+                "localField": "id",
+                "alias": "Organizations",
+                "foreignField": "industry_id",
+                "cardinality": "many"
+            }
+        ]
+    },
+    "Entity": {
+        "fields": {
+            "id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": false
+            },
+            "deleted": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "deleted_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "id",
+        "aggregates": [
+            {
+                "foreignTable": "Address",
+                "localField": "id",
+                "alias": "Addresses",
+                "foreignField": "entity_id",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "ExternalLink",
+                "localField": "id",
+                "alias": "ExternalLinks",
+                "foreignField": "entity_id",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "ContactValue",
+                "localField": "id",
+                "alias": "ContactValues",
+                "foreignField": "entity_id",
+                "cardinality": "many"
+            }
+        ]
+    },
+    "InternalEntity": {
+        "fields": {
+            "entity_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "created_on": {
+                "allowNull": false,
+                "dataType": "datetime",
+                "writable": true
+            },
+            "modified_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            },
+            "modified_by": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "entity_id",
+        "extends": {
+            "table": "Entity",
+            "local": "entity_id",
+            "foreign": "id"
+        },
+        "aggregates": [
+            {
+                "foreignTable": "InternalEntity",
+                "localField": "modified_by",
+                "alias": "ModifiedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "InternalEntity",
+                "localField": "entity_id",
+                "alias": "InternalEntities",
+                "foreignField": "modified_by",
+                "cardinality": "many"
+            }
+        ]
+    },
+    "RefHumanResourceType": {
+        "fields": {
+            "id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": false
+            },
+            "name": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "key": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "deleted": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "deleted_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "id",
+        "aggregates": [
+            {
+                "foreignTable": "HumanResource",
+                "localField": "id",
+                "alias": "HumanResources",
+                "foreignField": "human_resource_type_id",
+                "cardinality": "many"
+            }
+        ]
+    },
+    "HumanResource": {
+        "fields": {
+            "entity_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "superior_id": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "first_name": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "last_name": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "gender": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "birthdate": {
+                "allowNull": true,
+                "dataType": "date",
+                "defaultValue": null,
+                "writable": true
+            },
+            "hire_date": {
+                "allowNull": false,
+                "dataType": "date",
+                "writable": true
+            },
+            "dismiss_date": {
+                "allowNull": true,
+                "dataType": "date",
+                "defaultValue": null,
+                "writable": true
+            },
+            "title": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            },
+            "human_resource_type_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "annual_wage": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "hourly_wage": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "client_hourly_fee": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "entity_id",
+        "extends": {
+            "table": "InternalEntity",
+            "local": "entity_id",
+            "foreign": "entity_id"
+        },
+        "aggregates": [
+            {
+                "foreignTable": "HumanResource",
+                "localField": "superior_id",
+                "alias": "Superior",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "entity_id",
+                "alias": "HumanResources",
+                "foreignField": "superior_id",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "RefHumanResourceType",
+                "localField": "human_resource_type_id",
+                "alias": "RefHumanResourceType",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "ExternalEntity",
+                "localField": "entity_id",
+                "alias": "ExternalEntitiesAssignedTo",
+                "foreignField": "assigned_to",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "ExternalEntity",
+                "localField": "entity_id",
+                "alias": "ExternalEntitiesCreatedBy",
+                "foreignField": "created_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "ExternalEntity",
+                "localField": "entity_id",
+                "alias": "ExternalEntitiesModifiedBy",
+                "foreignField": "modified_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "Address",
+                "localField": "entity_id",
+                "alias": "AddressesCreatedBy",
+                "foreignField": "created_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "Address",
+                "localField": "entity_id",
+                "alias": "AddressesModifiedBy",
+                "foreignField": "modified_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "ExternalLink",
+                "localField": "entity_id",
+                "alias": "ExternalLinksCreatedBy",
+                "foreignField": "created_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "ExternalLink",
+                "localField": "entity_id",
+                "alias": "ExternalLinksModifiedBy",
+                "foreignField": "modified_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "ContactValue",
+                "localField": "entity_id",
+                "alias": "ContactValuesCreatedBy",
+                "foreignField": "created_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "ContactValue",
+                "localField": "entity_id",
+                "alias": "ContactValuesModifiedBy",
+                "foreignField": "modified_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "SalesProcess",
+                "localField": "entity_id",
+                "alias": "SalesProcessesCreatedBy",
+                "foreignField": "created_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "SalesProcess",
+                "localField": "entity_id",
+                "alias": "SalesProcessesModifiedBy",
+                "foreignField": "modified_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "SalesProcess",
+                "localField": "entity_id",
+                "alias": "SalesProcessesAssignedTo",
+                "foreignField": "assigned_to",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "Quote",
+                "localField": "entity_id",
+                "alias": "QuotesCreatedBy",
+                "foreignField": "created_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "Quote",
+                "localField": "entity_id",
+                "alias": "QuotesModifiedBy",
+                "foreignField": "modified_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "Quote",
+                "localField": "entity_id",
+                "alias": "QuotesAssignedTo",
+                "foreignField": "assigned_to",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "Invoice",
+                "localField": "entity_id",
+                "alias": "InvoicesCreatedBy",
+                "foreignField": "created_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "Invoice",
+                "localField": "entity_id",
+                "alias": "InvoicesModifiedBy",
+                "foreignField": "modified_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "Invoice",
+                "localField": "entity_id",
+                "alias": "InvoicesAssignedTo",
+                "foreignField": "assigned_to",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "TaxTable",
+                "localField": "entity_id",
+                "alias": "TaxTablesCreatedBy",
+                "foreignField": "created_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "TaxTable",
+                "localField": "entity_id",
+                "alias": "TaxTablesModifiedBy",
+                "foreignField": "modified_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "Offer",
+                "localField": "entity_id",
+                "alias": "OffersCreatedBy",
+                "foreignField": "created_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "Offer",
+                "localField": "entity_id",
+                "alias": "OffersModifiedBy",
+                "foreignField": "modified_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "QuoteLine",
+                "localField": "entity_id",
+                "alias": "QuoteLinesModifiedBy",
+                "foreignField": "modified_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "QuoteLine",
+                "localField": "entity_id",
+                "alias": "QuoteLinesCreatedBy",
+                "foreignField": "created_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "PriceBook",
+                "localField": "entity_id",
+                "alias": "PriceBooksModifiedBy",
+                "foreignField": "modified_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "PriceBook",
+                "localField": "entity_id",
+                "alias": "PriceBooksCreatedBy",
+                "foreignField": "created_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "InvoiceLine",
+                "localField": "entity_id",
+                "alias": "InvoiceLinesCreatedBy",
+                "foreignField": "created_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "InvoiceLine",
+                "localField": "entity_id",
+                "alias": "InvoiceLinesModifiedBy",
+                "foreignField": "modified_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "PriceBookLine",
+                "localField": "entity_id",
+                "alias": "PriceBookLinesCreatedBy",
+                "foreignField": "created_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "PriceBookLine",
+                "localField": "entity_id",
+                "alias": "PriceBookLinesModifiedBy",
+                "foreignField": "modified_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "TaxTableLine",
+                "localField": "entity_id",
+                "alias": "TaxTableLinesCreatedBy",
+                "foreignField": "created_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "TaxTableLine",
+                "localField": "entity_id",
+                "alias": "TaxTableLinesModifiedBy",
+                "foreignField": "modified_by",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "HumanResourceWageHistory",
+                "localField": "entity_id",
+                "alias": "WageHistory",
+                "foreignField": "human_resource_id",
+                "cardinality": "many"
+            }
+        ]
+    },
+    "ExternalEntity": {
+        "fields": {
+            "entity_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "assigned_to": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "created_by": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "created_on": {
+                "allowNull": false,
+                "dataType": "datetime",
+                "writable": true
+            },
+            "modified_by": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "modified_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "entity_id",
+        "extends": {
+            "table": "Entity",
+            "local": "entity_id",
+            "foreign": "id"
+        },
+        "aggregates": [
+            {
+                "foreignTable": "HumanResource",
+                "localField": "assigned_to",
+                "alias": "AssignedTo",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "created_by",
+                "alias": "CreatedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "modified_by",
+                "alias": "ModifiedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "SalesProcess",
+                "localField": "entity_id",
+                "alias": "SalesProcesses",
+                "foreignField": "entity_id",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "Quote",
+                "localField": "entity_id",
+                "alias": "Quotes",
+                "foreignField": "entity_id",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "Invoice",
+                "localField": "entity_id",
+                "alias": "Invoices",
+                "foreignField": "entity_id",
+                "cardinality": "many"
+            }
+        ]
+    },
+    "Organization": {
+        "fields": {
+            "entity_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "parent_organization_id": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "name": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "founded_in": {
+                "allowNull": true,
+                "dataType": "date",
+                "defaultValue": null,
+                "writable": true
+            },
+            "industry_id": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "nbr_employees": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "sales_revenue": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "net_income": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "entity_id",
+        "aggregates": [
+            {
+                "foreignTable": "RefIndustry",
+                "localField": "industry_id",
+                "alias": "RefIndustry",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "Organization",
+                "localField": "parent_organization_id",
+                "alias": "ParentOrganization",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "Organization",
+                "localField": "entity_id",
+                "alias": "Organizations",
+                "foreignField": "parent_organization_id",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "Person",
+                "localField": "entity_id",
+                "alias": "Persons",
+                "foreignField": "organization_id",
+                "cardinality": "many"
+            }
+        ],
+        "extends": {
+            "table": "ExternalEntity",
+            "local": "entity_id",
+            "foreign": "entity_id"
+        }
+    },
+    "Person": {
+        "fields": {
+            "entity_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "first_name": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "last_name": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "gender": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "organization_id": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "job_title": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            },
+            "birthdate": {
+                "allowNull": true,
+                "dataType": "date",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "entity_id",
+        "aggregates": [
+            {
+                "foreignTable": "Organization",
+                "localField": "organization_id",
+                "alias": "Organization",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            }
+        ],
+        "extends": {
+            "table": "ExternalEntity",
+            "local": "entity_id",
+            "foreign": "entity_id"
+        }
+    },
+    "RefCountry": {
+        "fields": {
+            "id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": false
+            },
+            "name": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "country_code": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "key": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "deleted": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "deleted_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "id",
+        "aggregates": [
+            {
+                "foreignTable": "Address",
+                "localField": "id",
+                "alias": "Addresses",
+                "foreignField": "country_id",
+                "cardinality": "many"
+            }
+        ]
+    },
+    "RefAddressType": {
+        "fields": {
+            "id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": false
+            },
+            "name": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "key": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "deleted": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "deleted_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "id",
+        "aggregates": [
+            {
+                "foreignTable": "Address",
+                "localField": "id",
+                "alias": "Addresses",
+                "foreignField": "address_type_id",
+                "cardinality": "many"
+            }
+        ]
+    },
+    "Address": {
+        "fields": {
+            "id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": false
+            },
+            "entity_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "address_type_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "additional_information": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            },
+            "address_line": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "locality": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "postal_code": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "region": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "country_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "created_on": {
+                "allowNull": false,
+                "dataType": "datetime",
+                "writable": true
+            },
+            "created_by": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "modified_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            },
+            "modified_by": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "deleted": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "deleted_on": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "id",
+        "aggregates": [
+            {
+                "foreignTable": "RefCountry",
+                "localField": "country_id",
+                "alias": "RefCountry",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "RefAddressType",
+                "localField": "address_type_id",
+                "alias": "RefAddressType",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "Entity",
+                "localField": "entity_id",
+                "alias": "Entity",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "created_by",
+                "alias": "CreatedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "modified_by",
+                "alias": "ModifiedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            }
+        ]
+    },
+    "ExternalLink": {
+        "fields": {
+            "id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": false
+            },
+            "entity_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "value": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "title": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "created_on": {
+                "allowNull": false,
+                "dataType": "datetime",
+                "writable": true
+            },
+            "created_by": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "modified_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            },
+            "modified_by": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "deleted": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "deleted_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "id",
+        "aggregates": [
+            {
+                "foreignTable": "Entity",
+                "localField": "entity_id",
+                "alias": "Entity",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "created_by",
+                "alias": "CreatedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "modified_by",
+                "alias": "ModifiedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            }
+        ]
+    },
+    "RefContactMethod": {
+        "fields": {
+            "id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": false
+            },
+            "name": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "key": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "deleted": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "deleted_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "id",
+        "aggregates": [
+            {
+                "foreignTable": "ContactValue",
+                "localField": "id",
+                "alias": "ContactValues",
+                "foreignField": "contact_method_id",
+                "cardinality": "many"
+            }
+        ]
+    },
+    "ContactValue": {
+        "fields": {
+            "id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": false
+            },
+            "entity_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "contact_method_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "value": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "created_on": {
+                "allowNull": false,
+                "dataType": "datetime",
+                "writable": true
+            },
+            "created_by": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "modified_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            },
+            "modified_by": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "deleted": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "deleted_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "id",
+        "aggregates": [
+            {
+                "foreignTable": "RefContactMethod",
+                "localField": "contact_method_id",
+                "alias": "RefContactMethod",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "Entity",
+                "localField": "entity_id",
+                "alias": "Entity",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "created_by",
+                "alias": "CreatedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "modified_by",
+                "alias": "ModifiedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            }
+        ]
+    },
+    "RefSalesSource": {
+        "fields": {
+            "id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": false
+            },
+            "name": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "key": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "deleted": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "deleted_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "id",
+        "aggregates": [
+            {
+                "foreignTable": "SalesProcess",
+                "localField": "id",
+                "alias": "SalesProcesses",
+                "foreignField": "sales_source_id",
+                "cardinality": "many"
+            }
+        ]
+    },
+    "RefSalesStage": {
+        "fields": {
+            "id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": false
+            },
+            "name": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "description": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            },
+            "key": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "deleted": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "deleted_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "id",
+        "aggregates": [
+            {
+                "foreignTable": "SalesProcess",
+                "localField": "id",
+                "alias": "SalesProcesses",
+                "foreignField": "sales_stage_id",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "SalesProcessHistory",
+                "localField": "id",
+                "alias": "SalesProcessHistory",
+                "foreignField": "sales_stage_id",
+                "cardinality": "many"
+            }
+        ]
+    },
+    "SalesProcess": {
+        "fields": {
+            "id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": false
+            },
+            "entity_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "sales_source_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "assigned_to": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "title": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "expected_close_date": {
+                "allowNull": true,
+                "dataType": "date",
+                "defaultValue": null,
+                "writable": true
+            },
+            "sales_stage_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "success_probability": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "estimated_value": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "next_step": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            },
+            "next_step_date": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            },
+            "notes": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            },
+            "created_on": {
+                "allowNull": false,
+                "dataType": "datetime",
+                "writable": true
+            },
+            "created_by": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "modified_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            },
+            "modified_by": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "deleted": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "deleted_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "id",
+        "aggregates": [
+            {
+                "foreignTable": "ExternalEntity",
+                "localField": "entity_id",
+                "alias": "Entity",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "RefSalesSource",
+                "localField": "sales_source_id",
+                "alias": "RefSalesSource",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "RefSalesStage",
+                "localField": "sales_stage_id",
+                "alias": "RefSalesStage",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "created_by",
+                "alias": "CreatedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "modified_by",
+                "alias": "ModifiedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "assigned_to",
+                "alias": "AssignedTo",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "Quote",
+                "localField": "id",
+                "alias": "Quotes",
+                "foreignField": "sales_process_id",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "Invoice",
+                "localField": "id",
+                "alias": "Invoices",
+                "foreignField": "sales_process_id",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "SalesProcessHistory",
+                "localField": "id",
+                "alias": "History",
+                "foreignField": "sales_process_id",
+                "cardinality": "many"
+            }
+        ]
+    },
+    "RefQuoteStatus": {
+        "fields": {
+            "id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": false
+            },
+            "name": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "key": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "deleted": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "deleted_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "id",
+        "aggregates": [
+            {
+                "foreignTable": "Quote",
+                "localField": "id",
+                "alias": "Quotes",
+                "foreignField": "quote_status_id",
+                "cardinality": "many"
+            }
+        ]
+    },
+    "Quote": {
+        "fields": {
+            "id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": false
+            },
+            "entity_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "sales_process_id": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "assigned_to": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "title": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            },
+            "quote_status_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 4,
+                "writable": true
+            },
+            "total_value": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "valid_to": {
+                "allowNull": true,
+                "dataType": "date",
+                "defaultValue": null,
+                "writable": true
+            },
+            "private_notes": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            },
+            "notes": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            },
+            "created_on": {
+                "allowNull": false,
+                "dataType": "datetime",
+                "writable": true
+            },
+            "created_by": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "modified_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            },
+            "modified_by": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "deleted_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            },
+            "deleted": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            }
+        },
+        "primary": "id",
+        "aggregates": [
+            {
+                "foreignTable": "SalesProcess",
+                "localField": "sales_process_id",
+                "alias": "SalesProcess",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "RefQuoteStatus",
+                "localField": "quote_status_id",
+                "alias": "RefQuoteStatus",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "created_by",
+                "alias": "CreatedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "modified_by",
+                "alias": "ModifiedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "assigned_to",
+                "alias": "AssignedTo",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "ExternalEntity",
+                "localField": "entity_id",
+                "alias": "Entity",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "Invoice",
+                "localField": "id",
+                "alias": "Invoices",
+                "foreignField": "quote_id",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "QuoteLine",
+                "localField": "id",
+                "alias": "Lines",
+                "foreignField": "quote_id",
+                "cardinality": "many"
+            }
+        ]
+    },
+    "RefInvoiceStatus": {
+        "fields": {
+            "id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": false
+            },
+            "name": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "key": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "deleted": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "deleted_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "id",
+        "aggregates": [
+            {
+                "foreignTable": "Invoice",
+                "localField": "id",
+                "alias": "Invoices",
+                "foreignField": "invoice_status_id",
+                "cardinality": "many"
+            }
+        ]
+    },
+    "Invoice": {
+        "fields": {
+            "id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": false
+            },
+            "entity_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "sales_process_id": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "assigned_to": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "quote_id": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "title": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            },
+            "due_date": {
+                "allowNull": false,
+                "dataType": "date",
+                "writable": true
+            },
+            "total_value": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "private_notes": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            },
+            "terms": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            },
+            "notes": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            },
+            "invoice_status_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 1,
+                "writable": true
+            },
+            "created_on": {
+                "allowNull": false,
+                "dataType": "datetime",
+                "writable": true
+            },
+            "created_by": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "modified_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            },
+            "modified_by": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "deleted": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "deleted_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "id",
+        "aggregates": [
+            {
+                "foreignTable": "Quote",
+                "localField": "quote_id",
+                "alias": "Quote",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "SalesProcess",
+                "localField": "sales_process_id",
+                "alias": "SalesProcess",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "RefInvoiceStatus",
+                "localField": "invoice_status_id",
+                "alias": "RefInvoiceStatus",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "created_by",
+                "alias": "CreatedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "modified_by",
+                "alias": "ModifiedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "assigned_to",
+                "alias": "AssignedTo",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "ExternalEntity",
+                "localField": "entity_id",
+                "alias": "Entity",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "InvoiceLine",
+                "localField": "id",
+                "alias": "Lines",
+                "foreignField": "invoice_id",
+                "cardinality": "many"
+            }
+        ]
+    },
+    "RefOfferCategory": {
+        "fields": {
+            "id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": false
+            },
+            "name": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "key": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "deleted": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "deleted_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "id",
+        "aggregates": [
+            {
+                "foreignTable": "Offer",
+                "localField": "id",
+                "alias": "Offers",
+                "foreignField": "offer_category_id",
+                "cardinality": "many"
+            }
+        ]
+    },
+    "TaxTable": {
+        "fields": {
+            "id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": false
+            },
+            "name": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "description": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            },
+            "created_on": {
+                "allowNull": false,
+                "dataType": "datetime",
+                "writable": true
+            },
+            "created_by": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "modified_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            },
+            "modified_by": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "deleted": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "deleted_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "id",
+        "aggregates": [
+            {
+                "foreignTable": "HumanResource",
+                "localField": "created_by",
+                "alias": "CreatedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "modified_by",
+                "alias": "ModifiedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "Offer",
+                "localField": "id",
+                "alias": "Offers",
+                "foreignField": "tax_table_id",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "QuoteLine",
+                "localField": "id",
+                "alias": "QuoteLines",
+                "foreignField": "tax_table_id",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "InvoiceLine",
+                "localField": "id",
+                "alias": "InvoiceLines",
+                "foreignField": "tax_table_id",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "PriceBookLine",
+                "localField": "id",
+                "alias": "PriceBookLines",
+                "foreignField": "tax_table_id",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "TaxTableLine",
+                "localField": "id",
+                "alias": "Lines",
+                "foreignField": "tax_table_id",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "Profile",
+                "localField": "id",
+                "alias": "ProfilesDefaultCustomerTaxTable",
+                "foreignField": "default_customer_tax_table",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "Profile",
+                "localField": "id",
+                "alias": "ProfilesDefaultVendorTaxTable",
+                "foreignField": "default_vendor_tax_table",
+                "cardinality": "many"
+            }
+        ]
+    },
+    "Offer": {
+        "fields": {
+            "id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": false
+            },
+            "name": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "description": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            },
+            "reference_code": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            },
+            "default_price": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "tax_table_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "note": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            },
+            "offer_category_id": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "created_on": {
+                "allowNull": false,
+                "dataType": "datetime",
+                "writable": true
+            },
+            "created_by": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "modified_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            },
+            "modified_by": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "deleted": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "deleted_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "id",
+        "aggregates": [
+            {
+                "foreignTable": "RefOfferCategory",
+                "localField": "offer_category_id",
+                "alias": "RefOfferCategory",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "created_by",
+                "alias": "CreatedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "modified_by",
+                "alias": "ModifiedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "TaxTable",
+                "localField": "tax_table_id",
+                "alias": "TaxTable",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "QuoteLine",
+                "localField": "id",
+                "alias": "QuoteLines",
+                "foreignField": "offer_id",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "InvoiceLine",
+                "localField": "id",
+                "alias": "InvoiceLines",
+                "foreignField": "offer_id",
+                "cardinality": "many"
+            },
+            {
+                "foreignTable": "PriceBookLine",
+                "localField": "id",
+                "alias": "PriceBookLines",
+                "foreignField": "offer_id",
+                "cardinality": "many"
+            }
+        ]
+    },
+    "Product": {
+        "fields": {
+            "offer_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "purchase_price": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "weight": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "width": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "height": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "length": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            }
+        },
+        "primary": "offer_id",
+        "extends": {
+            "table": "Offer",
+            "local": "offer_id",
+            "foreign": "id"
+        }
+    },
+    "Service": {
+        "fields": {
+            "offer_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            }
+        },
+        "primary": "offer_id",
+        "extends": {
+            "table": "Offer",
+            "local": "offer_id",
+            "foreign": "id"
+        }
+    },
+    "QuoteLine": {
+        "fields": {
+            "id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": false
+            },
+            "quote_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "offer_id": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "offer_price": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "offer_name": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "quantity": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 1,
+                "writable": true
+            },
+            "note": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            },
+            "tax_table_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "created_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            },
+            "created_by": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "modified_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            },
+            "modified_by": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "deleted_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            },
+            "deleted": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            }
+        },
+        "primary": "id",
+        "aggregates": [
+            {
+                "foreignTable": "Quote",
+                "localField": "quote_id",
+                "alias": "Quote",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "modified_by",
+                "alias": "ModifiedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "created_by",
+                "alias": "CreatedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "Offer",
+                "localField": "offer_id",
+                "alias": "Offer",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "TaxTable",
+                "localField": "tax_table_id",
+                "alias": "TaxTable",
+                "foreignField": "id",
+                "cardinality": "single"
+            }
+        ]
+    },
+    "SalesProcessHistory": {
+        "fields": {
+            "id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": false
+            },
+            "sales_process_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "date": {
+                "allowNull": false,
+                "dataType": "datetime",
+                "writable": true
+            },
+            "sales_stage_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "success_probability": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "created_on": {
+                "allowNull": false,
+                "dataType": "datetime",
+                "writable": true
+            },
+            "deleted": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "deleted_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "id",
+        "aggregates": [
+            {
+                "foreignTable": "SalesProcess",
+                "localField": "sales_process_id",
+                "alias": "SalesProcess",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "RefSalesStage",
+                "localField": "sales_stage_id",
+                "alias": "RefSalesStage",
+                "foreignField": "id",
+                "cardinality": "single"
+            }
+        ]
+    },
+    "PriceBook": {
+        "fields": {
+            "id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": false
+            },
+            "name": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "description": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            },
+            "created_by": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "created_on": {
+                "allowNull": false,
+                "dataType": "datetime",
+                "writable": true
+            },
+            "modified_by": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "modified_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            },
+            "deleted": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "deleted_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "id",
+        "aggregates": [
+            {
+                "foreignTable": "HumanResource",
+                "localField": "modified_by",
+                "alias": "ModifiedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "created_by",
+                "alias": "CreatedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "PriceBookLine",
+                "localField": "id",
+                "alias": "Lines",
+                "foreignField": "price_book_id",
+                "cardinality": "many"
+            }
+        ]
+    },
+    "InvoiceLine": {
+        "fields": {
+            "id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": false
+            },
+            "invoice_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "offer_id": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "offer_price": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "offer_name": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "quantity": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 1,
+                "writable": true
+            },
+            "tax_table_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "note": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            },
+            "created_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            },
+            "created_by": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "modified_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            },
+            "modified_by": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "deleted": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "deleted_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "id",
+        "aggregates": [
+            {
+                "foreignTable": "Invoice",
+                "localField": "invoice_id",
+                "alias": "Invoice",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "created_by",
+                "alias": "CreatedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "modified_by",
+                "alias": "ModifiedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "Offer",
+                "localField": "offer_id",
+                "alias": "Offer",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "TaxTable",
+                "localField": "tax_table_id",
+                "alias": "TaxTable",
+                "foreignField": "id",
+                "cardinality": "single"
+            }
+        ]
+    },
+    "PriceBookLine": {
+        "fields": {
+            "id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": false
+            },
+            "price_book_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "offer_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "price": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "tax_table_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 1,
+                "writable": true
+            },
+            "created_on": {
+                "allowNull": false,
+                "dataType": "datetime",
+                "writable": true
+            },
+            "created_by": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "modified_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            },
+            "modified_by": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "deleted_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            },
+            "deleted": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            }
+        },
+        "primary": "id",
+        "aggregates": [
+            {
+                "foreignTable": "PriceBook",
+                "localField": "price_book_id",
+                "alias": "PriceBook",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "TaxTable",
+                "localField": "tax_table_id",
+                "alias": "TaxTable",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "Offer",
+                "localField": "offer_id",
+                "alias": "Offer",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "created_by",
+                "alias": "CreatedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "modified_by",
+                "alias": "ModifiedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            }
+        ]
+    },
+    "TaxTableLine": {
+        "fields": {
+            "id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": false
+            },
+            "tax_table_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "name": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "rate": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "order": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "is_compound": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "registry_nbr": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            },
+            "created_by": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "created_on": {
+                "allowNull": false,
+                "dataType": "datetime",
+                "writable": true
+            },
+            "modified_by": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "modified_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            },
+            "deleted": {
+                "allowNull": false,
+                "dataType": "integer",
+                "defaultValue": 0,
+                "writable": true
+            },
+            "deleted_on": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "id",
+        "aggregates": [
+            {
+                "foreignTable": "TaxTable",
+                "localField": "tax_table_id",
+                "alias": "TaxTable",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "created_by",
+                "alias": "CreatedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "modified_by",
+                "alias": "ModifiedBy",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            }
+        ]
+    },
+    "Profile": {
+        "fields": {
+            "entity_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "name": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "company_identifier": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            },
+            "default_customer_tax_table": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "default_vendor_tax_table": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "logo_url": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "entity_id",
+        "extends": {
+            "table": "Entity",
+            "local": "entity_id",
+            "foreign": "id"
+        },
+        "aggregates": [
+            {
+                "foreignTable": "TaxTable",
+                "localField": "default_customer_tax_table",
+                "alias": "DefaultCustomerTaxTable",
+                "foreignField": "id",
+                "cardinality": "single"
+            },
+            {
+                "foreignTable": "TaxTable",
+                "localField": "default_vendor_tax_table",
+                "alias": "DefaultVendorTaxTable",
+                "foreignField": "id",
+                "cardinality": "single"
+            }
+        ]
+    },
+    "HumanResourceWageHistory": {
+        "fields": {
+            "id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": false
+            },
+            "human_resource_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "date": {
+                "allowNull": true,
+                "dataType": "datetime",
+                "defaultValue": null,
+                "writable": true
+            },
+            "annual_wage": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "hourly_wage": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "client_hourly_fee": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "id",
+        "aggregates": [
+            {
+                "foreignTable": "HumanResource",
+                "localField": "human_resource_id",
+                "alias": "HumanResource",
+                "foreignField": "entity_id",
+                "cardinality": "single"
+            }
+        ]
+    }
+}
