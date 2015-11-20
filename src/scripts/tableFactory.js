@@ -25,7 +25,7 @@ module.exports = function tableFactory(tn, fullModel, db) {
             if (isPrimaryKeyUsed(data, d[m.primary], m.primary)) {
                 throw Error("provided " + m.primary + ": " + d[m.primary] + " is already in use in " + name);
             } else {
-                obj = makeData(m, d, getFurthestAncestorField(name, fullModel), db);
+                obj = makeData(m, d, db);
                 // create a new data array
                 // immutability
                 data = data.concat(obj);
@@ -51,14 +51,11 @@ module.exports = function tableFactory(tn, fullModel, db) {
                 }
             }
 
-            // create a new object with makeData
+            // remove existing object
             this.delete(pkValue || d[m.primary]);
-            obj = makeData(m, d, getFurthestAncestorField(name, fullModel), db);
 
-            // inject it into data array at specific place (keep ids in order)
-            data.push(obj);
-
-            return obj;
+            // re-create new object
+            return this.post(d);
         },
         // DELETE
         delete: function(id) {
