@@ -68,7 +68,7 @@ module.exports = function tableFactory(tn, fullModel, db) {
                 // re-create new object
                 return this.post(d);
             } else {
-                return this.get(d[m.primary]);
+                return current;
             }
         },
         // DELETE
