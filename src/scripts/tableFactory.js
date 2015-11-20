@@ -42,7 +42,7 @@ module.exports = function tableFactory(tn, fullModel, db) {
         put: function(d, pkValue) {
             // find current object
             var current = getData(data, pkValue || d[m.primary], m.primary),
-                obj,
+                differs = false,
                 k;
 
             // throw if unfound
@@ -51,17 +51,25 @@ module.exports = function tableFactory(tn, fullModel, db) {
             }
 
             // compile new values, keeping only own values
+            // check if the PUT operation will actually change something
             for (k in current) {
                 if (d[k] === undefined && typeof current[k] !== "object") {
                     d[k] = current[k];
+                } else if (d[k] !== current[k]) {
+                    differs = true;
                 }
             }
 
-            // remove existing object
-            this.delete(pkValue || d[m.primary]);
+            // if differences have been detected
+            if (differs) {
+                // remove existing object
+                this.delete(pkValue || d[m.primary]);
 
-            // re-create new object
-            return this.post(d);
+                // re-create new object
+                return this.post(d);
+            } else {
+                return this.get(d[m.primary]);
+            }
         },
         // DELETE
         delete: function(id) {
