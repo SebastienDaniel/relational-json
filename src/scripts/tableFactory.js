@@ -26,9 +26,15 @@ module.exports = function tableFactory(tn, fullModel, db) {
                 throw Error("provided " + m.primary + ": " + d[m.primary] + " is already in use in " + name);
             } else {
                 obj = makeData(m, d, db);
-                // create a new data array
-                // immutability
-                data = data.concat(obj);
+
+                // create a new data array (for immutability)
+                // keep index order
+                data = data.concat(obj).sort(function(a, b) {
+                    a = a[m.primary];
+                    b = b[m.primary];
+
+                    return a - b;
+                });
                 return obj;
             }
         },
