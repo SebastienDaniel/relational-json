@@ -63,14 +63,14 @@ describe("immutability", function() {
         expect(db.Person.get(11)).to.equal(pastSpecific);
     });
 
-    it("shouldn't create a new collection on PUT", function() {
+    it("should create a new collection on PUT", function() {
         var past = db.Person.get();
 
         db.Person.put({
             first_name: "ginette"
         }, 11);
 
-        expect(past).to.equal(db.Person.get());
+        expect(past).to.not.equal(db.Person.get());
     });
 
     it("should look in data bundle if no pkValue is provided", function() {
