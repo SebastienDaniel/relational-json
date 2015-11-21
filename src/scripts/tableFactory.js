@@ -53,17 +53,19 @@ module.exports = function tableFactory(tn, fullModel, db) {
             // compile new values, keeping only own values
             // check if the PUT operation will actually change something
             for (k in current) {
-                if (d[k] === undefined && typeof current[k] !== "object") {
-                    d[k] = current[k];
-                } else if (d[k] !== current[k]) {
-                    differs = true;
+                if (current[k] === null || typeof current[k] !== "object") {
+                    if (d[k] === undefined) {
+                        d[k] = current[k];
+                    } else if (d[k] !== current[k]) {
+                        differs = true;
+                    }
                 }
             }
 
             // if differences have been detected
             if (differs) {
                 // remove existing object
-                this.delete(pkValue || d[m.primary]);
+                this.delete(pkValue || current[m.primary]);
 
                 // re-create new object
                 return this.post(d);
