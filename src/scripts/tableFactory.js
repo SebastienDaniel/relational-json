@@ -97,7 +97,11 @@ module.exports = function tableFactory(tn, fullModel, db) {
             aliasMap: {
                 get: function() {
                     return getInheritanceChain(name, fullModel).reduce(function(pV, cV) {
-                        return pV.concat(fullModel[cV].aggregates);
+                        if (fullModel[cV].aggregates) {
+                            return pV.concat(fullModel[cV].aggregates);
+                        } else {
+                            return pV;
+                        }
                     }, []).reduce(function(pV, cV) {
                         pV[cV.alias] = cV.foreignTable;
                         return pV;
