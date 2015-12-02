@@ -52,6 +52,11 @@ module.exports = function validateDataType(field, value) {
             // two-part evaluation
             value = value.split(/\s|T/);
 
+            // fallback time if time missing
+            if (!value[1]) {
+                value[1] = "00:00:00";
+            }
+
             res = trueType === "[object String]" && validateDataType({dataType: "date", allowNull: false}, value[0]) && validateDataType({dataType: "time", allowNull: false}, value[1]);
             break;
         }

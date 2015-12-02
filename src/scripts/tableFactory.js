@@ -76,6 +76,9 @@ module.exports = function tableFactory(tn, fullModel, db) {
         // DELETE
         delete: function(id) {
             recursiveDelete(id, data, name, fullModel, db);
+
+            // reset data array
+            data = data.splice(0, data.length);
         },
         // meta-data about the table
         meta: Object.create(null, {
