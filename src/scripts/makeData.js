@@ -1,7 +1,7 @@
 var dataFactory = require("./dataFactory"),
     validateDataType = require("./validateDataType");
 
-module.exports = function makeData(model, d, db) {
+module.exports = function makeData(model, d, tn, db) {
     "use strict";
     var missingFields = [];
 
@@ -17,7 +17,7 @@ module.exports = function makeData(model, d, db) {
         // make sure all fields respect their datatype
         if (d[key]) {
             if (!validateDataType(model.fields[key], d[key])) {
-                throw Error("Provided data " + d[key] + "\nis not compatible with field " + key + "\nexpected datatype: " + model.fields[key].dataType);
+                throw Error("Provided data " + d[key] + "\nis not compatible with " + tn + "." + key + "\nexpected datatype: " + model.fields[key].dataType);
             }
         }
     });

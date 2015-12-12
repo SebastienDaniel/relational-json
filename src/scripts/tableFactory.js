@@ -25,7 +25,7 @@ module.exports = function tableFactory(tn, fullModel, db) {
             if (isPrimaryKeyUsed(data, d[m.primary], m.primary)) {
                 throw Error("provided " + m.primary + ": " + d[m.primary] + " is already in use in " + name);
             } else {
-                obj = makeData(m, d, db);
+                obj = makeData(m, d, tn, db);
 
                 // create a new data array (for immutability)
                 // keep index order
