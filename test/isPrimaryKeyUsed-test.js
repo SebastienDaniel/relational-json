@@ -1,6 +1,7 @@
 var isPKused = require("../src/scripts/isPrimaryKeyUsed"),
     chai = require("chai"),
-    expect = require("chai").expect;
+    expect = require("chai").expect,
+    db = require("../src/scripts")(require("./test-graph.json"));
 
 describe("isPrimaryKeyUsed", function() {
     var a = [
@@ -38,6 +39,36 @@ describe("isPrimaryKeyUsed", function() {
 
         expect(function() {
             return isPKUsed(a);
+        }).to.throw;
+    });
+
+    it("data creation with existing parent ID in EXTENDS should pass", function() {
+        db.ExternalEntity.post({
+            entity_id: 11,
+            created_by: 1,
+            created_on: "2015-01-01T12:30:59"
+        });
+
+        expect(db.Person.post({
+            entity_id: 11,
+            first_name: "Sebastien",
+            last_name: "Daniel",
+            gender: "m",
+            created_by: 1,
+            created_on: "2015-01-01T12:30:59"
+        })).not.to.throw;
+    });
+
+    it("data creation with existing ID shuld throw", function() {
+        expect(function() {
+            return db.Person.post({
+                entity_id: 11,
+                first_name: "Sebastien",
+                last_name: "Daniel",
+                gender: "m",
+                created_by: 1,
+                created_on: "2015-01-01T12:30:59"
+            })
         }).to.throw;
     });
 });

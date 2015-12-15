@@ -9,8 +9,8 @@ module.exports = function dataFactory(model, d, db) {
         // make sure prototype has required data with proper key names
         d[model.extends.foreign] = d[model.extends.local];
 
-        // create the prototype
-        row = Object.create(db[model.extends.table].post(d));
+        // create or get the prototype
+        row = Object.create(db[model.extends.table].get(d[model.primary]) || db[model.extends.table].post(d));
     } else {
         row = Object.create(null);
     }

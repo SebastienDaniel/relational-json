@@ -87,4 +87,22 @@ describe("immutability", function() {
         expect(db.Person.get(11).created_by).to.eql(1);
         expect(db.Person.get(11).created_on).to.eql("2015-01-01T12:30:59");
     });
+
+    it("should change a child's prototype if the prototype is PUT", function() {
+        db.Entity.put({
+            id: 11,
+            deleted: 1
+        });
+
+        expect(db.Person.get(11).deleted).to.equal(1);
+    });
+
+    it("an entry should dispatch \"Put\" to it's prototype if necessary", function() {
+        db.Person.put({
+            entity_id: 11,
+            deleted_on: "2015-01-01 12:00:00"
+        });
+
+        expect(db.Entity.get(11).deleted_on).to.equal("2015-01-01 12:00:00");
+    });
 });

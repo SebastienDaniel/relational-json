@@ -28,6 +28,18 @@
                 "foreignField": "entity_id",
                 "cardinality": "many"
             }
+        ],
+        "extendedBy": [
+            {
+                "foreignTable": "InternalEntity",
+                "localField": "id",
+                "foreignField": "entity_id"
+            },
+            {
+                "foreignTable": "ExternalEntity",
+                "localField": "id",
+                "foreignField": "entity_id"
+            }
         ]
     },
     "InternalEntity": {
@@ -61,6 +73,18 @@
             "local": "entity_id",
             "foreign": "id"
         },
+        "extendedBy": [
+            {
+                "foreignTable": "Profile",
+                "localField": "entity_id",
+                "foreignField": "entity_id"
+            },
+            {
+                "foreignTable": "HumanResource",
+                "localField": "entity_id",
+                "foreignField": "entity_id"
+            }
+        ],
         "aggregates": [
             {
                 "foreignTable": "InternalEntity",
@@ -120,6 +144,18 @@
             "local": "entity_id",
             "foreign": "id"
         },
+        "extendedBy": [
+            {
+                "foreignTable": "Person",
+                "localField": "entity_id",
+                "foreignField": "entity_id"
+            },
+            {
+                "foreignTable": "Organization",
+                "localField": "entity_id",
+                "foreignField": "entity_id"
+            }
+        ],
         "aggregates": []
     },
     "ExternalLink": {
