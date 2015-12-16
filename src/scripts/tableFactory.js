@@ -111,7 +111,7 @@ module.exports = function tableFactory(tn, fullModel, db) {
              */
             aliasMap: {
                 get: function() {
-                    return getInheritanceChain(name, fullModel).reduce(function(pV, cV) {
+                    var aliases = getInheritanceChain(name, fullModel).reduce(function(pV, cV) {
                         if (fullModel[cV].aggregates) {
                             return pV.concat(fullModel[cV].aggregates);
                         } else {
@@ -121,6 +121,15 @@ module.exports = function tableFactory(tn, fullModel, db) {
                         pV[cV.alias] = cV.foreignTable;
                         return pV;
                     }, {});
+
+                    if (m.extendedBy) {
+                        m.extendedBy.reduce(function(pV, cV) {
+                            pV[cV.foreignTable] = cV.foreignTable;
+                            return pV;
+                        }, aliases);
+                    }
+
+                    return aliases;
                 },
                 enumerable: true
             }
