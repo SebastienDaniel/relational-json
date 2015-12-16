@@ -39,6 +39,20 @@ module.exports = function dataFactory(model, d, db) {
         }
     });
 
+    // generate child extensions
+    if (model.extendedBy) {
+        model.extendedBy.forEach(function(ext) {
+            // add getter for the parent data
+            Object.defineProperty(row, ext.foreignTable, {
+                get: function() {
+                    return db[ext.foreignTable].get(this[ext.localField]);
+                },
+                set: function() {},
+                enumerable: true
+            });
+        });
+    }
+
     // add aggregates to row
     if (model.aggregates) {
         model.aggregates.forEach(function(agg) {
