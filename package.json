@@ -1,5 +1,5 @@
 {
-  "name": "sebastiendaniel-relational-json",
+  "name": "relational-json",
   "description": "Relation data model for JSON objects",
   "keywords": [
     "relational",
@@ -8,7 +8,7 @@
     "model",
     "json"
   ],
-  "version": "2.5.1",
+  "version": "1.0.0",
   "author": {
     "name": "Sebastien Daniel",
     "email": "info@sebastiendaniel.ca",
@@ -21,10 +21,7 @@
   "bugs": {
     "url": "https://www.github.com/SebastienDaniel/relational-json/issues"
   },
-  "license": {
-    "type": "MIT License",
-    "url": "https://www.github.com/SebastienDaniel/relational-json/license"
-  },
+  "license": "MIT",
   "main": "src/scripts/index.js",
   "private": false,
   "devDependencies": {

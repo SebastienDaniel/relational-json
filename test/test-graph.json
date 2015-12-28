@@ -3,20 +3,17 @@
         "fields": {
             "id": {
                 "allowNull": false,
-                "dataType": "integer",
-                "writable": false
+                "dataType": "integer"
             },
             "deleted": {
                 "allowNull": false,
                 "dataType": "integer",
-                "defaultValue": 0,
-                "writable": true
+                "defaultValue": 0
             },
             "deleted_on": {
                 "allowNull": true,
                 "dataType": "datetime",
-                "defaultValue": null,
-                "writable": true
+                "defaultValue": null
             }
         },
         "primary": "id",
@@ -46,25 +43,21 @@
         "fields": {
             "entity_id": {
                 "allowNull": false,
-                "dataType": "integer",
-                "writable": true
+                "dataType": "integer"
             },
             "created_on": {
                 "allowNull": false,
-                "dataType": "datetime",
-                "writable": true
+                "dataType": "datetime"
             },
             "modified_on": {
                 "allowNull": true,
                 "dataType": "datetime",
-                "defaultValue": null,
-                "writable": true
+                "defaultValue": null
             },
             "modified_by": {
                 "allowNull": true,
                 "dataType": "integer",
-                "defaultValue": null,
-                "writable": true
+                "defaultValue": null
             }
         },
         "primary": "entity_id",
@@ -106,36 +99,30 @@
         "fields": {
             "entity_id": {
                 "allowNull": false,
-                "dataType": "integer",
-                "writable": true
+                "dataType": "integer"
             },
             "assigned_to": {
                 "allowNull": true,
                 "dataType": "integer",
-                "defaultValue": null,
-                "writable": true
+                "defaultValue": null
             },
             "created_by": {
                 "allowNull": false,
-                "dataType": "integer",
-                "writable": true
+                "dataType": "integer"
             },
             "created_on": {
                 "allowNull": false,
-                "dataType": "datetime",
-                "writable": true
+                "dataType": "datetime"
             },
             "modified_by": {
                 "allowNull": true,
                 "dataType": "integer",
-                "defaultValue": null,
-                "writable": true
+                "defaultValue": null
             },
             "modified_on": {
                 "allowNull": true,
                 "dataType": "datetime",
-                "defaultValue": null,
-                "writable": true
+                "defaultValue": null
             }
         },
         "primary": "entity_id",
@@ -162,13 +149,11 @@
         "fields": {
             "id": {
                 "allowNull": false,
-                "dataType": "integer",
-                "writable": false
+                "dataType": "integer"
             },
             "entity_id": {
                 "allowNull": false,
-                "dataType": "integer",
-                "writable": true
+                "dataType": "integer"
             },
             "value": {
                 "allowNull": false,

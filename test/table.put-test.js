@@ -1,6 +1,6 @@
 var chai = require("chai"),
     expect = require("chai").expect,
-    db = require("../src/scripts")(require("./graph-test.json"));
+    db = require("../src/scripts")(require("./test-graph.json"));
 
 describe("table.put()", function() {
     it("should update existing objects by creating new objects", function() {
@@ -24,7 +24,10 @@ describe("table.put()", function() {
 
         expect(entity).to.not.equal(db.Entity.get(1));
         expect(externalEntity).to.not.equal(db.ExternalEntity.get(1));
-        expect(person).to.equal(db.Person.get(1));
+        expect(person.first_name).to.eql(db.Person.get(1).first_name);
+        expect(person.last_name).to.eql(db.Person.get(1).last_name);
+        expect(person.entity_id).to.eql(db.Person.get(1).entity_id);
+        expect(person).to.not.equal(db.Person.get(1));
     });
 
     it("should ignore PUT requests that provide no change to the current primitives", function() {
