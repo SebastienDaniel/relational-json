@@ -33,13 +33,13 @@ Fields have the following properties:
 - **dataType**: the primitive type of your data. Supported types are:
   - string
   - date (*ISO format*)
-  - time (*ISO format*)
-  - datetime (*ISO format*)
+  - time (*ISO format, no timezone*)
+  - datetime (*ISO format, no timezone*)
   - integer
   - float
   - boolean (*true, false, 0, 1*)
 - **allowNull**: whether the value can be set to *null* or not.
-- **defaultValue**: the default value use on a POST operation, if no value is provided.
+- **defaultValue**: the default value used on a POST operation, if no value is provided.
   
 #### Table fields, example
 ```json
@@ -58,7 +58,7 @@ Fields have the following properties:
       "is_active": {
         "allowNull": false,
         "defaultValue": 1,
-        "dataType: "boolean"
+        "dataType": "boolean"
       }
     }
   }
