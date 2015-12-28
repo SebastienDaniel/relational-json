@@ -42,7 +42,7 @@ Fields have the following properties:
 - **defaultValue**: the default value used on a POST operation, if no value is provided.
   
 #### Table fields, example
-```json
+```js
 {
   "TableName": {
     "primary": "id",
@@ -76,7 +76,7 @@ When a table extends another, the child object cannot exist without the parent o
 2. If no existing parent is found for a given PK, the parent is created using the provided data. (*This means that you must provide all required fields for all ancestors of a table on POST*)
 
 The example below will make things clearer:
-```json
+```js
 {
   "TableA": {
     "primary": "id",
