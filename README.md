@@ -73,8 +73,8 @@ The **extends** property is an object containing the following properties:
 - **foreign**: the parent table field used for the relation. *usually the PK of the foreign table*
 
 When a table extends another, the child object cannot exist without the parent object. When you POST on a child table, relational-json will try two things:
-1. If the parent table contains an entry with a PK value equal to value of the child's extension field, that parent becomes the child's prototype.
-2. If no existing parent is found for a given PK, the parent is created using the provided data. (*This means that you must provide all required fields for all ancestors of a table on POST*)
+- If the parent table contains an entry with a PK value equal to value of the child's extension field, that parent becomes the child's prototype.
+- If no existing parent is found for a given PK, the parent is created using the provided data. (*This means that you must provide all required fields for all ancestors of a table on POST*)
 
 The example below will make things clearer:
 ```js
