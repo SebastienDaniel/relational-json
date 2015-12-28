@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>relational-json by SebastienDaniel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">relational-json</h1>
+      <h2 class="project-tagline"></h2>
+      <a href="https://github.com/SebastienDaniel/relational-json" class="btn">View on GitHub</a>
+      <a href="https://github.com/SebastienDaniel/relational-json/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/SebastienDaniel/relational-json/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="relational-json" class="anchor" href="#relational-json" aria-hidden="true"><span class="octicon octicon-link"></span></a>Relational JSON</h1>
+
+<h3>
+<a id="converts-a-json-data-schema-into-a-relational-data-store" class="anchor" href="#converts-a-json-data-schema-into-a-relational-data-store" aria-hidden="true"><span class="octicon octicon-link"></span></a>Converts a JSON data-schema into a relational data store</h3>
+
+<p>Takes a JSON data structure and converts it into a database-like module allowing easy CRUD operations on immutable &amp; relational objects (<em>no data duplication</em>).</p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<pre><code>npm install relational-json --save
+</code></pre>
+
+<h2>
+<a id="json-data-structure" class="anchor" href="#json-data-structure" aria-hidden="true"><span class="octicon octicon-link"></span></a>JSON data structure</h2>
+
+<p>Create your relational data-structure (<em>JSON format</em>) following the instructions below:</p>
+
+<h3>
+<a id="tables" class="anchor" href="#tables" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tables</h3>
+
+<p>Your JSON data structure can contain any amount of tables. Each table must respect the following points:</p>
+
+<ul>
+<li>Table names must be unique.</li>
+<li>Tables must have a <strong>primary</strong> property (<em>the name of the primary field of the table</em>)</li>
+<li>Tables must have fields, which minimally contains the primary field of the table.</li>
+</ul>
+
+<div class="highlight highlight-source-js"><pre>{
+  <span class="pl-s"><span class="pl-pds">"</span>TableName<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+    <span class="pl-s"><span class="pl-pds">"</span>fields<span class="pl-pds">"</span></span><span class="pl-k">:</span> {}, <span class="pl-c">// fields or columns of the data table</span>
+    <span class="pl-s"><span class="pl-pds">"</span>primary<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>, <span class="pl-c">// primary field of the table</span>
+    <span class="pl-s"><span class="pl-pds">"</span>aggregates<span class="pl-pds">"</span></span><span class="pl-k">:</span> [], <span class="pl-c">// relations to other tables</span>
+    <span class="pl-s"><span class="pl-pds">"</span>extends<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>, <span class="pl-c">// parent table (inheritance) </span>
+    <span class="pl-s"><span class="pl-pds">"</span>extendedBy<span class="pl-pds">"</span></span><span class="pl-k">:</span> [] <span class="pl-c">// child tables (inheritance)</span>
+  }
+}</pre></div>
+
+<h3>
+<a id="table-fields" class="anchor" href="#table-fields" aria-hidden="true"><span class="octicon octicon-link"></span></a>Table fields</h3>
+
+<p>Every Table in your relational structure must have fields. Fields describe the nature of your data and the constraints that relational-json will enforce during POST and PUT operations.
+Fields have the following properties:</p>
+
+<ul>
+<li>
+<strong>dataType</strong>: the primitive type of your data. Supported types are:
+
+<ul>
+<li>string</li>
+<li>date (<em>ISO format</em>)</li>
+<li>time (<em>ISO format, no timezone</em>)</li>
+<li>datetime (<em>ISO format, no timezone</em>)</li>
+<li>integer</li>
+<li>float</li>
+<li>boolean (<em>true, false, 0, 1</em>)</li>
+</ul>
+</li>
+<li>
+<strong>allowNull</strong>: whether the value can be set to <em>null</em> or not.</li>
+<li>
+<strong>defaultValue</strong>: the default value used on a POST operation, if no value is provided.</li>
+</ul>
+
+<h4>
+<a id="table-fields-example" class="anchor" href="#table-fields-example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Table fields, example</h4>
+
+<div class="highlight highlight-source-js"><pre>{
+  <span class="pl-s"><span class="pl-pds">"</span>TableName<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+    <span class="pl-s"><span class="pl-pds">"</span>primary<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>fields<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+      <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+        <span class="pl-s"><span class="pl-pds">"</span>allowNull<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">false</span>,
+        <span class="pl-s"><span class="pl-pds">"</span>dataType<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>integer<span class="pl-pds">"</span></span>
+      },
+      <span class="pl-s"><span class="pl-pds">"</span>title<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+        <span class="pl-s"><span class="pl-pds">"</span>allowNull<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">false</span>,
+        <span class="pl-s"><span class="pl-pds">"</span>dataType<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>string<span class="pl-pds">"</span></span>
+      },
+      <span class="pl-s"><span class="pl-pds">"</span>is_active<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+        <span class="pl-s"><span class="pl-pds">"</span>allowNull<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">false</span>,
+        <span class="pl-s"><span class="pl-pds">"</span>defaultValue<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">1</span>,
+        <span class="pl-s"><span class="pl-pds">"</span>dataType<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>boolean<span class="pl-pds">"</span></span>
+      }
+    }
+  }
+}</pre></div>
+
+<h3>
+<a id="table-extends" class="anchor" href="#table-extends" aria-hidden="true"><span class="octicon octicon-link"></span></a>Table extends</h3>
+
+<p>Tables can extend a parent table, which means that each object from the child table will have a prototype object from the parent table. 
+The <strong>extends</strong> property is an object containing the following properties:</p>
+
+<ul>
+<li>
+<strong>table</strong>: the parent table name</li>
+<li>
+<strong>local</strong>: the local field (<em>child table</em>) used for the relation. (<em>equivalent to a foreign key (FK) field in SQL</em>)</li>
+<li>
+<strong>foreign</strong>: the parent table field used for the relation. <em>usually the PK of the foreign table</em>
+</li>
+</ul>
+
+<p>When a table extends another, the child object cannot exist without the parent object. When you POST on a child table, relational-json will try two things:</p>
+
+<ul>
+<li>If the parent table contains an entry with a PK value equal to value of the child's extension field, that parent becomes the child's prototype.</li>
+<li>If no existing parent is found for a given PK, the parent is created using the provided data. (<em>This means that you must provide all required fields for all ancestors of a table on POST</em>)</li>
+</ul>
+
+<h4>
+<a id="table-extends-example" class="anchor" href="#table-extends-example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Table extends example</h4>
+
+<div class="highlight highlight-source-js"><pre>{
+  <span class="pl-s"><span class="pl-pds">"</span>TableA<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+    <span class="pl-s"><span class="pl-pds">"</span>primary<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>fields<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+      <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+        <span class="pl-s"><span class="pl-pds">"</span>allowNull<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">false</span>,
+        <span class="pl-s"><span class="pl-pds">"</span>dataType<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>integer<span class="pl-pds">"</span></span>
+      },
+      <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+        <span class="pl-s"><span class="pl-pds">"</span>allowNull<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">false</span>,
+        <span class="pl-s"><span class="pl-pds">"</span>dataType<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>string<span class="pl-pds">"</span></span>
+      }
+    }
+  },
+  <span class="pl-s"><span class="pl-pds">"</span>TableB<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+    <span class="pl-s"><span class="pl-pds">"</span>primary<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>fields<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+      <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+        <span class="pl-s"><span class="pl-pds">"</span>allowNull<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">false</span>,
+        <span class="pl-s"><span class="pl-pds">"</span>dataType<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>integer<span class="pl-pds">"</span></span>
+      },
+      <span class="pl-s"><span class="pl-pds">"</span>job_title<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+        <span class="pl-s"><span class="pl-pds">"</span>allowNull<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">false</span>,
+        <span class="pl-s"><span class="pl-pds">"</span>dataType<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>string<span class="pl-pds">"</span></span>
+      }
+    },
+    <span class="pl-s"><span class="pl-pds">"</span>extends<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+      <span class="pl-s"><span class="pl-pds">"</span>table<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>TableA<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>local<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>, <span class="pl-c">// refers to TableB.id</span>
+      <span class="pl-s"><span class="pl-pds">"</span>foreign<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span> <span class="pl-c">// refers to TableA.id</span>
+    }
+  }
+}</pre></div>
+
+<h3>
+<a id="table-extendedby" class="anchor" href="#table-extendedby" aria-hidden="true"><span class="octicon octicon-link"></span></a>Table extendedBy</h3>
+
+<p>A table can be extended by child tables, this is essentially the same as <em>extends</em>, but from the parent table's point of view. This allows the parent table's objects to refer to their children.
+The <code>extendedBy</code> property is an array of objects with the following properties:</p>
+
+<ul>
+<li>
+<strong>foreignTable</strong>: the table that is a child of the current table.</li>
+<li>
+<strong>localField</strong>: local field used for the relation.</li>
+<li>
+<strong>foreignField</strong>: foreign field used for the relation.</li>
+</ul>
+
+<h4>
+<a id="table-extendedby-example" class="anchor" href="#table-extendedby-example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Table extendedBy example</h4>
+
+<p>If we take the previous example, we can add the <code>extendedBy</code> property to <code>TableA</code>:</p>
+
+<div class="highlight highlight-source-js"><pre>{
+  <span class="pl-s"><span class="pl-pds">"</span>TableA<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+    <span class="pl-s"><span class="pl-pds">"</span>primary<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>fields<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+      <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+        <span class="pl-s"><span class="pl-pds">"</span>allowNull<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">false</span>,
+        <span class="pl-s"><span class="pl-pds">"</span>dataType<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>integer<span class="pl-pds">"</span></span>
+      },
+      <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+        <span class="pl-s"><span class="pl-pds">"</span>allowNull<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">false</span>,
+        <span class="pl-s"><span class="pl-pds">"</span>dataType<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>string<span class="pl-pds">"</span></span>
+      }
+    },
+    <span class="pl-c">// added extendedBy information to relate to children</span>
+    <span class="pl-s"><span class="pl-pds">"</span>extendedBy<span class="pl-pds">"</span></span><span class="pl-k">:</span> [
+      {
+        <span class="pl-s"><span class="pl-pds">"</span>foreignTable<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>TableB<span class="pl-pds">"</span></span>,
+        <span class="pl-s"><span class="pl-pds">"</span>localField<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>,
+        <span class="pl-s"><span class="pl-pds">"</span>foreignField<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>
+      }
+    ]
+  },
+  <span class="pl-s"><span class="pl-pds">"</span>TableB<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+    <span class="pl-s"><span class="pl-pds">"</span>primary<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>fields<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+      <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+        <span class="pl-s"><span class="pl-pds">"</span>allowNull<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">false</span>,
+        <span class="pl-s"><span class="pl-pds">"</span>dataType<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>integer<span class="pl-pds">"</span></span>
+      },
+      <span class="pl-s"><span class="pl-pds">"</span>job_title<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+        <span class="pl-s"><span class="pl-pds">"</span>allowNull<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">false</span>,
+        <span class="pl-s"><span class="pl-pds">"</span>dataType<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>string<span class="pl-pds">"</span></span>
+      }
+    },
+    <span class="pl-s"><span class="pl-pds">"</span>extends<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+      <span class="pl-s"><span class="pl-pds">"</span>table<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>TableA<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>local<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>, <span class="pl-c">// refers to TableB.id</span>
+      <span class="pl-s"><span class="pl-pds">"</span>foreign<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span> <span class="pl-c">// refers to TableA.id</span>
+    }
+  }
+}</pre></div>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/SebastienDaniel/relational-json">relational-json</a> is maintained by <a href="https://github.com/SebastienDaniel">SebastienDaniel</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
