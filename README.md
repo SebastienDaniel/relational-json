@@ -9,6 +9,12 @@ npm install relational-json --save
 
 ## JSON data structure
 Create your relational data-structure (*JSON format*) following the instructions below:
+
+### Tables
+Your JSON data structure can contain any amount of tables. Each table must respect the following points:
+- Table names must be unique.
+- Tables must have a **primary** property (*the name of the primary field of the table*)
+- Tables must have fields, which minimally contains the primary field of the table.
 ```js
 {
   "TableName": {
@@ -20,12 +26,6 @@ Create your relational data-structure (*JSON format*) following the instructions
   }
 }
 ```
-
-### Tables
-Your JSON data structure can contain any amount of tables. Each table must respect the following points:
-- Table names must be unique.
-- Tables must have a **primary** property (*the name of the primary field of the table*)
-- Tables must have fields, which minimally contains the primary field of the table.
 
 ### Table fields
 Every Table in your relational structure must have fields. Fields describe the nature of your data and the constraints that relational-json will enforce during POST and PUT operations.
@@ -76,7 +76,7 @@ When a table extends another, the child object cannot exist without the parent o
 - If the parent table contains an entry with a PK value equal to value of the child's extension field, that parent becomes the child's prototype.
 - If no existing parent is found for a given PK, the parent is created using the provided data. (*This means that you must provide all required fields for all ancestors of a table on POST*)
 
-The example below will make things clearer:
+#### Table extends example
 ```js
 {
   "TableA": {
@@ -113,3 +113,55 @@ The example below will make things clearer:
 }
 ```
 
+### Table extendedBy
+A table can be extended by child tables, this is essentially the same as *extends*, but from the parent table's point of view. This allows the parent table's objects to refer to their children.
+The `extendedBy` property is an array of objects with the following properties:
+- **foreignTable**: the table that is a child of the current table.
+- **localField**: local field used for the relation.
+- **foreignField**: foreign field used for the relation.
+
+#### Table extendedBy example
+If we take the previous example, we can add the `extendedBy` property to `TableA`:
+```js
+{
+  "TableA": {
+    "primary": "id",
+    "fields": {
+      "id": {
+        "allowNull": false,
+        "dataType": "integer"
+      },
+      "name": {
+        "allowNull": false,
+        "dataType": "string"
+      }
+    },
+    // added extendedBy information to relate to children
+    "extendedBy": [
+      {
+        "foreignTable": "TableB",
+        "localField": "id",
+        "foreignField": "id"
+      }
+    ]
+  },
+  "TableB": {
+    "primary": "id",
+    "fields": {
+      "id": {
+        "allowNull": false,
+        "dataType": "integer"
+      },
+      "job_title": {
+        "allowNull": false,
+        "dataType": "string"
+      }
+    },
+    "extends": {
+      "table": "TableA",
+      "local": "id", // refers to TableB.id
+      "foreign": "id" // refers to TableA.id
+    }
+  }
+}
+```
