@@ -3,6 +3,7 @@
 Takes a JSON data structure and converts it into a database-like module allowing easy CRUD operations on immutable & relational objects (*no data duplication*).
 #### Motivation, or why use relational-json
 When building web applications, sooner or later you end up consuming data from various APIs. These data sources typically manage relational data from a SQL database.
+
 A common problem, in the front-end, arises when you update a relation. Whether you are changing the relation target (*i.e. changing the FK value*) or changing the relations' data itself, somehow you have to make sure that everything updates properly throughout your data store(s).
 
 A well known solution to this issue is Dan Abramov's [Normalizr library](https://github.com/gaearon/normalizr). Relational-JSON attempts to solve the same issue by making all data dynamically relational. It also provides immutability for better predictability.
