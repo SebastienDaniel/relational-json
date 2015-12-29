@@ -1,6 +1,6 @@
 # Relational JSON
-### Converts a JSON data-schema into a relational data store
 Takes a JSON data structure and converts it into a database-like module allowing easy CRUD operations on immutable & relational objects (*no data duplication*).
+
 #### Motivation, or why use relational-json
 When building web applications, sooner or later you end up consuming data from various APIs. These data sources typically manage relational data from a SQL database.
 
@@ -15,10 +15,17 @@ npm install relational-json --save
 ```
 
 ## Essential concepts
-Relational-JSON builds a **dynamic** data store of objects. Each object relates to other objects based on the following relations:
-- Extension (*inheritance*). Parent's become childrens' prototypes along the inheritance chain.
-- Aggregation (*one-to-one or one-to-many*)
+Relational-JSON builds a **dynamic** data store of objects, to achieve this it makes heavy usage of object `Getters/Setters` from ES5. 
+Each object created by relational-json is prototype-less, it doesn't inherit any properties or methods. This allows us to make a predictable inheritance chain with predictable own-properties and enumerable properties.
 
+There are two types of relations supported by relational-json:
+- **Extension** (*inheritance*). Parent's become childrens' prototypes along the inheritance chain.
+- **Aggregation** (*one-to-one or one-to-many*).
+
+## IMPORTANT limitation
+Because relational-json makes heavy usage of `Getters/Setters` you won't be able to use recursion for traversing nested structures. Due to the dynamic nature of your relations, a recursive operation will loop eternally because each nested object could also refer to it's containing object, which starts the whole loop over every time.
+
+If you need to work with a chunk of data with recursive functions, we suggest you map the chunk you need, and use that map.
 
 ## JSON data structure
 Create your relational data-structure (*JSON format*) following the instructions below:
