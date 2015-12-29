@@ -83,6 +83,7 @@ Fields have the following properties:
 {
   "TableName": {
     "primary": "id",
+    // adding fields information to your table
     "fields": {
       "id": {
         "allowNull": false,
@@ -140,6 +141,7 @@ When a table extends another, the child object cannot exist without the parent o
         "dataType": "string"
       }
     },
+    // extending your table to inherit from TableA
     "extends": {
       "table": "TableA",
       "local": "id", // refers to TableB.id
