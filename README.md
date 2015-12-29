@@ -1,11 +1,23 @@
 # Relational JSON
 ### Converts a JSON data-schema into a relational data store
 Takes a JSON data structure and converts it into a database-like module allowing easy CRUD operations on immutable & relational objects (*no data duplication*).
+#### Motivation, or why use relational-json
+When building web applications, sooner or later you end up consuming data from various APIs. These data sources typically manage relational data from a SQL database.
+A common problem, in the front-end, arises when you update a relation. Whether you are changing the relation target (*i.e. changing the FK value*) or changing the relations' data itself, somehow you have to make sure that everything updates properly throughout your data store(s).
+
+A well known solution to this issue is Dan Abramov's [Normalizr library](https://github.com/gaearon/normalizr). Relational-JSON attempts to solve the same issue by making all data dynamically relational. It also provides immutability for better predictability.
+Both these libraries target the same issue, but use a different approach. If relational-json doesn't float your boat, I strongly recommend trying normalizr as an alternative.
 
 ## Installation
 ```
 npm install relational-json --save
 ```
+
+## Essential concepts
+Relational-JSON builds a **dynamic** data store of objects. Each object relates to other objects based on the following relations:
+- Extension (*inheritance*). Parent's become childrens' prototypes along the inheritance chain.
+- Aggregation (*one-to-one or one-to-many*)
+
 
 ## JSON data structure
 Create your relational data-structure (*JSON format*) following the instructions below:
@@ -69,12 +81,12 @@ Fields have the following properties:
 Tables can extend a parent table, which means that each object from the child table will have a prototype object from the parent table. 
 The **extends** property is an object containing the following properties:
 - **table**: the parent table name
-- **local**: the local field (*child table*) used for the relation. (*equivalent to a foreign key (FK) field in SQL*)
-- **foreign**: the parent table field used for the relation. *usually the PK of the foreign table*
+- **local**: the local field (*child table*) used for the relation. (*equivalent to a foreign key (FK) field in SQL*). This must be the table's primary key (PK).
+- **foreign**: the parent table field used for the relation. *usually the PK of the foreign table*. This must be the table's primary key (PK).
 
 When a table extends another, the child object cannot exist without the parent object. When you POST on a child table, relational-json will try two things:
-- If the parent table contains an entry with a PK value equal to value of the child's extension field, that parent becomes the child's prototype.
-- If no existing parent is found for a given PK, the parent is created using the provided data. (*This means that you must provide all required fields for all ancestors of a table on POST*)
+- If the parent table contains an entry with a PK value equal to the new child's PK value, that parent becomes the child's prototype.
+- If no existing parent is found for a given PK value, the parent is created using the provided data. (*This means that you must provide all required fields for all ancestors of a table on POST*)
 
 #### Table extends example
 ```js
@@ -165,3 +177,12 @@ If we take the previous example, we can add the `extendedBy` property to `TableA
   }
 }
 ```
+
+### Table aggregates
+Tables aggregate data from other tables, this is the most common form of relation between tables. It replicates the `one-to-many` or `one-to-one` relations found in database relations. 
+
+#### one-to-one
+One-to-one relations are represented as nested objects.
+
+#### one-to-many
+One-to-many relations are represented as an array of objects.
