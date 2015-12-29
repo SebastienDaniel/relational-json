@@ -29,14 +29,9 @@ Because relational-json makes heavy usage of `Getters/Setters` you won't be able
 If you need to work with a chunk of data with recursive functions, we suggest you map the chunk you need, and use that map.
 
 ## JSON data structure
-Create your relational data-structure (*JSON format*) following the instructions below:
-
-### Tables
-Your JSON data structure can contain any amount of tables. Each table must respect the following points:
-- Table names must be unique.
-- Tables must have a **primary** property (*the name of the primary field of the table*)
-- Tables must have fields, which minimally contains the primary field of the table.
+The expected JSON structure is a collection of "Table" objects, with the following generic structure:
 ```js
+// generic table structure. "fields" & "primary" are mandatory.
 {
   "TableName": {
     "fields": {}, // fields or columns of the data table
@@ -47,6 +42,28 @@ Your JSON data structure can contain any amount of tables. Each table must respe
   }
 }
 ```
+
+### Tables
+Your JSON data structure can contain any amount of tables. Each table must respect the following points:
+- Table names must be unique.
+- Tables must have a **primary** property (*the name of the primary field of the table*)
+- Tables must have **fields**, which minimally contains the primary field of the table.
+
+```js
+// minimal table schema
+{
+  "TableName": {
+    "fields": {
+      "id": {
+        "allowNull": false,
+        "dataType": "integer"
+      }
+    },
+    "primary": "id"
+  }
+}
+```
+
 
 ### Table fields
 Every Table in your relational structure must have fields. Fields describe the nature of your data and the constraints that relational-json will enforce during POST and PUT operations.
