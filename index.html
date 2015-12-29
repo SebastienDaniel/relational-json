@@ -22,10 +22,17 @@
       <h1>
 <a id="relational-json" class="anchor" href="#relational-json" aria-hidden="true"><span class="octicon octicon-link"></span></a>Relational JSON</h1>
 
-<h3>
-<a id="converts-a-json-data-schema-into-a-relational-data-store" class="anchor" href="#converts-a-json-data-schema-into-a-relational-data-store" aria-hidden="true"><span class="octicon octicon-link"></span></a>Converts a JSON data-schema into a relational data store</h3>
-
 <p>Takes a JSON data structure and converts it into a database-like module allowing easy CRUD operations on immutable &amp; relational objects (<em>no data duplication</em>).</p>
+
+<h4>
+<a id="motivation-or-why-use-relational-json" class="anchor" href="#motivation-or-why-use-relational-json" aria-hidden="true"><span class="octicon octicon-link"></span></a>Motivation, or why use relational-json</h4>
+
+<p>When building web applications, sooner or later you end up consuming data from various APIs. These data sources typically manage relational data from a SQL database.</p>
+
+<p>A common problem, in the front-end, arises when you update a relation. Whether you are changing the relation target (<em>i.e. changing the FK value</em>) or changing the relations' data itself, somehow you have to make sure that everything updates properly throughout your data store(s).</p>
+
+<p>A well known solution to this issue is Dan Abramov's <a href="https://github.com/gaearon/normalizr">Normalizr library</a>. Relational-JSON attempts to solve the same issue by making all data dynamically relational. It also provides immutability for better predictability.
+Both these libraries target the same issue, but use a different approach. If relational-json doesn't float your boat, I strongly recommend trying normalizr as an alternative.</p>
 
 <h2>
 <a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
@@ -34,9 +41,43 @@
 </code></pre>
 
 <h2>
-<a id="json-data-structure" class="anchor" href="#json-data-structure" aria-hidden="true"><span class="octicon octicon-link"></span></a>JSON data structure</h2>
+<a id="essential-concepts" class="anchor" href="#essential-concepts" aria-hidden="true"><span class="octicon octicon-link"></span></a>Essential concepts</h2>
 
-<p>Create your relational data-structure (<em>JSON format</em>) following the instructions below:</p>
+<p>Relational-JSON builds a <strong>dynamic</strong> data store of objects, to achieve this it makes heavy usage of object <code>Getters/Setters</code> from ES5 (<em>Hint: only IE9+ is supported, this cannot be shimmed</em>). </p>
+
+<p>Each object created by relational-json is prototype-less, it doesn't inherit any properties or methods. This allows us to make a predictable inheritance chain with predictable own-properties and enumerable properties.</p>
+
+<p>There are two types of relations supported by relational-json:</p>
+
+<ul>
+<li>
+<strong>Extension</strong> (<em>inheritance</em>). Parent's become childrens' prototypes along the inheritance chain.</li>
+<li>
+<strong>Aggregation</strong> (<em>one-to-one or one-to-many</em>).</li>
+</ul>
+
+<h2>
+<a id="important-limitation" class="anchor" href="#important-limitation" aria-hidden="true"><span class="octicon octicon-link"></span></a>IMPORTANT limitation</h2>
+
+<p>Because relational-json makes heavy usage of <code>Getters/Setters</code> you won't be able to use recursion for traversing nested structures. Due to the dynamic nature of your relations, a recursive operation will loop eternally because each nested object could also refer to it's containing object, which starts the whole loop over every time.</p>
+
+<p>If you need to work with a chunk of data with recursive functions, we suggest you map the chunk you need, and use that map.</p>
+
+<h2>
+<a id="json-data-schema" class="anchor" href="#json-data-schema" aria-hidden="true"><span class="octicon octicon-link"></span></a>JSON data schema</h2>
+
+<p>The expected JSON structure is a collection of "Table" objects, with the following generic structure:</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// generic table structure. "fields" &amp; "primary" are mandatory.</span>
+{
+  <span class="pl-s"><span class="pl-pds">"</span>TableName<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+    <span class="pl-s"><span class="pl-pds">"</span>fields<span class="pl-pds">"</span></span><span class="pl-k">:</span> {}, <span class="pl-c">// fields or columns of the data table</span>
+    <span class="pl-s"><span class="pl-pds">"</span>primary<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>, <span class="pl-c">// primary field of the table</span>
+    <span class="pl-s"><span class="pl-pds">"</span>aggregates<span class="pl-pds">"</span></span><span class="pl-k">:</span> [], <span class="pl-c">// relations to other tables</span>
+    <span class="pl-s"><span class="pl-pds">"</span>extends<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>, <span class="pl-c">// parent table (inheritance) </span>
+    <span class="pl-s"><span class="pl-pds">"</span>extendedBy<span class="pl-pds">"</span></span><span class="pl-k">:</span> [] <span class="pl-c">// child tables (inheritance)</span>
+  }
+}</pre></div>
 
 <h3>
 <a id="tables" class="anchor" href="#tables" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tables</h3>
@@ -46,16 +87,19 @@
 <ul>
 <li>Table names must be unique.</li>
 <li>Tables must have a <strong>primary</strong> property (<em>the name of the primary field of the table</em>)</li>
-<li>Tables must have fields, which minimally contains the primary field of the table.</li>
+<li>Tables must have <strong>fields</strong>, which minimally contains the primary field of the table.</li>
 </ul>
 
-<div class="highlight highlight-source-js"><pre>{
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// minimal table schema</span>
+{
   <span class="pl-s"><span class="pl-pds">"</span>TableName<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-    <span class="pl-s"><span class="pl-pds">"</span>fields<span class="pl-pds">"</span></span><span class="pl-k">:</span> {}, <span class="pl-c">// fields or columns of the data table</span>
-    <span class="pl-s"><span class="pl-pds">"</span>primary<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>, <span class="pl-c">// primary field of the table</span>
-    <span class="pl-s"><span class="pl-pds">"</span>aggregates<span class="pl-pds">"</span></span><span class="pl-k">:</span> [], <span class="pl-c">// relations to other tables</span>
-    <span class="pl-s"><span class="pl-pds">"</span>extends<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>, <span class="pl-c">// parent table (inheritance) </span>
-    <span class="pl-s"><span class="pl-pds">"</span>extendedBy<span class="pl-pds">"</span></span><span class="pl-k">:</span> [] <span class="pl-c">// child tables (inheritance)</span>
+    <span class="pl-s"><span class="pl-pds">"</span>fields<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+      <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+        <span class="pl-s"><span class="pl-pds">"</span>allowNull<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">false</span>,
+        <span class="pl-s"><span class="pl-pds">"</span>dataType<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>integer<span class="pl-pds">"</span></span>
+      }
+    },
+    <span class="pl-s"><span class="pl-pds">"</span>primary<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>
   }
 }</pre></div>
 
@@ -82,15 +126,13 @@ Fields have the following properties:</p>
 <li>
 <strong>allowNull</strong>: whether the value can be set to <em>null</em> or not.</li>
 <li>
-<strong>defaultValue</strong>: the default value used on a POST operation, if no value is provided.</li>
+<strong>defaultValue</strong>: the default value to use on a POST operation, if no value is provided.</li>
 </ul>
-
-<h4>
-<a id="table-fields-example" class="anchor" href="#table-fields-example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Table fields, example</h4>
 
 <div class="highlight highlight-source-js"><pre>{
   <span class="pl-s"><span class="pl-pds">"</span>TableName<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
     <span class="pl-s"><span class="pl-pds">"</span>primary<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>,
+    <span class="pl-c">// adding fields information to your table</span>
     <span class="pl-s"><span class="pl-pds">"</span>fields<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
       <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
         <span class="pl-s"><span class="pl-pds">"</span>allowNull<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">false</span>,
@@ -119,21 +161,17 @@ The <strong>extends</strong> property is an object containing the following prop
 <li>
 <strong>table</strong>: the parent table name</li>
 <li>
-<strong>local</strong>: the local field (<em>child table</em>) used for the relation. (<em>equivalent to a foreign key (FK) field in SQL</em>)</li>
+<strong>local</strong>: the local field (<em>child table</em>) used for the relation. (<em>equivalent to a foreign key (FK) field in SQL</em>). This must be the table's primary key (PK).</li>
 <li>
-<strong>foreign</strong>: the parent table field used for the relation. <em>usually the PK of the foreign table</em>
-</li>
+<strong>foreign</strong>: the parent table field used for the relation. <em>usually the PK of the foreign table</em>. This must be the table's primary key (PK).</li>
 </ul>
 
 <p>When a table extends another, the child object cannot exist without the parent object. When you POST on a child table, relational-json will try two things:</p>
 
 <ul>
-<li>If the parent table contains an entry with a PK value equal to value of the child's extension field, that parent becomes the child's prototype.</li>
-<li>If no existing parent is found for a given PK, the parent is created using the provided data. (<em>This means that you must provide all required fields for all ancestors of a table on POST</em>)</li>
+<li>If the parent table contains an entry with a PK value equal to the new child's PK value, that parent becomes the child's prototype.</li>
+<li>If no existing parent is found for a given PK value, the parent is created using the provided data. (<em>This means that you must provide all required fields for all ancestors of a table on POST</em>)</li>
 </ul>
-
-<h4>
-<a id="table-extends-example" class="anchor" href="#table-extends-example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Table extends example</h4>
 
 <div class="highlight highlight-source-js"><pre>{
   <span class="pl-s"><span class="pl-pds">"</span>TableA<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
@@ -161,6 +199,7 @@ The <strong>extends</strong> property is an object containing the following prop
         <span class="pl-s"><span class="pl-pds">"</span>dataType<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>string<span class="pl-pds">"</span></span>
       }
     },
+    <span class="pl-c">// extending your table to inherit from TableA</span>
     <span class="pl-s"><span class="pl-pds">"</span>extends<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
       <span class="pl-s"><span class="pl-pds">"</span>table<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>TableA<span class="pl-pds">"</span></span>,
       <span class="pl-s"><span class="pl-pds">"</span>local<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>, <span class="pl-c">// refers to TableB.id</span>
@@ -230,6 +269,21 @@ The <code>extendedBy</code> property is an array of objects with the following p
     }
   }
 }</pre></div>
+
+<h3>
+<a id="table-aggregates" class="anchor" href="#table-aggregates" aria-hidden="true"><span class="octicon octicon-link"></span></a>Table aggregates</h3>
+
+<p>Tables aggregate data from other tables, this is the most common form of relation between tables. It replicates the <code>one-to-many</code> or <code>one-to-one</code> relations found in database relations. </p>
+
+<h4>
+<a id="one-to-one" class="anchor" href="#one-to-one" aria-hidden="true"><span class="octicon octicon-link"></span></a>one-to-one</h4>
+
+<p>One-to-one relations are represented as nested objects.</p>
+
+<h4>
+<a id="one-to-many" class="anchor" href="#one-to-many" aria-hidden="true"><span class="octicon octicon-link"></span></a>one-to-many</h4>
+
+<p>One-to-many relations are represented as an array of objects.</p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/SebastienDaniel/relational-json">relational-json</a> is maintained by <a href="https://github.com/SebastienDaniel">SebastienDaniel</a>.</span>
