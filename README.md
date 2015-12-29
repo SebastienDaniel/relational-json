@@ -24,7 +24,7 @@ There are two types of relations supported by relational-json:
 - **Aggregation** (*one-to-one or one-to-many*).
 
 ## IMPORTANT limitation
-Because relational-json makes heavy usage of `Getters/Setters` you won't be able to use recursion for traversing nested structures. Due to the dynamic nature of your relations, a recursive operation will loop eternally because each nested object could also refer to it's containing object, which starts the whole loop over every time.
+Because relational-json makes heavy usage of `Getters/Setters` using recursion for traversing nested structures is trickier. Due to the dynamic nature of your relations, a recursive operation will loop eternally because each nested object could also refer to it's containing object, which starts the whole loop over every time.
 
 If you need to work with a chunk of data with recursive functions, we suggest you map the chunk you need, and use that map.
 
@@ -104,15 +104,17 @@ Fields have the following properties:
 ```
 
 ### Table extends
-Tables can extend a parent table, which means that each object from the child table will have a prototype object from the parent table. 
+Tables can extend a parent table, which means that each object from the child table will have a prototype object from the parent table.
+Extension occurs when the relation between two tables uses both tables' primary keys.
+
 The **extends** property is an object containing the following properties:
 - **table**: the parent table name
 - **local**: the local field (*child table*) used for the relation. (*equivalent to a foreign key (FK) field in SQL*). This must be the table's primary key (PK).
 - **foreign**: the parent table field used for the relation. *usually the PK of the foreign table*. This must be the table's primary key (PK).
 
 When a table extends another, the child object cannot exist without the parent object. When you POST on a child table, relational-json will try two things:
-- If the parent table contains an entry with a PK value equal to the new child's PK value, that parent becomes the child's prototype.
-- If no existing parent is found for a given PK value, the parent is created using the provided data. (*This means that you must provide all required fields for all ancestors of a table on POST*)
+- If the parent table contains an entry with a PK value equal to the new child's PK value, relational-json will create the child and use the parent as the prototype.
+- If no existing parent is found for a given PK value, both the child and the parent are created using the provided data. (*This means that you must provide all required fields for all ancestors of a table on POST*). The parent is the child's prototype.
 
 ```js
 {
