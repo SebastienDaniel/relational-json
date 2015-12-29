@@ -28,7 +28,7 @@ Because relational-json makes heavy usage of `Getters/Setters` you won't be able
 
 If you need to work with a chunk of data with recursive functions, we suggest you map the chunk you need, and use that map.
 
-## JSON data structure
+## JSON data schema
 The expected JSON structure is a collection of "Table" objects, with the following generic structure:
 ```js
 // generic table structure. "fields" & "primary" are mandatory.
@@ -77,9 +77,8 @@ Fields have the following properties:
   - float
   - boolean (*true, false, 0, 1*)
 - **allowNull**: whether the value can be set to *null* or not.
-- **defaultValue**: the default value used on a POST operation, if no value is provided.
+- **defaultValue**: the default value to use on a POST operation, if no value is provided.
   
-#### Table fields, example
 ```js
 {
   "TableName": {
@@ -114,7 +113,6 @@ When a table extends another, the child object cannot exist without the parent o
 - If the parent table contains an entry with a PK value equal to the new child's PK value, that parent becomes the child's prototype.
 - If no existing parent is found for a given PK value, the parent is created using the provided data. (*This means that you must provide all required fields for all ancestors of a table on POST*)
 
-#### Table extends example
 ```js
 {
   "TableA": {
