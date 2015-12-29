@@ -15,7 +15,7 @@ npm install relational-json --save
 ```
 
 ## Essential concepts
-Relational-JSON builds a **dynamic** data store of objects, to achieve this it makes heavy usage of object `Getters/Setters` from ES5. 
+Relational-JSON builds a **dynamic** data store of objects, to achieve this it makes heavy usage of object `Getters/Setters` from ES5 (*Hint: only IE9+ is supported, this cannot be shimmed*). 
 Each object created by relational-json is prototype-less, it doesn't inherit any properties or methods. This allows us to make a predictable inheritance chain with predictable own-properties and enumerable properties.
 
 There are two types of relations supported by relational-json:
