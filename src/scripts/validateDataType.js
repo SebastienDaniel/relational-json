@@ -48,16 +48,20 @@ module.exports = function validateDataType(field, value) {
         }
 
         case "datetime": {
-            // yyyy-mm-dd hh:mm:ss
-            // two-part evaluation
-            value = value.split(/\s|T/);
+            var fullTest = /^([0-2][0-9]{3})\-([0-1][0-9])\-([0-3][0-9])( |T)([0-5][0-9])\:([0-5][0-9])\:([0-5][0-9])(Z|([\-\+]([0-1][0-9])\:00))$/;
 
-            // fallback time if time missing
-            if (!value[1]) {
-                value[1] = "00:00:00";
+
+            if (value.length === 10) {
+                if (/^([0-2][0-9]{3})\-([0-1][0-9])\-([0-3][0-9])/.test(value)) {
+                    value += "T00:00:00Z";
+                } else {
+                    res = false;
+                }
+            } else if (value.length === 19) {
+                value += "Z";
             }
 
-            res = trueType === "[object String]" && validateDataType({dataType: "date", allowNull: false}, value[0]) && validateDataType({dataType: "time", allowNull: false}, value[1]);
+            res = trueType === "[object String]" && fullTest.test(value);
             break;
         }
 
