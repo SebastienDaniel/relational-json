@@ -12,7 +12,7 @@ module.exports = function(data, pkValue, pkName) {
         i;
 
     if (!pkValue) {
-        throw Error("Searching for a used PK with invalid value: " + pkValue + "\n" + pkName + "\n" + data);
+        throw Error("Searching for a used PK with invalid value:\nvalue: " + pkValue + "\nname: " + pkName);
     }
     pkName = pkName || "id";
 
