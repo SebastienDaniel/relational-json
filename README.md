@@ -214,3 +214,20 @@ One-to-one relations are represented as nested objects.
 
 #### one-to-many
 One-to-many relations are represented as an array of objects.
+
+## Table methods
+Once you have generated your data schema and passed it to relational-json, you'll obtain an object containing all your tables. Each table will have four methods:
+
+- **get()**: if not argument is provided returns the current data collection. If an argument (int) is provided, it will return the object with a matching PK value.
+```js
+Table.get(); // returns an array of that table's data objects
+Table.get(5); // returns the object with PK value 5, or undefined if unfound.
+```
+- **put()**: expects an object of properties to change, and the pk value of the object we want to update. It returns the new, update, object. Since relational-json is immutable, `put()` also re-compiles all data objects of the table into a new array.
+```js
+Table.put({ name: "bob" }, 5); // returns a new object, using the old object "5" values and the new name "bob"
+```
+- **post()**: expects an object containing all the mandatory field values required by the table. It then creates a new object and returns it. Because relational-json is immutable, the `post()` operation also re-compiles all data objects of the table into a new array.
+- **delete()**: expects a pk value (int). It then removes the object from the Table, and all of it's children. Because relational-json is immutable, the `delete()` operaiton also re-compiles all objects from all affected tables into new arrays.
+
+The essential part to remember is that all data-changing operations (`put(), post(), delete()`) cause the deletion of the previous object and the re-creation of a new object. They also cause the data array (*obtained from get()*) to be changed. This allows you to immediately track any changes to your data structures simply by comparing via reference.
