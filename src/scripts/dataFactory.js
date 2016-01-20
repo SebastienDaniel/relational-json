@@ -1,5 +1,3 @@
-var validateDataType = require("./validateDataType");
-
 module.exports = function dataFactory(model, d, db) {
     "use strict";
     var row;

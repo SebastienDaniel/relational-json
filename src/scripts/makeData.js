@@ -16,6 +16,18 @@ module.exports = function makeData(model, d, tn, db) {
 
         // make sure all fields respect their datatype
         if (d[key]) {
+            // tolerance for datetime formats
+            if (model.fields[key].dataType === "datetime") {
+                // add the time "T"
+                if (/\d {1}/.test(d[key])) {
+                    d[key] = d[key].replace(" ", "T");
+                }
+
+                // assume UTC if not timezone
+                if (/T/.test(d[key]) && !/(Z|\-\d\d:|\+){1}/.test(d[key])) {
+                    d[key] += "Z";
+                }
+            }
             if (!validateDataType(model.fields[key], d[key])) {
                 throw Error("Provided data " + d[key] + "\nis not compatible with " + tn + "." + key + "\nexpected datatype: " + model.fields[key].dataType);
             }

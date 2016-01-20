@@ -34,10 +34,20 @@ describe("validateDataType", function() {
     });
 
     it("should validate datetime", function() {
-        expect(vdt(graph.Entity.fields.deleted_on, "2015-01-01T12:00:00")).to.be.true;
-        expect(vdt(graph.Entity.fields.deleted_on, "2015-01-01 12:00:00")).to.be.true;
+        expect(vdt(graph.Entity.fields.deleted_on, "2015-01-01T12:00:00")).to.be.false;
+        expect(vdt(graph.Entity.fields.deleted_on, "2015-01-01 12:00:00")).to.be.false;
         expect(vdt(graph.Entity.fields.deleted_on, "2015-12-20")).to.be.true;
         expect(vdt(graph.Entity.fields.deleted_on, "2015-01 12:00:00")).to.be.false;
         expect(vdt(graph.Entity.fields.deleted_on, "2015-01-01 12:00")).to.be.false;
+        expect(vdt(graph.Entity.fields.deleted_on, "2015 12:00")).to.be.false;
+        expect(vdt(graph.Entity.fields.deleted_on, "2015")).to.be.true;
+
+        expect(vdt(graph.Entity.fields.deleted_on, "2015-01-01T12:00:00Z")).to.be.true;
+        expect(vdt(graph.Entity.fields.deleted_on, "2015-01-01T12:00:00+04:00")).to.be.true;
+        expect(vdt(graph.Entity.fields.deleted_on, "2015-12-20")).to.be.true;
+        expect(vdt(graph.Entity.fields.deleted_on, "2015-01T12:00:00Z")).to.be.true;
+        expect(vdt(graph.Entity.fields.deleted_on, "2015-01-01T12:00Z")).to.be.true;
+        expect(vdt(graph.Entity.fields.deleted_on, "2015T12:00Z")).to.be.true;
+        expect(vdt(graph.Entity.fields.deleted_on, "2015")).to.be.true;
     });
 });

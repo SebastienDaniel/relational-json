@@ -38,7 +38,7 @@ describe("immutability", function() {
         expect(db.Person.get(11).last_name).to.eql("McGinnee");
         expect(db.Person.get(11).gender).to.eql("m");
         expect(db.Person.get(11).created_by).to.eql(1);
-        expect(db.Person.get(11).created_on).to.eql("2015-01-01T12:30:59");
+        expect(db.Person.get(11).created_on).to.eql("2015-01-01T12:30:59Z");
     });
 
     it("identical GET should return the same reference", function() {
@@ -85,7 +85,7 @@ describe("immutability", function() {
         expect(db.Person.get(11).last_name).to.eql("Buu");
         expect(db.Person.get(11).gender).to.eql("m");
         expect(db.Person.get(11).created_by).to.eql(1);
-        expect(db.Person.get(11).created_on).to.eql("2015-01-01T12:30:59");
+        expect(db.Person.get(11).created_on).to.eql("2015-01-01T12:30:59Z");
     });
 
     it("should change a child's prototype if the prototype is PUT", function() {
@@ -103,6 +103,6 @@ describe("immutability", function() {
             deleted_on: "2015-01-01 12:00:00"
         });
 
-        expect(db.Entity.get(11).deleted_on).to.equal("2015-01-01 12:00:00");
+        expect(db.Entity.get(11).deleted_on).to.equal("2015-01-01T12:00:00Z");
     });
 });

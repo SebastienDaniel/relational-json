@@ -48,18 +48,7 @@ module.exports = function validateDataType(field, value) {
         }
 
         case "datetime": {
-            var fullTest = /^([0-2][0-9]{3})\-([0-1][0-9])\-([0-3][0-9])( |T)([0-5][0-9])\:([0-5][0-9])\:([0-5][0-9])(Z|([\-\+]([0-1][0-9])\:00))$/;
-
-
-            if (value.length === 10) {
-                if (/^([0-2][0-9]{3})\-([0-1][0-9])\-([0-3][0-9])/.test(value)) {
-                    value += "T00:00:00Z";
-                } else {
-                    res = false;
-                }
-            } else if (value.length === 19) {
-                value += "Z";
-            }
+            var fullTest = /^([0-9]{4})(\-0[1-9]|\-1[0-2])?(\-[0-2][0-9]|\-3[0-1])?(T(?=\d)([0-5][0-9]:)?([0-5][0-9])?(:[0-5][0-9])?(\.\d{1,3})?(Z|([\-\+](0[0-9]|1[0-4]):(00|15|30|45))))?$/;
 
             res = trueType === "[object String]" && fullTest.test(value);
             break;
