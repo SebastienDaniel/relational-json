@@ -75,6 +75,29 @@ describe("rJSON", function() {
             assert.equal("old_key", db.SalesSource.get(10).key);
             assert.equal(10, db.SalesSource.get(10).id);
         });
+
+        it("updates existing parent fields (if present) when child is created", function() {
+            var graph = require("./test-graph"),
+                db = rJSON(graph);
+
+            db.ExternalEntity.post({
+                entity_id: 1,
+                created_by: 1,
+                created_on: "2015-01-01T12:00:00Z"
+            });
+
+            expect(db.ExternalEntity.get(1).created_by).to.eql(1);
+
+            db.Person.post({
+                entity_id: 1,
+                created_by: 2,
+                first_name: "bob",
+                last_name: "michaels",
+                gender: "m"
+            });
+
+            expect(db.ExternalEntity.get(1).created_by).to.eql(2);
+        });
     });
 
     describe("get()", function() {

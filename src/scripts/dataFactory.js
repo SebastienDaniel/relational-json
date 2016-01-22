@@ -1,14 +1,22 @@
 module.exports = function dataFactory(model, d, db) {
     "use strict";
-    var row;
+    var row,
+        parent;
 
     // generate row and its prototype
     if (model.extends) {
-        // make sure prototype has required data with proper key names
-        d[model.extends.foreign] = d[model.extends.local];
+        parent = db[model.extends.table].get(d[model.primary]);
 
         // create or get the prototype
-        row = Object.create(db[model.extends.table].get(d[model.primary]) || db[model.extends.table].post(d));
+        // if parent exists, scan data for parent fields
+        if (parent) {
+            // put parent and use result as prototype (will be new obj or current parent)
+            parent = db[model.extends.table].put(d);
+        }
+
+        // make sure prototype has required data with proper key names for extension
+        d[model.extends.foreign] = d[model.extends.local];
+        row = Object.create(parent || db[model.extends.table].post(d));
     } else {
         row = Object.create(null);
     }

@@ -38,4 +38,15 @@ describe("table.put()", function() {
 
         expect(db.Person.get(1)).to.equal(change);
     });
+
+    it("should update parent fields", function() {
+        expect(db.ExternalEntity.get(1).created_by).to.eql(2);
+
+        var change = db.Person.put({
+            created_by: 3,
+            entity_id: 1
+        });
+
+        expect(db.ExternalEntity.get(1).created_by).to.eql(3);
+    });
 });
