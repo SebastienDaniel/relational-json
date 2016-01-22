@@ -11,7 +11,7 @@ module.exports = function dataFactory(model, d, db) {
         // if parent exists, scan data for parent fields
         if (parent) {
             // put parent and use result as prototype (will be new obj or current parent)
-            parent = db[model.extends.table].put(d);
+            parent = db[model.extends.table].put(d, d[model.extends.local]);
         }
 
         // make sure prototype has required data with proper key names for extension

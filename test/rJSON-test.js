@@ -88,15 +88,16 @@ describe("rJSON", function() {
 
             expect(db.ExternalEntity.get(1).created_by).to.eql(1);
 
-            db.Person.post({
+            console.log(db.Person.post({
                 entity_id: 1,
                 created_by: 2,
                 first_name: "bob",
                 last_name: "michaels",
                 gender: "m"
-            });
+            }));
 
             expect(db.ExternalEntity.get(1).created_by).to.eql(2);
+
         });
     });
 
