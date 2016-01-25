@@ -42,6 +42,10 @@ module.exports = function tableFactory(tn, fullModel, db) {
         put: function(d, pkValue) {
             // find current object
             var current = getData(data, pkValue || d[m.primary], m.primary),
+                bundle = Object.keys(d).reduce(function(o, key) {
+                    o[key] = d[key];
+                    return o;
+                }, {}),
                 differs = false,
                 extendedBy,
                 k;
@@ -56,9 +60,9 @@ module.exports = function tableFactory(tn, fullModel, db) {
             // for in also looks up prototypes
             for (k in current) {
                 if (current[k] === null || typeof current[k] !== "object") {
-                    if (d[k] === undefined) {
-                        d[k] = current[k];
-                    } else if (d[k] !== current[k]) {
+                    if (bundle[k] === undefined) {
+                        bundle[k] = current[k];
+                    } else if (bundle[k] !== current[k]) {
                         differs = true;
                     }
                 }
@@ -72,14 +76,14 @@ module.exports = function tableFactory(tn, fullModel, db) {
                             return true;
                         }
                     })) {
-                    d[extendedBy.foreignField] = d[extendedBy.localField];
-                    return db[extendedBy.foreignTable].put(d);
+                    bundle[extendedBy.foreignField] = bundle[extendedBy.localField];
+                    return db[extendedBy.foreignTable].put(bundle);
                 } else {
                     // remove existing object
                     this.delete(pkValue || current[m.primary]);
 
                     // re-create new object
-                    return this.post(d);
+                    return this.post(bundle);
                 }
             } else {
                 return current;

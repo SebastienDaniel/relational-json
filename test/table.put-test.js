@@ -49,4 +49,15 @@ describe("table.put()", function() {
 
         expect(db.ExternalEntity.get(1).created_by).to.eql(3);
     });
+
+    it("shouldn't mutate the provided data object", function() {
+        var original = {
+            entity_id: 1,
+            created_by: 2
+        };
+
+        db.Person.put(original);
+
+        expect(original.first_name).not.to.eql("Sebastien");
+    });
 });
