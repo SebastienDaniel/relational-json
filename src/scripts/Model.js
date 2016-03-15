@@ -20,6 +20,7 @@ function Model(tn, fullModel) {
                 return model.primary;
             }
         },
+        pk: this.primary, // alias
         requiredFields: {
             get: function() {
                 return requiredFields;
