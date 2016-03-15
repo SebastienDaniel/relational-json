@@ -46,42 +46,38 @@ module.exports = function dataFactory(model, d, db) {
     });
 
     // generate child extensions
-    if (model.extendedBy) {
-        model.extendedBy.forEach(function(ext) {
-            // add getter for the parent data
-            Object.defineProperty(row, ext.foreignTable, {
-                get: function() {
-                    return db[ext.foreignTable].get(this[ext.localField]);
-                },
-                set: function() {},
-                enumerable: true
-            });
+    model.extendedBy.forEach(function(ext) {
+        // add getter for the parent data
+        Object.defineProperty(row, ext.foreignTable, {
+            get: function() {
+                return db[ext.foreignTable].get(this[ext.localField]);
+            },
+            set: function() {},
+            enumerable: true
         });
-    }
+    });
 
     // add aggregates to row
-    if (model.aggregates) {
-        model.aggregates.forEach(function(agg) {
-            // add alias as property
-            if (agg.cardinality === "many") {
-                Object.defineProperty(row, agg.alias, {
-                    get: function() {
-                        return db[agg.foreignTable].get().filter(function(d) {
-                            return d[agg.foreignField] === this[agg.localField];
-                        }, this);
-                    },
-                    enumerable: true
-                });
-            } else {
-                Object.defineProperty(row, agg.alias, {
-                    get: function() {
-                        return db[agg.foreignTable].get(this[agg.localField]);
-                    },
-                    enumerable: true
-                });
-            }
-        });
-    }
+    model.aggregates.forEach(function(agg) {
+        // add alias as property
+        if (agg.cardinality === "many") {
+            Object.defineProperty(row, agg.alias, {
+                get: function() {
+                    return db[agg.foreignTable].get().filter(function(d) {
+                        return d[agg.foreignField] === this[agg.localField];
+                    }, this);
+                },
+                enumerable: true
+            });
+        } else {
+            Object.defineProperty(row, agg.alias, {
+                get: function() {
+                    return db[agg.foreignTable].get(this[agg.localField]);
+                },
+                enumerable: true
+            });
+        }
+    });
 
     // freeze and return
     return Object.freeze(row);

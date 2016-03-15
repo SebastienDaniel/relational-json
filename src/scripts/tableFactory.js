@@ -4,14 +4,13 @@ var getData = require("./getData"),
     isPrimaryKeyUsed = require("./isPrimaryKeyUsed"),
     recursiveDelete = require("./recursiveDelete"),
     formatDateString = require("./formatDateString"),
+    Model = require("./Model"),
     makeData = require("./makeData");
 
 module.exports = function tableFactory(tn, fullModel, db) {
     "use strict";
-    var data = [],          // private object store
-        m = fullModel[tn],  // own portion of graph
-        aliasMap = Object.freeze(getAliasMap(tn, fullModel)),
-        requiredFields = getRequiredFields(m, fullModel);
+    var data = [],
+        m = new Model(tn, fullModel);
 
     return {
         // SELECT
@@ -29,7 +28,7 @@ module.exports = function tableFactory(tn, fullModel, db) {
             }, {});
 
             // make sure pk is unique
-            if (isPrimaryKeyUsed(data, d[this.meta.pk], this.meta.pk)) {
+            if (isPrimaryKeyUsed(data, d[m.primary], m.primary)) {
                 throw Error("provided " + m.primary + ": " + d[m.primary] + " is already in use in " + tn);
             } else {
                 obj = makeData(m, d, tn, db);
@@ -42,7 +41,7 @@ module.exports = function tableFactory(tn, fullModel, db) {
                 return obj;
             }
         },
-        // UPDATE
+        // UPDATE, should create new Array and new Row
         put: function(d, pkValue) {
             // find current object
             var current = getData(data, pkValue || d[m.primary], m.primary),
@@ -106,28 +105,6 @@ module.exports = function tableFactory(tn, fullModel, db) {
 
             // reset data array
             data = data.slice(0, data.length);
-        },
-        // meta-data about the table
-        meta: Object.create(null, {
-            pk: {
-                get: function() {
-                    return m.primary;
-                },
-                enumerable: true
-            },
-            requiredFields: {
-                get: function() {
-                    // return a copy of required fields, this must not be tampered with
-                    return requiredFields.splice();
-                },
-                enumerable: true
-            },
-            aliasMap: {
-                get: function() {
-                    return aliasMap;
-                },
-                enumerable: true
-            }
-        })
+        }
     };
 };
