@@ -1,11 +1,14 @@
 var deepCopy = require("./deepCopy"),
-    getRequiredFields = require("./getRequiredFields"),
     tableFactory = require("./tableFactory"),
-    validateDataType = require("./validateDataType"),
-    getInheritanceChain = require("./getInheritanceChain"),
-    fullModel;
+    validateDataType = require("./validateDataType");
 
-// builds the relational JSON database
+/**
+ * Makes a copy of the model to avoid future tampering
+ * Creates each table in the Graph
+ *
+ * @param {JSON} graph - JSON schema of the database to build
+ * @returns {Object} - Tables from the schema
+ */
 function buildDatabase(graph) {
     "use strict";
     var db = Object.create(null, {}),
