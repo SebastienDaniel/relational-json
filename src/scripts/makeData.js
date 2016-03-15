@@ -29,9 +29,8 @@ module.exports = function makeData(model, d, tn, db) {
 
     // throw if any fields are missing
     if (missingFields.length > 0) {
-        throw Error("data creation rejected, mandatory fields not provided:\n" + missingFields);
+        throw Error("data creation rejected, mandatory fields not provided:\n" + missingFields.join(", "));
     }
 
-    //data.push(o);
     return dataFactory(model, d, db);
 };
