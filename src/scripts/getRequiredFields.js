@@ -11,7 +11,7 @@ module.exports = function getRequiredFields(model, fullModel) {
 
     // get models' own required fields
     Object.keys(model.fields).forEach(function(key) {
-        if (!model.fields[key].allowNull && model.fields[key].defaultValue === undefined) {
+        if (!model.fields[key].allowNull && !model.fields[key].hasOwnProperty("defaultValue")) {
             req.push(key);
         }
     });
