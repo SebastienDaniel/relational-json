@@ -1,9 +1,9 @@
 var getData = require("./getData"),
-    getFurthestAncestorField = require("./getFurthestAncestorField"),
     getInheritanceChain = require("./getInheritanceChain"),
     getRequiredFields = require("./getRequiredFields"),
     isPrimaryKeyUsed = require("./isPrimaryKeyUsed"),
     recursiveDelete = require("./recursiveDelete"),
+    formatDateString = require("./formatDateString"),
     makeData = require("./makeData");
 
 module.exports = function tableFactory(tn, fullModel, db) {
@@ -71,7 +71,12 @@ module.exports = function tableFactory(tn, fullModel, db) {
                     if (d[k] === undefined) {
                         d[k] = current[k];
                     } else if (d[k] !== current[k]) {
-                        differs = true;
+                        // re-validate if type is datetime
+                        if (m.fields[k] && m.fields[k].dataType === "datetime") {
+                            differs = formatDateString(d[k]) !== current[k];
+                        } else {
+                            differs = true;
+                        }
                     }
                 }
             }

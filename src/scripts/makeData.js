@@ -1,4 +1,5 @@
 var dataFactory = require("./dataFactory"),
+    formatDateString = require("./formatDateString"),
     validateDataType = require("./validateDataType");
 
 module.exports = function makeData(model, d, tn, db) {
@@ -18,15 +19,7 @@ module.exports = function makeData(model, d, tn, db) {
         if (d[key]) {
             // tolerance for datetime formats
             if (model.fields[key].dataType === "datetime") {
-                // add the time "T"
-                if (/\d {1}/.test(d[key])) {
-                    d[key] = d[key].replace(" ", "T");
-                }
-
-                // assume UTC if not timezone
-                if (/T/.test(d[key]) && !/(Z|\-\d\d:|\+){1}/.test(d[key])) {
-                    d[key] += "Z";
-                }
+                d[key] = formatDateString(d[key]);
             }
             if (!validateDataType(model.fields[key], d[key])) {
                 throw Error("Provided data " + d[key] + "\nis not compatible with " + tn + "." + key + "\nexpected datatype: " + model.fields[key].dataType);
