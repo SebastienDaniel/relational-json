@@ -105,6 +105,7 @@ module.exports = function tableFactory(tn, fullModel, db) {
 
             // reset data array
             data = data.slice(0, data.length);
-        }
+        },
+        meta: m
     };
 };
