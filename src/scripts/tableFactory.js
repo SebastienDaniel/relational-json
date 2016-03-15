@@ -1,5 +1,5 @@
 var getData = require("./getData"),
-    getInheritanceChain = require("./getInheritanceChain"),
+    getAliasMap = require("./getAliasMap"),
     getRequiredFields = require("./getRequiredFields"),
     isPrimaryKeyUsed = require("./isPrimaryKeyUsed"),
     recursiveDelete = require("./recursiveDelete"),
@@ -10,7 +10,8 @@ module.exports = function tableFactory(tn, fullModel, db) {
     "use strict";
     var data = [],          // private object store
         m = fullModel[tn],  // own portion of graph
-        name = tn;          // own name
+        aliasMap = Object.freeze(getAliasMap(tn, fullModel)),
+        requiredFields = getRequiredFields(m, fullModel);
 
     return {
         // SELECT
@@ -28,18 +29,15 @@ module.exports = function tableFactory(tn, fullModel, db) {
             }, {});
 
             // make sure pk is unique
-            if (isPrimaryKeyUsed(data, d[m.primary], m.primary)) {
-                throw Error("provided " + m.primary + ": " + d[m.primary] + " is already in use in " + name);
+            if (isPrimaryKeyUsed(data, d[this.meta.pk], this.meta.pk)) {
+                throw Error("provided " + m.primary + ": " + d[m.primary] + " is already in use in " + tn);
             } else {
                 obj = makeData(m, d, tn, db);
 
                 // create a new data array (for immutability)
                 // keep index order
                 data = data.concat(obj).sort(function(a, b) {
-                    a = a[m.primary];
-                    b = b[m.primary];
-
-                    return a - b;
+                    return a[m.primary] - b[m.primary];
                 });
                 return obj;
             }
@@ -104,7 +102,7 @@ module.exports = function tableFactory(tn, fullModel, db) {
         },
         // DELETE
         delete: function(id) {
-            recursiveDelete(id, data, name, fullModel, db);
+            recursiveDelete(id, data, tn, fullModel, db);
 
             // reset data array
             data = data.slice(0, data.length);
@@ -119,34 +117,14 @@ module.exports = function tableFactory(tn, fullModel, db) {
             },
             requiredFields: {
                 get: function() {
-                    return getRequiredFields(m, fullModel);
+                    // return a copy of required fields, this must not be tampered with
+                    return requiredFields.splice();
                 },
                 enumerable: true
             },
-            /**
-             * return a alias:tableName map of aggregate relations
-             */
             aliasMap: {
                 get: function() {
-                    var aliases = getInheritanceChain(name, fullModel).reduce(function(pV, cV) {
-                        if (fullModel[cV].aggregates) {
-                            return pV.concat(fullModel[cV].aggregates);
-                        } else {
-                            return pV;
-                        }
-                    }, []).reduce(function(pV, cV) {
-                        pV[cV.alias] = cV.foreignTable;
-                        return pV;
-                    }, {});
-
-                    if (m.extendedBy) {
-                        m.extendedBy.reduce(function(pV, cV) {
-                            pV[cV.foreignTable] = cV.foreignTable;
-                            return pV;
-                        }, aliases);
-                    }
-
-                    return aliases;
+                    return aliasMap;
                 },
                 enumerable: true
             }
