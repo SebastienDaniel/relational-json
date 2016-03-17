@@ -1,16 +1,15 @@
 var getData = require("./getData"),
     getAliasMap = require("./getAliasMap"),
-    getRequiredFields = require("./getRequiredFields"),
     isPrimaryKeyUsed = require("./isPrimaryKeyUsed"),
     recursiveDelete = require("./recursiveDelete"),
     formatDateString = require("./formatDateString"),
-    Model = require("./Model"),
+    model = require("./modelFactory"),
     makeData = require("./makeData");
 
 module.exports = function tableFactory(tn, fullModel, db) {
     "use strict";
     var data = [],
-        m = new Model(tn, fullModel);
+        m = model(tn, fullModel);
 
     return {
         // SELECT
