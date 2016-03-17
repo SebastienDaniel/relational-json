@@ -69,7 +69,7 @@ module.exports = function tableFactory(tn, fullModel, db) {
                     } else if (d[k] !== current[k]) {
                         // re-validate if type is datetime
                         if (m.fields[k] && m.fields[k].dataType === "datetime") {
-                            differs = formatDateString(d[k]) !== current[k];
+                            differs = !differs ? formatDateString(d[k]) !== current[k] : true;
                         } else {
                             differs = true;
                         }
