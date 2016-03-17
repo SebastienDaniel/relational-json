@@ -4,7 +4,7 @@ var getAliasMap = require("./getAliasMap"),
     Field = require("./Field"),
     getRequiredFields = require("./getRequiredFields");
 
-function Model(tn, fullModel) {
+module.exports = function modelFactory(tn, fullModel) {
     var model = fullModel[tn],
         requiredFields = getRequiredFields(model, fullModel),
         aliasMap = Object.freeze(getAliasMap(tn, fullModel)),
@@ -14,13 +14,24 @@ function Model(tn, fullModel) {
             return obj;
         }, {});
 
-    return Object.create(Model, {
+    return Object.create(null, {
         primary: {
             get: function() {
                 return model.primary;
             }
         },
-        pk: this.primary, // alias
+        pk: {
+            get: function() {
+                return this.primary;
+            }
+        },
+        field: {
+            get: function(f) {
+                if (this.fields[f]) {
+                    return this.fields[f];
+                }
+            }
+        },
         requiredFields: {
             get: function() {
                 return requiredFields;
@@ -52,6 +63,4 @@ function Model(tn, fullModel) {
             }
         }
     });
-}
-
-module.exports = Model;
+};
