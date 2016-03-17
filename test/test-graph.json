@@ -211,69 +211,6 @@
             }
         ]
     },
-    "Person": {
-        "fields": {
-            "entity_id": {
-                "allowNull": false,
-                "dataType": "integer",
-                "writable": true
-            },
-            "first_name": {
-                "allowNull": false,
-                "dataType": "string",
-                "writable": true
-            },
-            "last_name": {
-                "allowNull": false,
-                "dataType": "string",
-                "writable": true
-            },
-            "gender": {
-                "allowNull": false,
-                "dataType": "string",
-                "writable": true
-            },
-            "organization_id": {
-                "allowNull": true,
-                "dataType": "integer",
-                "defaultValue": null,
-                "writable": true
-            },
-            "job_title": {
-                "allowNull": true,
-                "dataType": "string",
-                "defaultValue": null,
-                "writable": true
-            },
-            "birthdate": {
-                "allowNull": true,
-                "dataType": "date",
-                "defaultValue": null,
-                "writable": true
-            },
-            "hourly_wage": {
-                "allowNull": true,
-                "dataType": "float",
-                "defaultValue": null,
-                "writable": true
-            }
-        },
-        "primary": "entity_id",
-        "aggregates": [
-            {
-                "foreignTable": "Organization",
-                "localField": "organization_id",
-                "alias": "Organization",
-                "foreignField": "entity_id",
-                "cardinality": "single"
-            }
-        ],
-        "extends": {
-            "table": "ExternalEntity",
-            "local": "entity_id",
-            "foreign": "entity_id"
-        }
-    },
     "Organization": {
         "fields": {
             "entity_id": {
@@ -345,6 +282,69 @@
                 "alias": "Persons",
                 "foreignField": "organization_id",
                 "cardinality": "many"
+            }
+        ],
+        "extends": {
+            "table": "ExternalEntity",
+            "local": "entity_id",
+            "foreign": "entity_id"
+        }
+    },
+    "Person": {
+        "fields": {
+            "entity_id": {
+                "allowNull": false,
+                "dataType": "integer",
+                "writable": true
+            },
+            "first_name": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "last_name": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "gender": {
+                "allowNull": false,
+                "dataType": "string",
+                "writable": true
+            },
+            "organization_id": {
+                "allowNull": true,
+                "dataType": "integer",
+                "defaultValue": null,
+                "writable": true
+            },
+            "job_title": {
+                "allowNull": true,
+                "dataType": "string",
+                "defaultValue": null,
+                "writable": true
+            },
+            "birthdate": {
+                "allowNull": true,
+                "dataType": "date",
+                "defaultValue": null,
+                "writable": true
+            },
+            "hourly_wage": {
+                "allowNull": true,
+                "dataType": "float",
+                "defaultValue": null,
+                "writable": true
+            }
+        },
+        "primary": "entity_id",
+        "aggregates": [
+            {
+                "foreignTable": "Organization",
+                "localField": "organization_id",
+                "alias": "Organization",
+                "foreignField": "entity_id",
+                "cardinality": "single"
             }
         ],
         "extends": {
