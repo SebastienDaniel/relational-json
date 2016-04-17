@@ -20,6 +20,7 @@ module.exports = function modelFactory(tn, fullModel) {
                 return model.primary;
             }
         },
+        // alias for primary
         pk: {
             get: function() {
                 return this.primary;
