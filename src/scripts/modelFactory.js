@@ -18,7 +18,8 @@ module.exports = function modelFactory(tn, fullModel) {
         primary: {
             get: function() {
                 return model.primary;
-            }
+            },
+            enumerable: true
         },
         // alias for primary
         pk: {
@@ -26,40 +27,50 @@ module.exports = function modelFactory(tn, fullModel) {
                 return this.primary;
             }
         },
-        field: {
-            get: function(f) {
-                return this.fields[f];
-            }
+        getField: {
+            value: function(f) {
+                if (this.fields[f]) {
+                    return Object.freeze(this.fields[f]);
+                }
+            },
+            enumerable: true
         },
         requiredFields: {
             get: function() {
+                // return a copy to avoid tampering
                 return requiredFields.slice();
-            }
+            },
+            enumerable: true
         },
         aliasMap: {
             get: function() {
                 return aliasMap;
-            }
+            },
+            enumerable: true
         },
         extendedBy: {
             get: function() {
                 return model.extendedBy || [];
-            }
+            },
+            enumerable: true
         },
         aggregates: {
             get: function() {
                 return model.aggregates || [];
-            }
+            },
+            enumerable: true
         },
         extends: {
             get: function() {
                 return model.extends;
-            }
+            },
+            enumerable: true
         },
         fields: {
             get: function() {
                 return fields;
-            }
+            },
+            enumerable: true
         }
     });
 };
