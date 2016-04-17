@@ -33,7 +33,7 @@ module.exports = function modelFactory(tn, fullModel) {
         },
         requiredFields: {
             get: function() {
-                return requiredFields;
+                return requiredFields.slice();
             }
         },
         aliasMap: {
