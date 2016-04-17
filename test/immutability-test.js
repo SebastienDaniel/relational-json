@@ -3,14 +3,15 @@ var chai = require("chai"),
     db = require("../src/scripts")(require("./test-graph.json"));
 
 describe("immutability", function() {
-    var p = db.Person.post({
-        entity_id: 11,
-        first_name: "Sebastien",
-        last_name: "Daniel",
-        gender: "m",
-        created_by: 1,
-        created_on: "2015-01-01T12:30:59"
-    });
+    var pData = {
+            entity_id: 11,
+            first_name: "Sebastien",
+            last_name: "Daniel",
+            gender: "m",
+            created_by: 1,
+            created_on: "2015-01-01T12:30:59"
+        },
+        p = db.Person.post(pData);
 
     it("should silently ignore property changes", function() {
         "use strict";
@@ -104,5 +105,21 @@ describe("immutability", function() {
         });
 
         expect(db.Entity.get(11).deleted_on).to.equal("2015-01-01T12:00:00Z");
+    });
+
+    it("should not refer to creation data when getting value", function() {
+        var p3 = {
+            entity_id: 12,
+            first_name: "Seb",
+            last_name: "Dan",
+            gender: "m",
+            created_by: 1,
+            created_on: "2015-01-01T12:30:59"
+        };
+
+        db.Person.post(p3);
+        expect(db.Person.get(12).first_name).to.eql("Seb");
+        p3.first_name = "Mike";
+        expect(db.Person.get(12).first_name).to.eql("Seb");
     });
 });
