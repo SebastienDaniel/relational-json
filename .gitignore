@@ -219,6 +219,7 @@ pip-log.txt
 ###########################
 node_modules/
 build/
+/build
 .idea/
 idea/
 doc/
