@@ -28,9 +28,7 @@ module.exports = function modelFactory(tn, fullModel) {
         },
         field: {
             get: function(f) {
-                if (this.fields[f]) {
-                    return this.fields[f];
-                }
+                return this.fields[f];
             }
         },
         requiredFields: {
