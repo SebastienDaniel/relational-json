@@ -1,7 +1,7 @@
 var gam = require("../src/scripts/model/getAliasMap"),
     chai = require("chai"),
     expect = require("chai").expect,
-    graph = require("./test-graph.json");
+    graph = require("./data/test-graph.json");
 
 describe("getAliasMap", function() {
     it("should return tableName when no inheritance", function() {

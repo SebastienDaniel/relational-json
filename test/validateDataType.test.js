@@ -1,7 +1,7 @@
 var vdt = require("../src/scripts/data/validateDataType"),
     chai = require("chai"),
     expect = require("chai").expect,
-    graph = require("./test-graph.json");
+    graph = require("./data/test-graph.json");
 
 describe("validateDataType", function() {
     it("should validate integers", function() {
