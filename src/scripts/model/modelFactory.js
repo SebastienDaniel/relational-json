@@ -14,6 +14,10 @@ module.exports = function modelFactory(tn, fullModel) {
             return obj;
         }, {});
 
+    /**
+     * The model is publicly exposed
+     * hence, we need a tamper-free interface
+     */
     return Object.create(null, {
         primary: {
             get: function() {
@@ -24,13 +28,13 @@ module.exports = function modelFactory(tn, fullModel) {
         // alias for primary
         pk: {
             get: function() {
-                return this.primary;
+                return model.primary;
             }
         },
         getField: {
             value: function(f) {
-                if (this.fields[f]) {
-                    return Object.freeze(this.fields[f]);
+                if (fields[f]) {
+                    return Object.freeze(fields[f]);
                 }
             },
             enumerable: true
