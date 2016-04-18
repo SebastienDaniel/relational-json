@@ -1,8 +1,8 @@
 /**
  * adds a tolerance level for datetime string formats, which can have a missing "T" or "timezone offset"
- * Expects that the string has been pre-validated
+ * Expects that the string has been pre-validated (validateDataType)
  * @param str
- * @returns {*}
+ * @returns {string} - properly formatted javascript datetime string
  */
 module.exports = function(str) {
     "use strict";

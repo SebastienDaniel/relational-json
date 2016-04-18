@@ -58,7 +58,7 @@ module.exports = function validateDataType(field, value) {
         }
 
         default: {
-            throw new Error("Incompatible dataType:" + trueType);
+            throw new Error("Incompatible dataType: " + trueType);
         }
     }
 
