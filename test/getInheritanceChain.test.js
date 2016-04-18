@@ -1,4 +1,4 @@
-var gic = require("../src/scripts/getInheritanceChain"),
+var gic = require("../src/scripts/model/getInheritanceChain"),
     chai = require("chai"),
     expect = require("chai").expect,
     graph = require("./test-graph.json");
