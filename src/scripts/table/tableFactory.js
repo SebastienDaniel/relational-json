@@ -1,36 +1,30 @@
-var getData = require("./getData"),
-    getAliasMap = require("./getAliasMap"),
-    isPrimaryKeyUsed = require("./isPrimaryKeyUsed"),
+var get = require("./get"),
+    isPrimaryKeyUsed = require("../isPrimaryKeyUsed"),
     recursiveDelete = require("./recursiveDelete"),
-    formatDateString = require("./formatDateString"),
-    model = require("./modelFactory"),
-    makeData = require("./makeData");
+    formatDateString = require("../data/formatDateString"),
+    model = require("../model/modelFactory"),
+    post = require("./post");
 
 module.exports = function tableFactory(tn, fullModel, db) {
     "use strict";
-    var data = [],
-        m = model(tn, fullModel);
+    // TODO: data should be a hash-map, because each PK value is unique
+    var data = [], // table's private data
+        m = model(tn, fullModel); // table's model instance
 
     return {
         // SELECT
         get: function(id) {
-            return getData(data, id, m.primary);
+            return get(data, id, m.primary);
         },
         // INSERT, should create new array
         post: function(d) {
             var obj;
 
-            // copy data to avoid mutating argument
-            d = Object.keys(d).reduce(function(o, key) {
-                o[key] = d[key];
-                return o;
-            }, {});
-
             // make sure pk is unique
             if (isPrimaryKeyUsed(data, d[m.primary], m.primary)) {
                 throw Error("provided " + m.primary + ": " + d[m.primary] + " is already in use in " + tn);
             } else {
-                obj = makeData(m, d, tn, db);
+                obj = post(m, d, tn, db);
 
                 // create a new data array (for immutability)
                 // keep index order
@@ -43,7 +37,7 @@ module.exports = function tableFactory(tn, fullModel, db) {
         // UPDATE, should create new Array and new Row
         put: function(d, pkValue) {
             // find current object
-            var current = getData(data, pkValue || d[m.primary], m.primary),
+            var current = get(data, pkValue || d[m.primary], m.primary),
                 differs = false,
                 extendedBy,
                 k;
