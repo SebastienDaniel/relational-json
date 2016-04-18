@@ -8,27 +8,27 @@ var get = require("./get"),
 module.exports = function tableFactory(tn, fullModel, db) {
     "use strict";
     // TODO: data should be a hash-map, because each PK value is unique
-    var data = [], // table's private data
+    var rows = [], // table's private data
         m = model(tn, fullModel); // table's model instance
 
     return {
         // SELECT
         get: function(id) {
-            return get(data, id, m.primary);
+            return get(rows, id, m.primary);
         },
         // INSERT, should create new array
         post: function(d) {
             var obj;
 
             // make sure pk is unique
-            if (isPrimaryKeyUsed(data, d[m.primary], m.primary)) {
+            if (isPrimaryKeyUsed(rows, d[m.primary], m.primary)) {
                 throw Error("provided " + m.primary + ": " + d[m.primary] + " is already in use in " + tn);
             } else {
                 obj = post(m, d, tn, db);
 
                 // create a new data array (for immutability)
                 // keep index order
-                data = data.concat(obj).sort(function(a, b) {
+                rows = rows.concat(obj).sort(function(a, b) {
                     return a[m.primary] - b[m.primary];
                 });
                 return obj;
@@ -37,12 +37,13 @@ module.exports = function tableFactory(tn, fullModel, db) {
         // UPDATE, should create new Array and new Row
         put: function(d, pkValue) {
             // find current object
-            var current = get(data, pkValue || d[m.primary], m.primary),
+            var current = get(rows, pkValue || d[m.primary], m.primary),
                 differs = false,
                 extendedBy,
                 k;
 
             // copy data to avoid mutating argument
+            // TODO: overzealous?
             d = Object.keys(d).reduce(function(o, key) {
                 o[key] = d[key];
                 return o;
@@ -94,10 +95,10 @@ module.exports = function tableFactory(tn, fullModel, db) {
         },
         // DELETE
         delete: function(id) {
-            recursiveDelete(id, data, tn, fullModel, db);
+            recursiveDelete(id, rows, tn, fullModel, db);
 
             // reset data array
-            data = data.slice(0, data.length);
+            rows = rows.slice(0, rows.length);
         },
         meta: m
     };
