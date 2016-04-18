@@ -1,7 +1,7 @@
 "use strict";
 
-var formatDateString = require("./formatDateString"),
-    validateDataType = require("./validateDataType");
+var formatDateString = require("../data/formatDateString"),
+    validateDataType = require("../data/validateDataType");
 
 function Field(f) {
     // basics
