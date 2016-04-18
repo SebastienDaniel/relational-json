@@ -1,11 +1,13 @@
-"use strict";
-
 var getInheritanceChain = require("./getInheritanceChain");
 
 /**
- * return a alias:tableName map of aggregate relations
+ * The alias map is a alias:tableName hash-map, where
+ * a given alias, in the context of the current table,
+ * points to another table in the schema
+ * In other words, it is a map for nested data (Object or Array)
  */
 module.exports = function(tn, fullModel) {
+    "use strict";
     var aliases = getInheritanceChain(tn, fullModel).reduce(function(pV, cV) {
             if (fullModel[cV].aggregates) {
                 return pV.concat(fullModel[cV].aggregates);
