@@ -1,4 +1,4 @@
-var grf = require("../src/scripts/getRequiredFields"),
+var grf = require("../src/scripts/model/getRequiredFields"),
     chai = require("chai"),
     expect = require("chai").expect,
     graph = require("./test-graph.json");
