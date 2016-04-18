@@ -2,64 +2,38 @@ var get = require("./get"),
     recursiveDelete = require("./recursiveDelete"),
     formatDateString = require("../row/formatDateString"),
     model = require("../model/modelFactory"),
+    ImmDictionary = require("./ImmutableDictionary"),
     post = require("./post");
-
-function hashToList(obj) {
-    return Object.keys(obj).map(function(key) {
-        return obj[key];
-    });
-}
-
-function copyHashMap(obj) {
-    return Object.keys(obj).reduce(function(o, key) {
-        o[key] = obj[key];
-        return o;
-    }, {});
-}
 
 module.exports = function tableFactory(tn, fullModel, db) {
     "use strict";
     // TODO: data should be a hash-map, because each PK value is unique
-    var rows = {}, // table's private data
+    var rows = new ImmDictionary(), // table's private data
         m = model(tn, fullModel); // table's model instance
 
     return {
         // SELECT
         get: function(id) {
-            return id ? rows[id] : hashToList(rows);
+            return id ? rows.get(id) : rows.all();
         },
         // INSERT, should create new array
         post: function(d) {
-            var obj;
-
             // make sure pk is unique
-            if (rows[d[m.primary]]) {
+            if (rows.has(d[m.primary])) {
                 throw Error("provided " + m.primary + ": " + d[m.primary] + " is already in use in " + tn);
             } else {
-                obj = post(m, d, tn, db);
+                rows.add(d[m.primary], post(m, d, tn, db));
 
-                // create a new data array (for immutability)
-                // keep index order
-                rows = copyHashMap(rows);
-                rows[obj[m.primary]] = obj;
-
-                return obj;
+                return this.get(d[m.primary]);
             }
         },
         // UPDATE, should create new Array and new Row
         put: function(d, pkValue) {
             // find current object
-            var current = rows[pkValue || d[m.primary]],
+            var current = rows.get(pkValue || d[m.primary]),
                 differs = false,
                 extendedBy,
                 k;
-
-            // copy data to avoid mutating argument
-            // TODO: overzealous?
-            d = Object.keys(d).reduce(function(o, key) {
-                o[key] = d[key];
-                return o;
-            }, {});
 
             // throw if unfound
             if (!current) {
@@ -105,13 +79,16 @@ module.exports = function tableFactory(tn, fullModel, db) {
                 return current;
             }
         },
-        // DELETE
-        // TODO: NOT ADAPTED to HASHMAP structure
         delete: function(id) {
-            recursiveDelete(id, rows, tn, fullModel, db);
+            if (rows.has(id)) {
+                // jumps from table to table, eliminating youngest child and up
+                recursiveDelete(rows.get(id), m, db);
 
-            // reset data array
-            rows = rows.slice(0, rows.length);
+                // eliminate self
+                return rows.remove(id);
+            } else {
+                throw Error("Cannot delete non existent object id: " + id + "\nin " + tn);
+            }
         },
         meta: m
     };

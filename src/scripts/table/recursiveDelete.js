@@ -1,20 +1,17 @@
-var get = require("./get");
 
-function recursiveDelete(id, data, tableName, fullModel, db) {
+// should delete CHILDREN, not PARENTS
+function recursiveDelete(target, model, db) {
     "use strict";
-    var target = get(data, id, fullModel[tableName].primary);
 
-    if (!target) {
-        throw Error("Cannot delete non existent object id: " + id);
-    }
+    // for each child match
+    // delete child from its table
+    model.extendedBy.forEach(function(ext) {
+        var t = db[ext.foreignTable].get(target[ext.localField]);
 
-    // check for parent
-    if (fullModel[tableName].extends) {
-        // delete parent
-        db[fullModel[tableName].extends.table].delete(id);
-    }
-
-    data.splice(data.indexOf(target), 1);
+        if (t) {
+            db[ext.foreignTable].delete(t[ext.foreignField] || target[ext.localField]);
+        }
+    });
 }
 
 module.exports = recursiveDelete;
