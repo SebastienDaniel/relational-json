@@ -27,8 +27,4 @@ function buildDatabase(graph) {
     return Object.freeze(db);
 }
 
-// TODO: wuhhh? useless wrapper function
-module.exports = function(graph) {
-    "use strict";
-    return buildDatabase(graph);
-};
+module.exports = buildDatabase;
