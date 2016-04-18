@@ -1,8 +1,8 @@
-var getData = require("./getData");
+var get = require("./get");
 
 function recursiveDelete(id, data, tableName, fullModel, db) {
     "use strict";
-    var target = getData(data, id, fullModel[tableName].primary);
+    var target = get(data, id, fullModel[tableName].primary);
 
     if (!target) {
         throw Error("Cannot delete non existent object id: " + id);

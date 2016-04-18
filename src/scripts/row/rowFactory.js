@@ -30,7 +30,7 @@ function getRowPrototype(model, d, db) {
 }
 
 // TODO: needs to encapsulate data
-function dataFactory(model, d, db) {
+function rowFactory(model, d, db) {
     "use strict";
     var row = Object.create(getRowPrototype(model, d, db)),
         data = {}; // private own data
@@ -47,13 +47,12 @@ function dataFactory(model, d, db) {
                 enumerable: true
             });
         } else {
-            // store own data value
+            // pre-calculate &  own data value
             data[key] = d[key] !== undefined ? d[key] : model.fields[key].defaultValue;
 
             // add getter for own data
             Object.defineProperty(row, key, {
                 get: function() {
-                    // should be pre-calculated and shouldn't rely on d
                     return data[key];
                 },
                 enumerable: true
@@ -98,4 +97,4 @@ function dataFactory(model, d, db) {
     return Object.freeze(row);
 }
 
-module.exports = dataFactory;
+module.exports = rowFactory;

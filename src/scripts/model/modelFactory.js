@@ -18,6 +18,7 @@ module.exports = function modelFactory(tn, fullModel) {
      * The model is publicly exposed
      * hence, we need a tamper-free interface
      */
+    // TODO: simplify interface, it contains much unused crud
     return Object.create(null, {
         primary: {
             get: function() {

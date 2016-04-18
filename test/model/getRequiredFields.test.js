@@ -1,7 +1,7 @@
-var grf = require("../src/scripts/model/getRequiredFields"),
+var grf = require("../../src/scripts/model/getRequiredFields"),
     chai = require("chai"),
     expect = require("chai").expect,
-    graph = require("./data/test-graph.json");
+    graph = require("../data/test-graph.json");
 
 describe("getRequiredFields", function() {
     it("should return own required fields for a given Table", function() {

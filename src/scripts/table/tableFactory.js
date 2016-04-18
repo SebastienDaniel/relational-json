@@ -1,43 +1,55 @@
 var get = require("./get"),
-    isPrimaryKeyUsed = require("../isPrimaryKeyUsed"),
     recursiveDelete = require("./recursiveDelete"),
-    formatDateString = require("../data/formatDateString"),
+    formatDateString = require("../row/formatDateString"),
     model = require("../model/modelFactory"),
     post = require("./post");
+
+function hashToList(obj) {
+    return Object.keys(obj).map(function(key) {
+        return obj[key];
+    });
+}
+
+function copyHashMap(obj) {
+    return Object.keys(obj).reduce(function(o, key) {
+        o[key] = obj[key];
+        return o;
+    }, {});
+}
 
 module.exports = function tableFactory(tn, fullModel, db) {
     "use strict";
     // TODO: data should be a hash-map, because each PK value is unique
-    var rows = [], // table's private data
+    var rows = {}, // table's private data
         m = model(tn, fullModel); // table's model instance
 
     return {
         // SELECT
         get: function(id) {
-            return get(rows, id, m.primary);
+            return id ? rows[id] : hashToList(rows);
         },
         // INSERT, should create new array
         post: function(d) {
             var obj;
 
             // make sure pk is unique
-            if (isPrimaryKeyUsed(rows, d[m.primary], m.primary)) {
+            if (rows[d[m.primary]]) {
                 throw Error("provided " + m.primary + ": " + d[m.primary] + " is already in use in " + tn);
             } else {
                 obj = post(m, d, tn, db);
 
                 // create a new data array (for immutability)
                 // keep index order
-                rows = rows.concat(obj).sort(function(a, b) {
-                    return a[m.primary] - b[m.primary];
-                });
+                rows = copyHashMap(rows);
+                rows[obj[m.primary]] = obj;
+
                 return obj;
             }
         },
         // UPDATE, should create new Array and new Row
         put: function(d, pkValue) {
             // find current object
-            var current = get(rows, pkValue || d[m.primary], m.primary),
+            var current = rows[pkValue || d[m.primary]],
                 differs = false,
                 extendedBy,
                 k;
@@ -94,6 +106,7 @@ module.exports = function tableFactory(tn, fullModel, db) {
             }
         },
         // DELETE
+        // TODO: NOT ADAPTED to HASHMAP structure
         delete: function(id) {
             recursiveDelete(id, rows, tn, fullModel, db);
 

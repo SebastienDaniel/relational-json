@@ -1,7 +1,7 @@
-var dataFactory = require("./dataFactory"),
-    formatDateString = require("./formatDateString");
+var rowFactory = require("../row/rowFactory"),
+    formatDateString = require("../row/formatDateString");
 
-module.exports = function makeData(model, d, tn, db) {
+module.exports = function post(model, d, tn, db) {
     "use strict";
     var missingFields = [];
 
@@ -31,5 +31,5 @@ module.exports = function makeData(model, d, tn, db) {
         throw Error("data creation rejected for table " + tn + ", mandatory fields not provided:\n" + missingFields.join(", ") + "\nfrom data: " + JSON.stringify(d));
     }
 
-    return dataFactory(model, d, db);
+    return rowFactory(model, d, db);
 };
