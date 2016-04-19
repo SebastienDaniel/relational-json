@@ -1,7 +1,7 @@
-var rowFactory = require("../row/rowFactory"),
-    formatDateString = require("../row/formatDateString");
+var rowFactory = require("../row/rowFactory");
 
-module.exports = function post(model, d, tn, db) {
+// TODO: POST is your pre-processor before rowFactory
+module.exports = function post(model, d, tn, env) {
     "use strict";
     var missingFields = [];
 
@@ -10,15 +10,16 @@ module.exports = function post(model, d, tn, db) {
         var field = model.fields[key];
 
         // make sure all required fields are provided
-        if (field.isRequired()) {
-            if (d[key] === undefined) {
-                missingFields.push(key);
-            }
+        if (field.isRequired() && d[key] === undefined) {
+            missingFields.push(key);
         }
 
         // make sure all fields respect their datatype
         if (d[key]) {
-            d[key] = field.adaptData(d[key]);
+            // pipe through preprocessor, if available
+            if (env.preprocessor) {
+                d[key] = env.preprocessor(tn, field, d[key]);
+            }
 
             if (!field.validateData(d[key])) {
                 throw Error("Provided data " + d[key] + "\nis not compatible with " + tn + "." + key + "\nexpected datatype: " + field.dataType);
@@ -31,5 +32,5 @@ module.exports = function post(model, d, tn, db) {
         throw Error("data creation rejected for table " + tn + ", mandatory fields not provided:\n" + missingFields.join(", ") + "\nfrom data: " + JSON.stringify(d));
     }
 
-    return rowFactory(model, d, db);
+    return rowFactory(model, d, env.db);
 };

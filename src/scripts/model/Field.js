@@ -1,7 +1,6 @@
 "use strict";
 
-var formatDateString = require("../row/formatDateString"),
-    validateDataType = require("../row/validateDataType");
+var validateDataType = require("../row/validateDataType");
 
 function Field(f) {
     // basics
@@ -11,16 +10,11 @@ function Field(f) {
         this.defaultValue = f.defaultValue;
     }
     this.writable = f.writable || false;
+
+    return Object.freeze(this);
 }
 
 Field.prototype = {
-    adaptData: function(value) {
-        if (this.dataType === "datetime") {
-            return formatDateString(value);
-        }
-
-        return value;
-    },
     isRequired: function() {
         return !this.allowNull && !this.hasOwnProperty("defaultValue");
     },

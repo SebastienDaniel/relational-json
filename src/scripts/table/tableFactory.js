@@ -4,7 +4,7 @@ var recursiveDelete = require("./recursiveDelete"),
     ImmDictionary = require("./ImmutableDictionary"),
     post = require("./post");
 
-module.exports = function tableFactory(tn, fullModel, db) {
+module.exports = function tableFactory(tn, fullModel, env) {
     "use strict";
     var rows = new ImmDictionary(), // table's private data
         m = model(tn, fullModel); // table's model instance
@@ -19,7 +19,7 @@ module.exports = function tableFactory(tn, fullModel, db) {
             if (rows.has(d[m.primary])) {
                 throw Error("provided " + m.primary + ": " + d[m.primary] + " is already in use in " + tn);
             } else {
-                rows.add(d[m.primary], post(m, d, tn, db));
+                rows.add(d[m.primary], post(m, d, tn, env));
 
                 return this.get(d[m.primary]);
             }
@@ -78,7 +78,7 @@ module.exports = function tableFactory(tn, fullModel, db) {
         delete: function(id) {
             if (rows.has(id)) {
                 // jumps from table to table, eliminating youngest child and up
-                recursiveDelete(rows.get(id), m, db);
+                recursiveDelete(rows.get(id), m, env.db);
 
                 // eliminate self
                 return rows.remove(id);
