@@ -1,5 +1,4 @@
-var get = require("./get"),
-    recursiveDelete = require("./recursiveDelete"),
+var recursiveDelete = require("./recursiveDelete"),
     formatDateString = require("../row/formatDateString"),
     model = require("../model/modelFactory"),
     ImmDictionary = require("./ImmutableDictionary"),
@@ -7,12 +6,10 @@ var get = require("./get"),
 
 module.exports = function tableFactory(tn, fullModel, db) {
     "use strict";
-    // TODO: data should be a hash-map, because each PK value is unique
     var rows = new ImmDictionary(), // table's private data
         m = model(tn, fullModel); // table's model instance
 
-    return {
-        // SELECT
+    return Object.freeze({
         get: function(id) {
             return id ? rows.get(id) : rows.all();
         },
@@ -27,7 +24,6 @@ module.exports = function tableFactory(tn, fullModel, db) {
                 return this.get(d[m.primary]);
             }
         },
-        // UPDATE, should create new Array and new Row
         put: function(d, pkValue) {
             // find current object
             var current = rows.get(pkValue || d[m.primary]),
@@ -91,5 +87,5 @@ module.exports = function tableFactory(tn, fullModel, db) {
             }
         },
         meta: m
-    };
+    });
 };
