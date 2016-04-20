@@ -1,6 +1,6 @@
 var prepPost = require("./prepPost");
 
-module.exports = function post(d, c) {
+module.exports = function post(c, d) {
     var obj;
 
     // make sure pk is unique

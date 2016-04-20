@@ -1,6 +1,6 @@
 var post = require("./post");
 
-module.exports = function put(d, pkValue, c) {
+module.exports = function put(c, pkValue, d) {
     // find current object
     var current = c.rows.get(pkValue || d[c.model.primary]),
         differs = false,

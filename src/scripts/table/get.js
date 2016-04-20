@@ -1,17 +1,17 @@
-module.exports = function get() {
-    var aL = arguments.length,
+module.exports = function get(args, rows) {
+    var aL = args.length,
         a,
         i;
 
     if (aL === 0) {
-        return this.all();
+        return rows.all();
     } else if (aL === 1) {
-        return this.get(arguments[0]);
+        return rows.get(args[0]);
     } else {
         a = [];
 
         for (i = 0; i < aL; i++) {
-            a.push(this.get(arguments[i]));
+            a.push(rows.get(args[i]));
         }
 
         return a;

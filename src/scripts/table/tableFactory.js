@@ -1,31 +1,31 @@
 var model = require("../model/modelFactory"),
     ImmDictionary = require("./ImmutableDictionary"),
-    remove = require("./remove"),
     get = require("./get"),
     put = require("./put"),
-    post = require("./post");
+    post = require("./post"),
+    remove = require("./remove");
 
 module.exports = function tableFactory(tn, fullModel, env) {
     "use strict";
-    var c = {
-            env: env,
-            model: model(tn, fullModel), // table's model instance
-            rows: new ImmDictionary() // table's private data
-        };
+    var context = Object.freeze({
+        env: env, // settings of the relational-json instance
+        model: model(tn, fullModel), // table's model instance
+        rows: new ImmDictionary() // table's private data dictionary
+    });
 
     return Object.freeze({
         get: function() {
-            return get.apply(c.rows, arguments);
+            return get(arguments, context.rows);
         },
         post: function(d) {
-            return post(d, c);
+            return post(context, d);
         },
         put: function(d, pkValue) {
-            return put(d, pkValue, c)
+            return put(context, pkValue, d)
         },
         delete: function(id) {
-            return remove(id, c);
+            return remove(context, id);
         },
-        meta: c.model
+        meta: context.model
     });
 };
