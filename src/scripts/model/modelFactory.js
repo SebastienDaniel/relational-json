@@ -76,6 +76,12 @@ module.exports = function modelFactory(tn, fullModel) {
                 return fields;
             },
             enumerable: true
+        },
+        tableName: {
+            get: function() {
+                return tn;
+            },
+            enumerable: true
         }
     });
 };
