@@ -21,8 +21,8 @@ module.exports = function put(c, pkValue, d) {
                 d[k] = current[k];
             } else if (d[k] !== current[k]) {
                 // re-validate if type is datetime
-                if (env.preprocessor) {
-                    differs = !differs ? env.preprocessor(d[k]) !== current[k] : true;
+                if (c.env.preprocessor) {
+                    differs = !differs ? c.env.preprocessor(d[k]) !== current[k] : true;
                 } else {
                     differs = true;
                 }
