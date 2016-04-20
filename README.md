@@ -1,3 +1,8 @@
+# IMPORTANT
+I'm currently working an a **significant** refactoring of the library. The API changes will be minimal, but they may break previous integrations *if you used the table metadata*. My focus is mostly on performance improvements. 
+
+So far my early benchmarks/tests revealed a **2x-3x** improvement on moderate amounts of data, and even more on larger datasets.
+
 # Relational JSON
 Takes a JSON data structure and converts it into a database-like module allowing easy CRUD operations on immutable & relational objects (*no data duplication*).
 
