@@ -1,9 +1,10 @@
 var chai = require("chai"),
     expect = chai.expect,
+    compileModel = require("../../src/scripts/model/compileModel"),
     rf = require("../../src/scripts/row/rowFactory");
 
 describe("rowFactory()", function() {
-    var model = {
+    var model = compileModel({
             Table1: {
                 primary: "id",
                 fields: {
@@ -25,7 +26,7 @@ describe("rowFactory()", function() {
                 },
                 extendedBy: []
             }
-        },
+        }),
         data = {id: 1, name: "bob", created_on: "2015-01-01T00:00:00Z"},
         row = rf(model.Table1, data, {});
 

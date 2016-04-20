@@ -1,5 +1,5 @@
-var deepCopy = require("./deepCopy"),
-    tableFactory = require("./table/tableFactory");
+var tableFactory = require("./table/tableFactory"),
+    compileModel = require("./model/compileModel");
 
 function compileOptions(options) {
     var o = Object.create(null, {});
@@ -17,25 +17,24 @@ function compileOptions(options) {
  * Makes a copy of the model to avoid future tampering
  * Creates each table in the Graph
  *
- * @param {JSON} graph - JSON-like schema of the database to build
+ * @param {JSON} schema - JSON-like schema of the database to build
  * @param {object} [options] - additional options & utilities for the schema
  * @returns {Object} - relational-json instance (Tables)
  */
-function buildDatabase(graph, options) {
+function buildDatabase(schema, options) {
     "use strict";
-    // store a copy of the model
-    // TODO: might not be necessary so early, since a copy might be made in the model
-     var fullModel = deepCopy(graph);
+    // create graph from schema
+     var fullModel = compileModel(schema);
 
     // finalize the options object
     options = compileOptions(options);
 
     // create db tables
-    Object.keys(graph).forEach(function(key) {
-        if (!graph[key].primary || !graph[key].fields) {
+    Object.keys(schema).forEach(function(key) {
+        if (!schema[key].primary || !schema[key].fields) {
             throw new Error("Unable to create relational-json instance.\nGraph table " + key + " has no fields or no primary key");
         } else {
-            options.db[key] = tableFactory(key, fullModel, options);
+            options.db[key] = tableFactory(fullModel[key], options);
         }
     });
 

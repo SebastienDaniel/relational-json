@@ -1,5 +1,6 @@
 var chai = require("chai"),
     expect = chai.expect,
+    compileModel = require("../../src/scripts/model/compileModel"),
     tf = require("../../src/scripts/table/tableFactory");
 
 describe("tableFactory()", function() {
@@ -40,10 +41,13 @@ describe("tableFactory()", function() {
                     }
                 }
             }
-        };
+        },
+        model = compileModel(graph);
 
     // create table 1
-    var t1 = db["Table1"] = tf("Table1", graph, db);
+    var t1 = db["Table1"] = tf(model["Table1"], {
+        db: db
+    });
 
     it("should create a Table", function() {
         expect(t1).to.exist;
@@ -67,7 +71,7 @@ describe("tableFactory()", function() {
 
     it("should allow data creation (post)", function() {
         var bob = t1.post({id: 1, name: "bob", created_on: "2015-01-01T00:00:00Z"});
-
+        console.log(bob);
         expect(bob).to.exist;
         expect(bob.id).to.eql(1);
         expect(bob.name).to.eql("bob");

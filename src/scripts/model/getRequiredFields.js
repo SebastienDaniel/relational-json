@@ -1,31 +1,24 @@
 /**
- * tests if a field's metadata makes it a mandatory field
- * @param {object} f - field metadata
- * @returns {boolean}
- */
-function fieldIsRequired(f) {
-    return !f.allowNull && !f.hasOwnProperty("defaultValue");
-}
-
-/**
  * compiles an array of all required field names to create a data object
  * for the provided table model
  * @param {object} model - table model to scan
- * @param {object} fullModel - full graph, necessary to scan extensions
+ * @param {object} type - "own" or "all"
  * @returns {Array}
  */
-module.exports = function getRequiredFields(model, fullModel) {
+module.exports = function getRequiredFields(type, model) {
     "use strict";
 
     // get models' own required fields
-    var req = Object.keys(model.fields).filter(function(key) {
-        return fieldIsRequired(model.fields[key]);
+    var req = model.fields.filter(function(field) {
+        return field.isRequired();
+    }).map(function(f) {
+        return f.name;
     });
 
     // check for ancestor requirements
-    if (model.extends) {
+    if (type === "all" && model.extends) {
         // recursively get required fields of ancestor(s)
-        req = req.concat(getRequiredFields(fullModel[model.extends.table], fullModel));
+        req = req.concat(getRequiredFields(type, model.extends.table));
 
         // remove the ancestor extension field requirement,
         // it can be inferred at data creation time

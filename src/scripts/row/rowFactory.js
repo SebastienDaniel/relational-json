@@ -11,7 +11,7 @@ function getRowPrototype(model, d, db) {
     if (model.extends) {
         // try to fetch the parent
         if (db[model.extends.table].get(d[model.primary])) {
-            // update parent parent data
+            // update parent data
             // and use result as prototype (will be new obj or current parent)
             parent = db[model.extends.table].put(d, d[model.extends.local]);
         } else {
@@ -43,14 +43,16 @@ function rowFactory(model, d, db) {
         data = {}; // private own data
 
     // generate public row field descriptors
-    Object.keys(model.fields).forEach(function(key) {
+    model.fields.forEach(function(field) {
+        var key = field.name;
+
         if (model.extends && model.extends.local === key) {
             // create field "getter" for common parent-child data
             // i.e. use parent data
             data[key] = Object.getPrototypeOf(this)[model.extends.foreign];
         } else {
             // pre-calculate &  own data value
-            data[key] = d[key] !== undefined ? d[key] : model.fields[key].defaultValue;
+            data[key] = d[key] !== undefined ? d[key] : field.defaultValue;
         }
 
         // add getter for own data (isolate)

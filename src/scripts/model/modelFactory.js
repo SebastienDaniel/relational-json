@@ -1,15 +1,11 @@
 "use strict";
 
-var getAliasMap = require("./getAliasMap"),
-    Field = require("./Field"),
+var Field = require("./Field"),
     getRequiredFields = require("./getRequiredFields");
 
-module.exports = function modelFactory(tn, fullModel) {
-    var model = fullModel[tn],
-        requiredFields = getRequiredFields(model, fullModel),
-        aliasMap = Object.freeze(getAliasMap(tn, fullModel)),
-        fields = Object.keys(fullModel[tn].fields).reduce(function(obj, field) {
-            obj[field] = new Field(fullModel[tn].fields[field]);
+module.exports = function modelFactory(tn, model) {
+        var fields = Object.keys(model.fields).reduce(function(obj, field) {
+            obj[field] = new Field(field, model.fields[field]);
 
             return obj;
         }, {});
@@ -18,14 +14,12 @@ module.exports = function modelFactory(tn, fullModel) {
      * The model is publicly exposed
      * hence, we need a tamper-free interface
      */
-    // TODO: simplify interface, it contains much unused crud
     return Object.create(null, {
         primary: {
-            get: function() {
-                return model.primary;
-            },
+            value: model.primary,
             enumerable: true
         },
+        // TODO: might need fix, not sure freeze is doing what we want it to do
         getField: {
             value: function(f) {
                 if (fields[f]) {
@@ -34,40 +28,19 @@ module.exports = function modelFactory(tn, fullModel) {
             },
             enumerable: true
         },
-        requiredFields: {
-            get: function() {
-                // return a copy to avoid tampering
-                return requiredFields.slice();
-            },
-            enumerable: true
-        },
-        aliasMap: {
-            get: function() {
-                return aliasMap;
-            },
-            enumerable: true
-        },
-        extendedBy: {
-            get: function() {
-                return model.extendedBy || [];
-            },
-            enumerable: true
-        },
-        aggregates: {
-            get: function() {
-                return model.aggregates || [];
-            },
-            enumerable: true
-        },
-        extends: {
-            get: function() {
-                return model.extends;
+        getRequiredFields: {
+            value: function(type) {
+                type = type === "all" ? "all" : "own";
+
+                return getRequiredFields(type, this);
             },
             enumerable: true
         },
         fields: {
             get: function() {
-                return fields;
+                return Object.keys(fields).map(function(f) {
+                    return fields[f];
+                });
             },
             enumerable: true
         },

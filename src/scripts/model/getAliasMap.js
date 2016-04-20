@@ -1,4 +1,25 @@
-var getInheritanceChain = require("./getInheritanceChain");
+function mapRelations(obj, model) {
+    // add own aggregates
+    if (model.aggregates) {
+        model.aggregates.forEach(function (agg) {
+            obj[agg.alias] = agg.table.tableName;
+        });
+    }
+
+    // add own extendedBy
+    if (model.extendedBy) {
+        model.extendedBy.forEach(function (ext) {
+            obj[ext.table.tableName] = ext.table.tableName;
+        });
+    }
+
+    // loop into extends
+    if (model.extends) {
+        mapRelations(obj, model.extends);
+    }
+
+    return obj;
+}
 
 /**
  * The alias map is a alias:tableName hash-map, where
@@ -6,26 +27,7 @@ var getInheritanceChain = require("./getInheritanceChain");
  * points to another table in the schema
  * In other words, it is a map for nested data (Object or Array)
  */
-module.exports = function(tn, fullModel) {
+module.exports = function(model) {
     "use strict";
-    var aliases = getInheritanceChain(tn, fullModel).reduce(function(pV, cV) {
-            if (fullModel[cV].aggregates) {
-                return pV.concat(fullModel[cV].aggregates);
-            } else {
-                return pV;
-            }
-        }, []).reduce(function(pV, cV) {
-            pV[cV.alias] = cV.foreignTable;
-            return pV;
-        }, {}),
-        m = fullModel[tn];
-
-    if (m.extendedBy) {
-        m.extendedBy.reduce(function(pV, cV) {
-            pV[cV.foreignTable] = cV.foreignTable;
-            return pV;
-        }, aliases);
-    }
-
-    return aliases;
+    return mapRelations({}, model)
 };

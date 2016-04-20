@@ -2,8 +2,9 @@
 
 var validateDataType = require("../row/validateDataType");
 
-function Field(f) {
+function Field(n, f) {
     // basics
+    this.name = n;
     this.dataType = f.dataType;
     this.allowNull = f.allowNull;
     if (f.defaultValue !== undefined) {

@@ -1,13 +1,12 @@
 var rowFactory = require("../row/rowFactory");
 
-// TODO: POST is your pre-processor before rowFactory
 module.exports = function post(d, c) {
     "use strict";
     var missingFields = [];
 
     // make sure all fields are respected
-    Object.keys(c.model.fields).forEach(function(key) {
-        var field = c.model.fields[key];
+    c.model.fields.forEach(function(field) {
+        var key = field.name;
 
         // make sure all required fields are provided
         if (field.isRequired() && d[key] === undefined) {
@@ -29,7 +28,9 @@ module.exports = function post(d, c) {
 
     // throw if any fields are missing
     if (missingFields.length > 0) {
-        throw Error("data creation rejected for table " + c.model.tableName + ", mandatory fields not provided:\n" + missingFields.join(", ") + "\nfrom data: " + JSON.stringify(d));
+        throw Error("data creation rejected for table " + c.model.tableName + ", mandatory fields not provided:\n" + missingFields.map(function(f) {
+                return f.name;
+            }).join(", ") + "\nfrom data: " + JSON.stringify(d));
     }
 
     return rowFactory(c.model, d, c.env.db);
