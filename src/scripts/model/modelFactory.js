@@ -26,12 +26,6 @@ module.exports = function modelFactory(tn, fullModel) {
             },
             enumerable: true
         },
-        // alias for primary
-        pk: {
-            get: function() {
-                return model.primary;
-            }
-        },
         getField: {
             value: function(f) {
                 if (fields[f]) {
