@@ -1,36 +1,15 @@
-var rowFactory = require("../row/rowFactory");
+var prepPost = require("./prepPost");
 
-// TODO: POST is your pre-processor before rowFactory
-module.exports = function post(model, d, tn, env) {
-    "use strict";
-    var missingFields = [];
+module.exports = function post(d, c) {
+    var obj;
 
-    // make sure all fields are respected
-    Object.keys(model.fields).forEach(function(key) {
-        var field = model.fields[key];
+    // make sure pk is unique
+    if (c.rows.has(d[c.model.primary])) {
+        throw Error("provided " + c.model.primary + ": " + d[c.model.primary] + " is already in use in " + c.model.tableName);
+    } else {
+        obj = prepPost(d, c);
+        c.rows.add(d[c.model.primary], obj);
 
-        // make sure all required fields are provided
-        if (field.isRequired() && d[key] === undefined) {
-            missingFields.push(key);
-        }
-
-        // make sure all fields respect their datatype
-        if (d[key]) {
-            // pipe through preprocessor, if available
-            if (env.preprocessor) {
-                d[key] = env.preprocessor(tn, field, d[key]);
-            }
-
-            if (!field.validateData(d[key])) {
-                throw Error("Provided data " + d[key] + "\nis not compatible with " + tn + "." + key + "\nexpected datatype: " + field.dataType);
-            }
-        }
-    });
-
-    // throw if any fields are missing
-    if (missingFields.length > 0) {
-        throw Error("data creation rejected for table " + tn + ", mandatory fields not provided:\n" + missingFields.join(", ") + "\nfrom data: " + JSON.stringify(d));
+        return obj;
     }
-
-    return rowFactory(model, d, env.db);
 };
