@@ -10,10 +10,25 @@ module.exports = function tableFactory(tn, fullModel, env) {
         m = model(tn, fullModel); // table's model instance
 
     return Object.freeze({
-        get: function(id) {
-            return id ? rows.get(id) : rows.all();
+        get: function() {
+            var aL = arguments.length,
+                a,
+                i;
+
+            if (aL === 0) {
+                return rows.all();
+            } else if (aL === 1) {
+                return rows.get(arguments[0]);
+            } else {
+                a = [];
+
+                for (i = 0; i < aL; i++) {
+                    a.push(rows.get(arguments[i]));
+                }
+
+                return a;
+            }
         },
-        // INSERT, should create new array
         post: function(d) {
             // make sure pk is unique
             if (rows.has(d[m.primary])) {
