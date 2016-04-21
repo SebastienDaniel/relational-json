@@ -1,4 +1,4 @@
-var getAliasMap = require("../model/getAliasMap"),
+var buildAliasMap = require("../model/buildAliasMap"),
     ImmDictionary = require("./ImmutableDictionary"),
     get = require("./get"),
     put = require("./put"),
@@ -37,7 +37,7 @@ module.exports = function tableFactory(model, env) {
                     enumerable: true
                 },
                 aliasMap: {
-                    value: Object.freeze(getAliasMap(model)),
+                    value: Object.freeze(buildAliasMap(model)),
                     enumerable: true
                 },
                 requiredFields: {
