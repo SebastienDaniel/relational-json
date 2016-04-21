@@ -1,27 +1,22 @@
 var expect = require("chai").expect,
     schema = require("../data/mixed-graph.json"),
     Field = require("../../src/scripts/model/Field"),
-    modelFactory = require("../../src/scripts/model/modelFactory");
+    Model = require("../../src/scripts/model/Model");
 
-describe("modelFactory()", function() {
-    var m = modelFactory("Person", schema["Person"]);
+describe("new Model()", function() {
+    var m = new Model("Person", schema["Person"]);
 
     it("should generate a model object", function() {
         expect(typeof m).to.eql("object");
+        expect(m).to.be.instanceof(Model);
 
         expect(m.primary).to.eql("entity_id");
         expect(m.tableName).to.eql("Person");
-        expect(typeof m.getField).to.eql("function");
-
-        expect(m.getField("first_name")).to.have.all.keys("name", "dataType", "allowNull");
     });
 
     it("properties should not be modifiable", function() {
         m.tableName = "bob";
         expect(m.tableName).to.eql("Person");
-
-        m.getField = "field";
-        expect(typeof m.getField).to.eql("function");
     });
 
     it("should be extendable (new properties)", function() {
@@ -29,10 +24,15 @@ describe("modelFactory()", function() {
         expect(m.source).to.eql("source");
     });
 
-    it("model.fields should return an array of Field instances", function() {
-        expect(m.fields).to.be.array;
+    it("fields should return a hashmap of field objects", function() {
+        expect(typeof m.fields).to.eql("object");
+        expect(m.fields["entity_id"]).to.be.instanceof(Field);
+    });
 
-        m.fields.forEach(function(f) {
+    it("listFields() should return an array of Field instances", function() {
+        expect(m.listFields()).to.be.array;
+
+        m.listFields().forEach(function(f) {
             // is Field instance
             expect(f).to.be.instanceof(Field);
 

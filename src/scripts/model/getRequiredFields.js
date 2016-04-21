@@ -9,7 +9,7 @@ module.exports = function getRequiredFields(model, type) {
     "use strict";
 
     // get models' own required fields
-    var req = model.fields.filter(function(field) {
+    var req = model.listFields().filter(function(field) {
         return field.isRequired();
     }).map(function(f) {
         return f.name;

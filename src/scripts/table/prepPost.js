@@ -5,7 +5,7 @@ module.exports = function post(d, c) {
     var missingFields = [];
 
     // make sure all fields are respected
-    c.model.fields.forEach(function(field) {
+    c.model.listFields().forEach(function(field) {
         var key = field.name;
 
         // make sure all required fields are provided

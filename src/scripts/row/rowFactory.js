@@ -30,7 +30,7 @@ function getRowPrototype(model, d, db) {
 
 /**
  * compiles a row (object) based on its model & relations
- * own data (model.fields) are hidden, and a public, read-only interface is created for that data.
+ * own data (model.listFields()) are hidden, and a public, read-only interface is created for that data.
  * relations are dynamically mapped and data is requested on-demand.
  * @param model
  * @param d
@@ -43,7 +43,7 @@ function rowFactory(model, d, db) {
         data = {}; // private own data
 
     // generate public row field descriptors
-    model.fields.forEach(function(field) {
+    model.listFields().forEach(function(field) {
         var key = field.name;
 
         if (model.extends && model.extends.localField === key) {

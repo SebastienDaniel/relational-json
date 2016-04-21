@@ -1,4 +1,4 @@
-var modelFactory = require("./modelFactory"),
+var Model = require("./Model"),
     addRelations = require("./addRelations");
 
 module.exports = function buildModelGraph(schema) {
@@ -6,7 +6,7 @@ module.exports = function buildModelGraph(schema) {
     var dynamicModel = Object.create(null, {});
 
     Object.keys(schema).forEach(function(key) {
-        dynamicModel[key] = modelFactory(key, schema[key]);
+        dynamicModel[key] = new Model(key, schema[key]);
     });
 
     // second pass, enhance models with relations
