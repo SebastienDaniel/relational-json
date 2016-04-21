@@ -58,13 +58,13 @@ module.exports = function put(c, pkValue, d) {
     // if differences have been detected
     if (differs.parent) {
         if (c.model.extendedBy && c.model.extendedBy.some(function(e) {
-                if (!!db[e.foreignTable].get(current[e.localField])) {
+                if (!!db[e.table].get(current[e.localField])) {
                     extendedBy = e;
                     return true;
                 }
             })) {
             d[extendedBy.foreignField] = d[extendedBy.localField];
-            return db[extendedBy.foreignTable].put(d);
+            return db[extendedBy.table].put(d);
         } else {
             // remove existing object
             this.delete(pkValue || current[c.model.primary]);

@@ -22,14 +22,14 @@
     "primary": "id",
     "aggregates": [
       {
-        "foreignTable": "ExternalLink",
+        "table": "ExternalLink",
         "localField": "id",
         "alias": "ExternalLinks",
         "foreignField": "entity_id",
         "cardinality": "many"
       },
       {
-        "foreignTable": "ContactValue",
+        "table": "ContactValue",
         "localField": "id",
         "alias": "ContactValues",
         "foreignField": "entity_id",
@@ -103,7 +103,7 @@
     "primary": "id",
     "aggregates": [
       {
-        "foreignTable": "Entity",
+        "table": "Entity",
         "localField": "entity_id",
         "alias": "Entity",
         "foreignField": "id",
@@ -150,7 +150,7 @@
     "primary": "id",
     "aggregates": [
       {
-        "foreignTable": "ContactValue",
+        "table": "ContactValue",
         "localField": "id",
         "alias": "ContactValues",
         "foreignField": "contact_method_id",
@@ -224,14 +224,14 @@
     "primary": "id",
     "aggregates": [
       {
-        "foreignTable": "RefContactMethod",
+        "table": "RefContactMethod",
         "localField": "contact_method_id",
         "alias": "RefContactMethod",
         "foreignField": "id",
         "cardinality": "single"
       },
       {
-        "foreignTable": "Entity",
+        "table": "Entity",
         "localField": "entity_id",
         "alias": "Entity",
         "foreignField": "id",

@@ -22,21 +22,21 @@
     "primary": "id",
     "extendedBy": [
       {
-        "foreignTable": "ExternalEntity",
+        "table": "ExternalEntity",
         "foreignField": "entity_id",
         "localField": "id"
       }
     ],
     "aggregates": [
       {
-        "foreignTable": "ExternalLink",
+        "table": "ExternalLink",
         "localField": "id",
         "alias": "ExternalLinks",
         "foreignField": "entity_id",
         "cardinality": "many"
       },
       {
-        "foreignTable": "ContactValue",
+        "table": "ContactValue",
         "localField": "id",
         "alias": "ContactValues",
         "foreignField": "entity_id",
@@ -95,14 +95,14 @@
     "primary": "id",
     "aggregates": [
       {
-        "foreignTable": "HumanResource",
+        "table": "HumanResource",
         "localField": "deleted_by",
         "alias": "DeletedBy",
         "foreignField": "entity_id",
         "cardinality": "single"
       },
       {
-        "foreignTable": "Organization",
+        "table": "Organization",
         "localField": "id",
         "alias": "Organizations",
         "foreignField": "industry_id",
@@ -155,17 +155,17 @@
     "primary": "entity_id",
     "extends": {
       "table": "Entity",
-      "local": "entity_id",
-      "foreign": "id"
+      "localField": "entity_id",
+      "foreignField": "id"
     },
     "extendedBy": [
       {
-        "foreignTable": "Organization",
+        "table": "Organization",
         "foreignField": "entity_id",
         "localField": "entity_id"
       },
       {
-        "foreignTable": "Person",
+        "table": "Person",
         "foreignField": "entity_id",
         "localField": "entity_id"
       }
@@ -217,28 +217,28 @@
     "primary": "entity_id",
     "aggregates": [
       {
-        "foreignTable": "RefIndustry",
+        "table": "RefIndustry",
         "localField": "industry_id",
         "alias": "RefIndustry",
         "foreignField": "id",
         "cardinality": "single"
       },
       {
-        "foreignTable": "Organization",
+        "table": "Organization",
         "localField": "parent_organization_id",
         "alias": "ParentOrganization",
         "foreignField": "entity_id",
         "cardinality": "single"
       },
       {
-        "foreignTable": "Organization",
+        "table": "Organization",
         "localField": "entity_id",
         "alias": "Organizations",
         "foreignField": "parent_organization_id",
         "cardinality": "many"
       },
       {
-        "foreignTable": "Person",
+        "table": "Person",
         "localField": "entity_id",
         "alias": "Persons",
         "foreignField": "organization_id",
@@ -247,8 +247,8 @@
     ],
     "extends": {
       "table": "ExternalEntity",
-      "local": "entity_id",
-      "foreign": "entity_id"
+      "localField": "entity_id",
+      "foreignField": "entity_id"
     }
   },
   "Person": {
@@ -295,7 +295,7 @@
     "primary": "entity_id",
     "aggregates": [
       {
-        "foreignTable": "Organization",
+        "table": "Organization",
         "localField": "organization_id",
         "alias": "Organization",
         "foreignField": "entity_id",
@@ -304,8 +304,8 @@
     ],
     "extends": {
       "table": "ExternalEntity",
-      "local": "entity_id",
-      "foreign": "entity_id"
+      "localField": "entity_id",
+      "foreignField": "entity_id"
     }
   },
   "ExternalLink": {
@@ -374,28 +374,28 @@
     "primary": "id",
     "aggregates": [
       {
-        "foreignTable": "Entity",
+        "table": "Entity",
         "localField": "entity_id",
         "alias": "Entity",
         "foreignField": "id",
         "cardinality": "single"
       },
       {
-        "foreignTable": "HumanResource",
+        "table": "HumanResource",
         "localField": "created_by",
         "alias": "CreatedBy",
         "foreignField": "entity_id",
         "cardinality": "single"
       },
       {
-        "foreignTable": "HumanResource",
+        "table": "HumanResource",
         "localField": "modified_by",
         "alias": "ModifiedBy",
         "foreignField": "entity_id",
         "cardinality": "single"
       },
       {
-        "foreignTable": "HumanResource",
+        "table": "HumanResource",
         "localField": "deleted_by",
         "alias": "DeletedBy",
         "foreignField": "entity_id",
@@ -442,14 +442,14 @@
     "primary": "id",
     "aggregates": [
       {
-        "foreignTable": "HumanResource",
+        "table": "HumanResource",
         "localField": "deleted_by",
         "alias": "DeletedBy",
         "foreignField": "entity_id",
         "cardinality": "single"
       },
       {
-        "foreignTable": "ContactValue",
+        "table": "ContactValue",
         "localField": "id",
         "alias": "ContactValues",
         "foreignField": "contact_method_id",
@@ -523,14 +523,14 @@
     "primary": "id",
     "aggregates": [
       {
-        "foreignTable": "RefContactMethod",
+        "table": "RefContactMethod",
         "localField": "contact_method_id",
         "alias": "RefContactMethod",
         "foreignField": "id",
         "cardinality": "single"
       },
       {
-        "foreignTable": "Entity",
+        "table": "Entity",
         "localField": "entity_id",
         "alias": "Entity",
         "foreignField": "id",

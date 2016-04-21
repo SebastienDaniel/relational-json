@@ -13,11 +13,11 @@ function getRowPrototype(model, d, db) {
         if (db[model.extends.table].get(d[model.primary])) {
             // update parent data
             // and use result as prototype (will be new obj or current parent)
-            parent = db[model.extends.table].put(d, d[model.extends.local]);
+            parent = db[model.extends.table].put(d, d[model.extends.localField]);
         } else {
             // make sure parent values match row values
             // on their extension point (field)
-            d[model.extends.foreign] = d[model.extends.local];
+            d[model.extends.foreignField] = d[model.extends.localField];
 
             // create new parent from provided data
             parent = db[model.extends.table].post(d);
@@ -46,10 +46,10 @@ function rowFactory(model, d, db) {
     model.fields.forEach(function(field) {
         var key = field.name;
 
-        if (model.extends && model.extends.local === key) {
+        if (model.extends && model.extends.localField === key) {
             // create field "getter" for common parent-child data
             // i.e. use parent data
-            data[key] = Object.getPrototypeOf(this)[model.extends.foreign];
+            data[key] = Object.getPrototypeOf(this)[model.extends.foreignField];
         } else {
             // pre-calculate &  own data value
             data[key] = d[key] !== undefined ? d[key] : field.defaultValue;
@@ -69,9 +69,9 @@ function rowFactory(model, d, db) {
     if (model.extendedBy) {
         model.extendedBy.forEach(function (ext) {
             // add getter for the child row
-            Object.defineProperty(row, ext.foreignTable, {
+            Object.defineProperty(row, ext.table, {
                 get: function () {
-                    return db[ext.foreignTable].get(data[ext.localField]);
+                    return db[ext.table].get(data[ext.localField]);
                 },
                 enumerable: true
             });
@@ -84,18 +84,18 @@ function rowFactory(model, d, db) {
         model.aggregates.forEach(function (agg) {
             // use alias as property name, fallback to foreign table name
             if (agg.cardinality === "many") {
-                Object.defineProperty(row, agg.alias || agg.foreignTable, {
+                Object.defineProperty(row, agg.alias || agg.table, {
                     get: function () {
-                        return db[agg.foreignTable].get().filter(function (d) {
+                        return db[agg.table].get().filter(function (d) {
                             return d[agg.foreignField] === this[agg.localField];
                         }, this);
                     },
                     enumerable: true
                 });
             } else {
-                Object.defineProperty(row, agg.alias || agg.foreignTable, {
+                Object.defineProperty(row, agg.alias || agg.table, {
                     get: function () {
-                        return db[agg.foreignTable].get(data[agg.localField]);
+                        return db[agg.table].get(data[agg.localField]);
                     },
                     enumerable: true
                 });

@@ -146,7 +146,7 @@ When a table extends another, the child object cannot exist without the parent o
     // extending your table to inherit from TableA
     "extends": {
       "table": "TableA",
-      "local": "id", // refers to TableB.id
+      "localField": "id", // refers to TableB.id
       "foreign": "id" // refers to TableA.id
     }
   }
@@ -199,7 +199,7 @@ If we take the previous example, we can add the `extendedBy` property to `TableA
     },
     "extends": {
       "table": "TableA",
-      "local": "id", // refers to TableB.id
+      "localField": "id", // refers to TableB.id
       "foreign": "id" // refers to TableA.id
     }
   }

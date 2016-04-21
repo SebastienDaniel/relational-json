@@ -6,8 +6,8 @@ module.exports = function addRelations(schema, dynamicModel, model) {
         Object.defineProperty(model, "extends", {
             value: {
                 table: dynamicModel[schema.extends.table],
-                local: schema.extends.local,
-                foreign: schema.extends.foreign
+                localField: schema.extends.localField,
+                foreignField: schema.extends.foreignField
             },
             enumerable: true
         });
@@ -18,7 +18,7 @@ module.exports = function addRelations(schema, dynamicModel, model) {
         Object.defineProperty(model, "extendedBy", {
             value: schema.extendedBy.map(function(ext) {
                 return {
-                    table: dynamicModel[ext.foreignTable],
+                    table: dynamicModel[ext.table],
                     localField: ext.localField,
                     foreignField: ext.foreignField
                 };
@@ -32,7 +32,7 @@ module.exports = function addRelations(schema, dynamicModel, model) {
         Object.defineProperty(model, "aggregates", {
             value: schema.aggregates.map(function (agg) {
                 return {
-                    table: dynamicModel[agg.foreignTable],
+                    table: dynamicModel[agg.table],
                     alias: agg.alias,
                     cardinality: agg.cardinality,
                     localField: agg.localField,

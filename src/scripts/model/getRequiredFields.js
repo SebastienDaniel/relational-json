@@ -22,7 +22,7 @@ module.exports = function getRequiredFields(model, type) {
 
         // remove the ancestor extension field requirement,
         // it can be inferred at data creation time
-        req.splice(req.indexOf(model.extends.foreign), 1);
+        req.splice(req.indexOf(model.extends.foreignField), 1);
     }
 
     return req;
