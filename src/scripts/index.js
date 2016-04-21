@@ -1,17 +1,6 @@
 var tableFactory = require("./table/tableFactory"),
-    compileModel = require("./model/compileModel");
-
-function compileOptions(options) {
-    var o = Object.create(null, {});
-
-    if (options && typeof options.preprocessor === "function") {
-        o.preprocessor = options.preprocessor;
-    }
-
-    o.db = Object.create(null, {});
-
-    return o;
-}
+    buildModelGraph = require("./model/buildModelGraph"),
+    compileEnvironment = require("./compileEnvironment");
 
 /**
  * Makes a copy of the model to avoid future tampering
@@ -24,21 +13,19 @@ function compileOptions(options) {
 function buildDatabase(schema, options) {
     "use strict";
     // create graph from schema
-     var fullModel = compileModel(schema);
-
-    // finalize the options object
-    options = compileOptions(options);
+     var fullModel = buildModelGraph(schema),
+        env = compileEnvironment(options);
 
     // create db tables
     Object.keys(schema).forEach(function(key) {
         if (!schema[key].primary || !schema[key].fields) {
             throw new Error("Unable to create relational-json instance.\nGraph table " + key + " has no fields or no primary key");
         } else {
-            options.db[key] = tableFactory(fullModel[key], options);
+            env.db[key] = tableFactory(fullModel[key], env);
         }
     });
 
-    return Object.freeze(options.db);
+    return Object.freeze(env.db);
 }
 
 module.exports = buildDatabase;
