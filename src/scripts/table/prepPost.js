@@ -28,9 +28,7 @@ module.exports = function post(d, c) {
 
     // throw if any fields are missing
     if (missingFields.length > 0) {
-        throw Error("data creation rejected for table " + c.model.tableName + ", mandatory fields not provided:\n" + missingFields.map(function(f) {
-                return f.name;
-            }).join(", ") + "\nfrom data: " + JSON.stringify(d));
+        throw Error("data creation rejected for table " + c.model.tableName + ", mandatory fields not provided:\n" + missingFields.join(", ") + "\nfrom data: " + JSON.stringify(d));
     }
 
     return rowFactory(c.model, d, c.env.db);

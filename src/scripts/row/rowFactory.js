@@ -69,9 +69,9 @@ function rowFactory(model, d, db) {
     if (model.extendedBy) {
         model.extendedBy.forEach(function (ext) {
             // add getter for the child row
-            Object.defineProperty(row, ext.table, {
+            Object.defineProperty(row, ext.table.tableName, {
                 get: function () {
-                    return db[ext.table].get(data[ext.localField]);
+                    return db[ext.table.tableName].get(data[ext.localField]);
                 },
                 enumerable: true
             });
@@ -84,18 +84,18 @@ function rowFactory(model, d, db) {
         model.aggregates.forEach(function (agg) {
             // use alias as property name, fallback to foreign table name
             if (agg.cardinality === "many") {
-                Object.defineProperty(row, agg.alias || agg.table, {
+                Object.defineProperty(row, agg.alias || agg.table.tableName, {
                     get: function () {
-                        return db[agg.table].get().filter(function (d) {
+                        return db[agg.table.tableName].get().filter(function (d) {
                             return d[agg.foreignField] === this[agg.localField];
                         }, this);
                     },
                     enumerable: true
                 });
             } else {
-                Object.defineProperty(row, agg.alias || agg.table, {
+                Object.defineProperty(row, agg.alias || agg.table.tableName, {
                     get: function () {
-                        return db[agg.table].get(data[agg.localField]);
+                        return db[agg.table.tableName].get(data[agg.localField]);
                     },
                     enumerable: true
                 });
