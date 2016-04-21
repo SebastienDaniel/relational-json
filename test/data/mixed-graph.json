@@ -95,13 +95,6 @@
     "primary": "id",
     "aggregates": [
       {
-        "table": "HumanResource",
-        "localField": "deleted_by",
-        "alias": "DeletedBy",
-        "foreignField": "entity_id",
-        "cardinality": "single"
-      },
-      {
         "table": "Organization",
         "localField": "id",
         "alias": "Organizations",
@@ -379,27 +372,6 @@
         "alias": "Entity",
         "foreignField": "id",
         "cardinality": "single"
-      },
-      {
-        "table": "HumanResource",
-        "localField": "created_by",
-        "alias": "CreatedBy",
-        "foreignField": "entity_id",
-        "cardinality": "single"
-      },
-      {
-        "table": "HumanResource",
-        "localField": "modified_by",
-        "alias": "ModifiedBy",
-        "foreignField": "entity_id",
-        "cardinality": "single"
-      },
-      {
-        "table": "HumanResource",
-        "localField": "deleted_by",
-        "alias": "DeletedBy",
-        "foreignField": "entity_id",
-        "cardinality": "single"
       }
     ]
   },
@@ -441,13 +413,6 @@
     },
     "primary": "id",
     "aggregates": [
-      {
-        "table": "HumanResource",
-        "localField": "deleted_by",
-        "alias": "DeletedBy",
-        "foreignField": "entity_id",
-        "cardinality": "single"
-      },
       {
         "table": "ContactValue",
         "localField": "id",
