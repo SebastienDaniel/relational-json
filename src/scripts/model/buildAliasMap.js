@@ -7,14 +7,17 @@ function mapRelations(obj, model) {
     }
 
     // add own extendedBy
+    /*
     if (model.extendedBy) {
         model.extendedBy.forEach(function (ext) {
             obj[ext.table.tableName] = ext.table.tableName;
         });
     }
+    */
 
     // loop into extends
     if (model.extends) {
+        obj[model.extends.table.tableName] = model.extends.table.tableName;
         mapRelations(obj, model.extends.table);
     }
 

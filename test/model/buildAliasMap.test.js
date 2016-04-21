@@ -6,6 +6,8 @@ var bam = require("../../src/scripts/model/buildAliasMap"),
     model = compileModel(graph);
 
 describe("getAliasMap", function() {
+    console.log(bam(model["Organization"]));
+    
     it("should return tableName when no inheritance", function() {
         expect(bam(model["Entity"]).ExternalLinks).to.eql("ExternalLink");
         expect(bam(model["Entity"]).ExternalEntity).to.eql("ExternalEntity");
@@ -16,7 +18,6 @@ describe("getAliasMap", function() {
             "ExternalEntity": "ExternalEntity"
         });
 
-        console.log(bam(model["Organization"]));
         expect(bam(model["Organization"])).to.eql({
             "ExternalLinks": "ExternalLink",
             "ContactValues": "ContactValue",
