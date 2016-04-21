@@ -40,8 +40,12 @@ module.exports = function tableFactory(model, env) {
                     value: Object.freeze(buildAliasMap(model)),
                     enumerable: true
                 },
-                requiredFields: {
-                    value: model.getRequiredFields,
+                ownRequiredFields: {
+                    value: model.getRequiredFields("own"),
+                    enumerable: true
+                },
+                allRequiredFields: {
+                    value: model.getRequiredFields("all"),
                     enumerable: true
                 }
             })
