@@ -1,0 +1,35 @@
+{
+  "Person": {
+    "fields": {
+      "entity_id": {
+        "allowNull": false,
+        "dataType": "integer",
+        "writable": true
+      },
+      "first_name": {
+        "allowNull": false,
+        "dataType": "string",
+        "writable": true
+      },
+      "hourly_wage": {
+        "allowNull": false,
+        "dataType": "float"
+      },
+      "hired": {
+        "allowNull": true,
+        "dataType": "datetime"
+      },
+      "birthdate": {
+        "allowNull": true,
+        "dataType": "date",
+        "defaultValue": null,
+        "writable": true
+      },
+      "start_time": {
+        "allowNull": true,
+        "dataType": "time"
+      }
+    },
+    "primary": "entity_id"
+  }
+}

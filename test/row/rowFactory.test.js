@@ -1,6 +1,6 @@
 var chai = require("chai"),
     expect = chai.expect,
-    compileModel = require("../../src/scripts/model/compileModel"),
+    compileModel = require("../../src/scripts/model/buildModelGraph"),
     rf = require("../../src/scripts/row/rowFactory");
 
 describe("rowFactory()", function() {
