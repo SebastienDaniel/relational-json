@@ -6,18 +6,8 @@ function mapRelations(obj, model) {
         });
     }
 
-    // add own extendedBy
-    /*
-    if (model.extendedBy) {
-        model.extendedBy.forEach(function (ext) {
-            obj[ext.table.tableName] = ext.table.tableName;
-        });
-    }
-    */
-
-    // loop into extends
+    // continue looping into parents
     if (model.extends) {
-        obj[model.extends.table.tableName] = model.extends.table.tableName;
         mapRelations(obj, model.extends.table);
     }
 
@@ -32,5 +22,18 @@ function mapRelations(obj, model) {
  */
 module.exports = function buildAliasMap(model) {
     "use strict";
-    return mapRelations({}, model)
+    var o = {};
+
+    // add immediate parent
+    if (model.extends) {
+        o[model.extends.table.tableName] = model.extends.table.tableName;
+    }
+
+    // add own children
+    if (model.extendedBy) {
+        model.extendedBy.forEach(function (ext) {
+            o[ext.table.tableName] = ext.table.tableName;
+        });
+    }
+    return mapRelations(o, model)
 };
