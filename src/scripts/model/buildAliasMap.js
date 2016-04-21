@@ -27,7 +27,7 @@ function mapRelations(obj, model) {
  * points to another table in the schema
  * In other words, it is a map for nested data (Object or Array)
  */
-module.exports = function(model) {
+module.exports = function buildAliasMap(model) {
     "use strict";
     return mapRelations({}, model)
 };

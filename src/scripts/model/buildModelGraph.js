@@ -1,7 +1,7 @@
 var modelFactory = require("./modelFactory"),
     addRelations = require("./addRelations");
 
-module.exports = function compileModel(schema) {
+module.exports = function buildModelGraph(schema) {
     // first pass, create model instances
     var dynamicModel = Object.create(null, {});
 

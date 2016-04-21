@@ -3,9 +3,9 @@
 var Field = require("./Field"),
     getRequiredFields = require("./getRequiredFields");
 
-module.exports = function modelFactory(tn, model) {
-        var fields = Object.keys(model.fields).reduce(function(obj, field) {
-            obj[field] = new Field(field, model.fields[field]);
+module.exports = function modelFactory(tn, schema) {
+        var fields = Object.keys(schema.fields).reduce(function(obj, field) {
+            obj[field] = new Field(field, schema.fields[field]);
 
             return obj;
         }, {});
@@ -16,14 +16,13 @@ module.exports = function modelFactory(tn, model) {
      */
     return Object.create(null, {
         primary: {
-            value: model.primary,
+            value: schema.primary,
             enumerable: true
         },
-        // TODO: might need fix, not sure freeze is doing what we want it to do
         getField: {
             value: function(f) {
                 if (fields[f]) {
-                    return Object.freeze(fields[f]);
+                    return fields[f];
                 }
             },
             enumerable: true
@@ -32,7 +31,7 @@ module.exports = function modelFactory(tn, model) {
             value: function(type) {
                 type = type === "all" ? "all" : "own";
 
-                return getRequiredFields(type, this);
+                return getRequiredFields(this, type);
             },
             enumerable: true
         },
