@@ -5,8 +5,8 @@ var grf = require("../../src/scripts/model/getRequiredFields"),
     graph = require("../data/mixed-graph.json"),
     model = compileModel(graph);
 
-describe("getRequiredFields('own') & getRequiredFields()", function() {
-    it("should return own required fields, ignoring extends & aggregates", function() {
+describe("getRequiredFields()", function() {
+    it("should return own required field names, ignoring extends & aggregates", function() {
         // using OWN
         expect(grf(model["Entity"], "own")).to.have.members(["id"]);
         expect(grf(model["Entity"], "own")).to.have.length(1);
@@ -27,9 +27,7 @@ describe("getRequiredFields('own') & getRequiredFields()", function() {
         expect(grf(model["Person"])).to.have.members(["entity_id", "first_name", "last_name", "gender"]);
         expect(grf(model["Person"])).to.have.length(4);
     });
-});
 
-describe("getRequiredFields('all')", function() {
     it("should return all required fields, including own, extends & aggregates", function() {
         expect(grf(model["Entity"], "all")).to.have.members(["id"]);
         expect(grf(model["Entity"], "all")).to.have.length(1);
@@ -39,5 +37,11 @@ describe("getRequiredFields('all')", function() {
 
         expect(grf(model["Person"], "all")).to.have.members(["entity_id", "first_name", "last_name", "gender", "created_by", "created_on"]);
         expect(grf(model["Person"], "all")).to.have.length(6);
+    });
+
+    it("returned data should be an array of strings", function() {
+        grf(model["Person"], "all").forEach(function(f) {
+            expect(typeof f).to.be.eql("string");
+        });
     });
 });
