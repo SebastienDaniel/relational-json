@@ -15,7 +15,7 @@ function mapRelations(obj, model) {
 
     // loop into extends
     if (model.extends) {
-        mapRelations(obj, model.extends);
+        mapRelations(obj, model.extends.table);
     }
 
     return obj;
