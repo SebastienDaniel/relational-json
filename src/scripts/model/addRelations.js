@@ -1,7 +1,7 @@
 module.exports = function addRelations(schema, dynamicModel, model) {
     schema = schema[model.tableName];
 
-    // add link to parent
+    // add link to parent model
     if (schema.extends) {
         Object.defineProperty(model, "extends", {
             value: {
@@ -13,7 +13,7 @@ module.exports = function addRelations(schema, dynamicModel, model) {
         });
     }
     
-    // add links to children
+    // add links to children models
     if (schema.extendedBy) {
         Object.defineProperty(model, "extendedBy", {
             value: schema.extendedBy.map(function(ext) {
@@ -27,7 +27,7 @@ module.exports = function addRelations(schema, dynamicModel, model) {
         });
     }
 
-    // add links to aggregates
+    // add links to aggregate models
     if (schema.aggregates) {
         Object.defineProperty(model, "aggregates", {
             value: schema.aggregates.map(function (agg) {
