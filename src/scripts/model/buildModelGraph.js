@@ -14,5 +14,5 @@ module.exports = function buildModelGraph(schema) {
         addRelations(schema, dynamicModel, dynamicModel[key]);
     });
 
-    return dynamicModel;
+    return Object.freeze(dynamicModel);
 };
