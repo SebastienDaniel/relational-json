@@ -1,0 +1,78 @@
+{
+  "Organization": {
+    "fields": {
+      "entity_id": {
+        "allowNull": false,
+        "dataType": "integer",
+        "writable": true
+      },
+      "name": {
+        "allowNull": false,
+        "dataType": "string",
+        "writable": true
+      },
+      "industry_id": {
+        "allowNull": true,
+        "dataType": "integer",
+        "defaultValue": null,
+        "writable": true
+      },
+      "nbr_employees": {
+        "allowNull": true,
+        "dataType": "integer",
+        "defaultValue": null,
+        "writable": true
+      },
+      "sales_volume": {
+        "allowNull": true,
+        "dataType": "integer",
+        "defaultValue": null,
+        "writable": true
+      },
+      "net_income": {
+        "allowNull": true,
+        "dataType": "integer",
+        "defaultValue": null,
+        "writable": true
+      }
+    },
+    "primary": "entity_id"
+  },
+  "Person": {
+    "fields": {
+      "entity_id": {
+        "allowNull": false,
+        "dataType": "integer",
+        "writable": true
+      },
+      "first_name": {
+        "allowNull": false,
+        "dataType": "string",
+        "writable": true
+      },
+      "last_name": {
+        "allowNull": false,
+        "dataType": "string",
+        "writable": true
+      },
+      "gender": {
+        "allowNull": false,
+        "dataType": "string",
+        "writable": true
+      },
+      "job_title": {
+        "allowNull": true,
+        "dataType": "string",
+        "defaultValue": null,
+        "writable": true
+      },
+      "birthdate": {
+        "allowNull": true,
+        "dataType": "date",
+        "defaultValue": null,
+        "writable": true
+      }
+    },
+    "primary": "entity_id"
+  }
+}

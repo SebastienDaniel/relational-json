@@ -1,0 +1,195 @@
+{
+  "Entity": {
+    "fields": {
+      "id": {
+        "allowNull": false,
+        "dataType": "integer",
+        "writable": false
+      },
+      "deleted": {
+        "allowNull": false,
+        "dataType": "integer",
+        "defaultValue": 0,
+        "writable": true
+      },
+      "deleted_on": {
+        "allowNull": true,
+        "dataType": "datetime",
+        "defaultValue": null,
+        "writable": true
+      }
+    },
+    "primary": "id",
+    "extendedBy": [
+      {
+        "foreignTable": "ExternalEntity",
+        "foreignField": "entity_id",
+        "localField": "id"
+      },
+      {
+        "foreignTable": "Profile",
+        "foreignField": "entity_id",
+        "localField": "id"
+      }
+    ]
+  },
+  "ExternalEntity": {
+    "fields": {
+      "entity_id": {
+        "allowNull": false,
+        "dataType": "integer",
+        "writable": true
+      },
+      "assigned_to": {
+        "allowNull": true,
+        "dataType": "integer",
+        "defaultValue": null,
+        "writable": true
+      },
+      "created_by": {
+        "allowNull": false,
+        "dataType": "integer",
+        "writable": true
+      },
+      "created_on": {
+        "allowNull": false,
+        "dataType": "datetime",
+        "writable": true
+      },
+      "modified_by": {
+        "allowNull": true,
+        "dataType": "integer",
+        "defaultValue": null,
+        "writable": true
+      },
+      "modified_on": {
+        "allowNull": true,
+        "dataType": "datetime",
+        "defaultValue": null,
+        "writable": true
+      },
+      "deleted_by": {
+        "allowNull": true,
+        "dataType": "integer",
+        "defaultValue": null,
+        "writable": true
+      }
+    },
+    "primary": "entity_id",
+    "extends": {
+      "table": "Entity",
+      "local": "entity_id",
+      "foreign": "id"
+    },
+    "extendedBy": [
+      {
+        "foreignTable": "Organization",
+        "foreignField": "entity_id",
+        "localField": "entity_id"
+      },
+      {
+        "foreignTable": "Person",
+        "foreignField": "entity_id",
+        "localField": "entity_id"
+      }
+    ]
+  },
+  "Organization": {
+    "fields": {
+      "entity_id": {
+        "allowNull": false,
+        "dataType": "integer",
+        "writable": true
+      },
+      "parent_organization_id": {
+        "allowNull": true,
+        "dataType": "integer",
+        "defaultValue": null,
+        "writable": true
+      },
+      "name": {
+        "allowNull": false,
+        "dataType": "string",
+        "writable": true
+      },
+      "industry_id": {
+        "allowNull": true,
+        "dataType": "integer",
+        "defaultValue": null,
+        "writable": true
+      },
+      "nbr_employees": {
+        "allowNull": true,
+        "dataType": "integer",
+        "defaultValue": null,
+        "writable": true
+      },
+      "sales_volume": {
+        "allowNull": true,
+        "dataType": "integer",
+        "defaultValue": null,
+        "writable": true
+      },
+      "net_income": {
+        "allowNull": true,
+        "dataType": "integer",
+        "defaultValue": null,
+        "writable": true
+      }
+    },
+    "primary": "entity_id",
+    "extends": {
+      "table": "ExternalEntity",
+      "local": "entity_id",
+      "foreign": "entity_id"
+    }
+  },
+  "Person": {
+    "fields": {
+      "entity_id": {
+        "allowNull": false,
+        "dataType": "integer",
+        "writable": true
+      },
+      "first_name": {
+        "allowNull": false,
+        "dataType": "string",
+        "writable": true
+      },
+      "last_name": {
+        "allowNull": false,
+        "dataType": "string",
+        "writable": true
+      },
+      "gender": {
+        "allowNull": false,
+        "dataType": "string",
+        "writable": true
+      },
+      "organization_id": {
+        "allowNull": true,
+        "dataType": "integer",
+        "defaultValue": null,
+        "writable": true
+      },
+      "job_title": {
+        "allowNull": true,
+        "dataType": "string",
+        "defaultValue": null,
+        "writable": true
+      },
+      "birthdate": {
+        "allowNull": true,
+        "dataType": "date",
+        "defaultValue": null,
+        "writable": true
+      }
+    },
+    "primary": "entity_id",
+    "extends": {
+      "table": "ExternalEntity",
+      "local": "entity_id",
+      "foreign": "entity_id"
+    }
+  }
+}

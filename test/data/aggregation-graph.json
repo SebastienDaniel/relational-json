@@ -1,0 +1,242 @@
+{
+  "Entity": {
+    "fields": {
+      "id": {
+        "allowNull": false,
+        "dataType": "integer",
+        "writable": false
+      },
+      "deleted": {
+        "allowNull": false,
+        "dataType": "integer",
+        "defaultValue": 0,
+        "writable": true
+      },
+      "deleted_on": {
+        "allowNull": true,
+        "dataType": "datetime",
+        "defaultValue": null,
+        "writable": true
+      }
+    },
+    "primary": "id",
+    "aggregates": [
+      {
+        "foreignTable": "ExternalLink",
+        "localField": "id",
+        "alias": "ExternalLinks",
+        "foreignField": "entity_id",
+        "cardinality": "many"
+      },
+      {
+        "foreignTable": "ContactValue",
+        "localField": "id",
+        "alias": "ContactValues",
+        "foreignField": "entity_id",
+        "cardinality": "many"
+      }
+    ]
+  },
+  "ExternalLink": {
+    "fields": {
+      "id": {
+        "allowNull": false,
+        "dataType": "integer",
+        "writable": false
+      },
+      "entity_id": {
+        "allowNull": false,
+        "dataType": "integer",
+        "writable": true
+      },
+      "value": {
+        "allowNull": false,
+        "dataType": "string",
+        "writable": true
+      },
+      "title": {
+        "allowNull": false,
+        "dataType": "string",
+        "writable": true
+      },
+      "created_on": {
+        "allowNull": false,
+        "dataType": "datetime",
+        "writable": true
+      },
+      "created_by": {
+        "allowNull": false,
+        "dataType": "integer",
+        "writable": true
+      },
+      "modified_on": {
+        "allowNull": true,
+        "dataType": "datetime",
+        "defaultValue": null,
+        "writable": true
+      },
+      "modified_by": {
+        "allowNull": true,
+        "dataType": "integer",
+        "defaultValue": null,
+        "writable": true
+      },
+      "deleted": {
+        "allowNull": false,
+        "dataType": "integer",
+        "defaultValue": 0,
+        "writable": true
+      },
+      "deleted_on": {
+        "allowNull": true,
+        "dataType": "datetime",
+        "defaultValue": null,
+        "writable": true
+      },
+      "deleted_by": {
+        "allowNull": true,
+        "dataType": "integer",
+        "defaultValue": null,
+        "writable": true
+      }
+    },
+    "primary": "id",
+    "aggregates": [
+      {
+        "foreignTable": "Entity",
+        "localField": "entity_id",
+        "alias": "Entity",
+        "foreignField": "id",
+        "cardinality": "single"
+      }
+    ]
+  },
+  "RefContactMethod": {
+    "fields": {
+      "id": {
+        "allowNull": false,
+        "dataType": "integer",
+        "writable": false
+      },
+      "name": {
+        "allowNull": false,
+        "dataType": "string",
+        "writable": true
+      },
+      "key": {
+        "allowNull": false,
+        "dataType": "string",
+        "writable": true
+      },
+      "deleted": {
+        "allowNull": false,
+        "dataType": "integer",
+        "defaultValue": 0,
+        "writable": true
+      },
+      "deleted_on": {
+        "allowNull": true,
+        "dataType": "datetime",
+        "defaultValue": null,
+        "writable": true
+      },
+      "deleted_by": {
+        "allowNull": true,
+        "dataType": "integer",
+        "defaultValue": null,
+        "writable": true
+      }
+    },
+    "primary": "id",
+    "aggregates": [
+      {
+        "foreignTable": "ContactValue",
+        "localField": "id",
+        "alias": "ContactValues",
+        "foreignField": "contact_method_id",
+        "cardinality": "many"
+      }
+    ]
+  },
+  "ContactValue": {
+    "fields": {
+      "id": {
+        "allowNull": false,
+        "dataType": "integer",
+        "writable": false
+      },
+      "entity_id": {
+        "allowNull": false,
+        "dataType": "integer",
+        "writable": true
+      },
+      "contact_method_id": {
+        "allowNull": false,
+        "dataType": "integer",
+        "writable": true
+      },
+      "value": {
+        "allowNull": false,
+        "dataType": "string",
+        "writable": true
+      },
+      "created_on": {
+        "allowNull": false,
+        "dataType": "datetime",
+        "writable": true
+      },
+      "created_by": {
+        "allowNull": false,
+        "dataType": "integer",
+        "writable": true
+      },
+      "modified_on": {
+        "allowNull": true,
+        "dataType": "datetime",
+        "defaultValue": null,
+        "writable": true
+      },
+      "modified_by": {
+        "allowNull": true,
+        "dataType": "integer",
+        "defaultValue": null,
+        "writable": true
+      },
+      "deleted": {
+        "allowNull": false,
+        "dataType": "integer",
+        "defaultValue": 0,
+        "writable": true
+      },
+      "deleted_on": {
+        "allowNull": true,
+        "dataType": "datetime",
+        "defaultValue": null,
+        "writable": true
+      },
+      "deleted_by": {
+        "allowNull": true,
+        "dataType": "integer",
+        "defaultValue": null,
+        "writable": true
+      }
+    },
+    "primary": "id",
+    "aggregates": [
+      {
+        "foreignTable": "RefContactMethod",
+        "localField": "contact_method_id",
+        "alias": "RefContactMethod",
+        "foreignField": "id",
+        "cardinality": "single"
+      },
+      {
+        "foreignTable": "Entity",
+        "localField": "entity_id",
+        "alias": "Entity",
+        "foreignField": "id",
+        "cardinality": "single"
+      }
+    ]
+  }
+}
