@@ -9,8 +9,10 @@ function Field(n, f) {
     this.allowNull = f.allowNull;
     if (f.defaultValue !== undefined) {
         this.defaultValue = f.defaultValue;
+    } else if (f.allowNull) {
+        // TODO: should warn user about this case during schema validation
+        this.defaultValue = null;
     }
-    this.writable = f.writable || false;
 
     return Object.freeze(this);
 }
