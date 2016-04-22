@@ -94,7 +94,7 @@ function rowFactory(model, d, db) {
             } else {
                 Object.defineProperty(row, agg.alias || agg.table.tableName, {
                     get: function () {
-                        return db[agg.table.tableName].get(data[agg.localField]);
+                        return db[agg.table.tableName].get(data[agg.localField]) || null;
                     },
                     enumerable: true
                 });

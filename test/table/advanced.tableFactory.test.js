@@ -38,12 +38,7 @@ describe("advanced table", function() {
                 created_by: 2
             });
 
-            console.log(db["Entity"].get(1));
-            console.log(db["Entity"].get(1).ExternalEntity);
-            console.log(db["ExternalEntity"].get(1).Entity);
-            console.log(db["Person"].get(1));
             expect(db["ExternalEntity"].get(11)).to.eql(ext);
-            expect(db["ExternalEntity"].get(11).Entity).to.exist;
             expect(db["Entity"].get(11)).to.exist;
             expect(db["Person"].get(11)).to.not.exist;
             expect(db["Organization"].get(11)).to.not.exist;
@@ -67,26 +62,37 @@ describe("advanced table", function() {
             var ext = db["ExternalEntity"].delete(1);
 
             expect(db["Entity"].get(1)).to.exist;
-            //expect(ext.Entity).to.eql(db["Entity"].get(1));
             expect(db["ExternalEntity"].get(1)).to.not.exist;
             expect(db["Person"].get(1)).to.not.exist;
         });
     });
-    /*
+
      describe("table.put()", function() {
-     it("should update an object's data", function() {
-     t1.put({entity_id: 1, first_name: "mike"});
-     expect(t1.get(1).first_name).to.eql("mike");
-     });
-     it("should re-create the object, breaking past reference", function() {
-     var old = t1.get(1);
+         t1.post({
+             entity_id: 3,
+             first_name: "bob",
+             last_name: "builder",
+             gender: "m",
+             created_on: "2015-01-01T00:00:00Z",
+             created_by: 2
+         });
 
-     t1.put({entity_id: 1, first_name: "molly"});
-     expect(t1.get(1).first_name).to.eql("molly");
-     expect(t1.get(1)).to.not.eql(old);
-     });
-     });
-     */
+         it("should update an object's data", function() {
+             t1.put({entity_id: 3, first_name: "mike"});
+             expect(t1.get(3).first_name).to.eql("mike");
+             expect(t1.get(3).last_name).to.eql("builder");
+             expect(t1.get(3).organization_id).to.eql(null);
+         });
+         it("should preserve the object's relations", function() {
+             expect(db.ExternalEntity.get(3).Person).to.eql(db.Person.get(3));
+         });
 
-    // additional generic tests (relations)
+         it("should re-create the object, breaking past reference", function() {
+             var old = t1.get(3);
+
+             t1.put({entity_id: 3, first_name: "molly"});
+             expect(t1.get(3).first_name).to.eql("molly");
+             expect(t1.get(3)).to.not.eql(old);
+         });
+     });
 });

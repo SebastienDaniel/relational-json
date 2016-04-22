@@ -31,7 +31,7 @@ module.exports = function buildAliasMap(model) {
 
     // add own children
     if (model.extendedBy) {
-        model.extendedBy.forEach(function (ext) {
+        model.extendedBy.forEach(function(ext) {
             o[ext.table.tableName] = ext.table.tableName;
         });
     }

@@ -11,7 +11,7 @@ describe("addRelations()", function() {
         extensionModel = buildModelGraph(extensionSchema),
         aggregateModel = buildModelGraph(aggregateSchema);
 
-    it("should not change Model instances if they has no relations", function() {
+    it("should not change Model instances if they have no relations", function() {
         Object.keys(flatModel).forEach(function(key) {
             expect(flatModel[key].extends).to.not.exist;
             expect(flatModel[key].extendedBy).to.not.exist;
@@ -30,6 +30,11 @@ describe("addRelations()", function() {
         expect(extensionModel["ExternalEntity"].extends.table.tableName).to.eql("Entity");
 
         expect(extensionModel["ExternalEntity"].aggregates).to.not.exist;
+
+        expect(extensionModel["Entity"].extendedBy).to.exist;
+        extensionModel["Entity"].extendedBy.forEach(function(ext) {
+            expect(ext.table).to.be.instanceof(Model);
+        });
     });
 
     it("should add aggregate relations, if present", function() {
@@ -39,6 +44,7 @@ describe("addRelations()", function() {
 
         aggregateModel["Entity"].aggregates.forEach(function(agg) {
             expect(agg.table).to.be.instanceof(Model);
+            expect(agg.table.tableName).to.exist;
         });
     });
 });
