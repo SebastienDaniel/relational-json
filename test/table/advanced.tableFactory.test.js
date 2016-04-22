@@ -94,5 +94,24 @@ describe("advanced table", function() {
              expect(t1.get(3).first_name).to.eql("molly");
              expect(t1.get(3)).to.not.eql(old);
          });
+         it("should dispatch updates to all rows in family-line", function(){
+             db["Person"].post({
+                 entity_id: 7,
+                 first_name: "kandice",
+                 last_name: "miller",
+                 gender: "m",
+                 created_on: "2015-01-01T00:00:00Z",
+                 created_by: 2
+             });
+
+             expect(db["Entity"].get(7).deleted).to.eql(0);
+             expect(db["ExternalEntity"].get(7).created_on).to.eql("2015-01-01T00:00:00Z");
+             expect(db["Person"].get(7).first_name).to.eql("kandice");
+
+             // complex put
+             db["Person"].put({entity_id:7, first_name:"miley", deleted:1});
+             expect(db["Person"].get(7).first_name).to.eql("miley");
+             expect(db["Entity"].get(7).deleted).to.eql(1);
+         });
      });
 });
