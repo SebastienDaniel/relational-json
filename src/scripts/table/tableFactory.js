@@ -1,5 +1,5 @@
 var buildAliasMap = require("../model/buildAliasMap"),
-    ImmDictionary = require("./ImmutableDictionary"),
+    ImmDictionary = require("./Dictionary"),
     get = require("./get"),
     put = require("./put"),
     post = require("./post"),

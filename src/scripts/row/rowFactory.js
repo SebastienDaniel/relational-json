@@ -5,22 +5,22 @@
  * @param d
  * @param db
  */
-function getRowPrototype(model, d, db) {
+function setRowPrototype(model, d, db) {
     var parent;
 
     if (model.extends) {
         // try to fetch the parent
-        if (db[model.extends.table].get(d[model.primary])) {
+        if (db[model.extends.table.tableName].get(d[model.primary])) {
             // update parent data
             // and use result as prototype (will be new obj or current parent)
-            parent = db[model.extends.table].put(d, d[model.extends.localField]);
+            parent = db[model.extends.table.tableName].put(d, d[model.extends.localField]);
         } else {
             // make sure parent values match row values
             // on their extension point (field)
             d[model.extends.foreignField] = d[model.extends.localField];
 
             // create new parent from provided data
-            parent = db[model.extends.table].post(d);
+            parent = db[model.extends.table.tableName].post(d);
         }
         return parent;
     } else {
@@ -39,7 +39,7 @@ function getRowPrototype(model, d, db) {
  */
 function rowFactory(model, d, db) {
     "use strict";
-    var row = Object.create(getRowPrototype(model, d, db)),
+    var row = Object.create(setRowPrototype(model, d, db)),
         data = {}; // private own data
 
     // generate public row field descriptors
@@ -49,17 +49,16 @@ function rowFactory(model, d, db) {
         if (model.extends && model.extends.localField === key) {
             // create field "getter" for common parent-child data
             // i.e. use parent data
-            data[key] = Object.getPrototypeOf(this)[model.extends.foreignField];
+            data[key] = Object.getPrototypeOf(row)[model.extends.foreignField];
         } else {
             // pre-calculate &  own data value
             data[key] = d[key] !== undefined ? d[key] : field.defaultValue;
         }
 
         // add getter for own data (isolate)
+        // doesn't need to be getter, since it can't be modified
         Object.defineProperty(row, key, {
-            get: function() {
-                return data[key];
-            },
+            value: data[key],
             enumerable: true
         });
     });

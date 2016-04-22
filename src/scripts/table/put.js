@@ -1,6 +1,32 @@
-var post = require("./post");
+function mergeRows(row, newO) {
+    var o = Object.create(null, {}),
+        k;
 
-function valuesDiffer(o1, o2, env) {
+    for (k in row) {
+        o[k] = newO[k] || row[k];
+    }
+
+    return o;
+}
+
+/**
+ * assumes that ALL possible fields are ALWAYS present on a row
+ * scans based on current row, to find applicable keys
+ * @param c
+ * @param oldO
+ * @param newO
+ * @returns {boolean}
+ */
+function shouldUpdate(c, oldO, newO) {
+    /**
+     * check if any OWN values from oldO differ from those of newO
+     */
+    return Object.keys(oldO).some(function(key) {
+        return oldO[key] !== (c.preprocessor ? preprocessor(c.model.tableName, c.model.fields[key], newO[key]) : newO);
+    });
+}
+
+/*function valuesDiffer(o1, o2, env) {
     var k,
         tempVal,
         differs = {
@@ -15,7 +41,7 @@ function valuesDiffer(o1, o2, env) {
             // set true value based on preprocessor (or not)
             tempVal = env.preprocessor ? env.preprocessor(env.model.tableName, env.model.getField(k), o2[k]) : o2[k];
 
-            // set change test result
+            // set test result
             differs.self = !differs.self ? o2[k] !== tempVal : true;
 
             // assign final value for key
@@ -41,37 +67,44 @@ function valuesDiffer(o1, o2, env) {
 
     return differs;
 }
+*/
 
 module.exports = function put(c, pkValue, d) {
     // find current object
     var current = c.rows.get(pkValue || d[c.model.primary]),
-        differs,
-        extendedBy;
+        update = false,
+        model = c.model;
 
     // throw if unfound
     if (!current) {
         throw Error("Cannot update a non-existent Object, id: " + pkValue);
+    } else {
+        d = mergeRows(current, d);
     }
 
-    differs = valuesDiffer(current, d, c);
+    while (!update && model) {
+        // no change detected
+        if (!shouldUpdate(c, current, d)) {
+            // can we lookup to parent?
+            if (model.extends) {
+                current = current.prototype;
+                model = model.extends;
+            } else {
+                // break loop
+                model = false;
+            }
+        } else {
+            update = true;
+        }
+    }
 
     // if differences have been detected
-    if (differs.parent) {
-        if (c.model.extendedBy && c.model.extendedBy.some(function(e) {
-                if (!!db[e.table].get(current[e.localField])) {
-                    extendedBy = e;
-                    return true;
-                }
-            })) {
-            d[extendedBy.foreignField] = d[extendedBy.localField];
-            return db[extendedBy.table].put(d);
-        } else {
-            // remove existing object
-            this.delete(pkValue || current[c.model.primary]);
+    if (update) {
+        // dispatch delete to proper table
+        c.env.db[model.tableName].delete(current[c.model.primary]);
 
-            // re-create new object
-            return post(d, c);
-        }
+        // dispatch post to proper table
+        return c.env.db[model.tableName].post(d);
     } else {
         return current;
     }
