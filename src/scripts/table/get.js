@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = function get(args, rows) {
     var aL = args ? args.length : 0,
         a,

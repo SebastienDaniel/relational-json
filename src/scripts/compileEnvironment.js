@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = function compileEnvironment(options) {
     var o = Object.create(null, {});
 

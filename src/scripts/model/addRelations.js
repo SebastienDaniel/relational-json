@@ -1,8 +1,10 @@
+"use strict";
+
 /**
  * @private
  * @alias addRelations
  * @summary Adds relations to other tables in the rJSON db
- * 
+ *
  * @param {JSON} schema - schema used to build rJSON db
  * @param {object} dynamicModel - hashmap of Models
  * @param {object} model - Model object to add relations to
@@ -22,7 +24,7 @@ module.exports = function addRelations(schema, dynamicModel, model) {
             enumerable: true
         });
     }
-    
+
     // add links to children models
     if (schema.extendedBy) {
         Object.defineProperty(model, "extendedBy", {
@@ -42,7 +44,7 @@ module.exports = function addRelations(schema, dynamicModel, model) {
     // add links to aggregate models
     if (schema.aggregates) {
         Object.defineProperty(model, "aggregates", {
-            value: schema.aggregates.map(function (agg) {
+            value: schema.aggregates.map(function(agg) {
                 return {
                     table: dynamicModel[agg.table],
                     alias: agg.alias,

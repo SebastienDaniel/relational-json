@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * @private
  * Attempts to validate data formats based on MySQL requirements & best-practices.
@@ -6,7 +8,6 @@
  * @returns {boolean}
  */
 module.exports = function validateDataType(field, value) {
-    "use strict";
     // expected types: string, integer, float, date, time, datetime, boolean
     var trueType = Object.prototype.toString.call(value),
         res = false;

@@ -1,7 +1,8 @@
+"use strict";
+
 var rowFactory = require("../row/rowFactory");
 
 module.exports = function post(c, d) {
-    "use strict";
     var missingFields = [],
         row;
 

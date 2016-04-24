@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * @typedef {object} Row
  * @summary Immutable javascript object stored within a Table
@@ -46,7 +48,6 @@ function setRowPrototype(model, d, db) {
  * @returns {Row}
  */
 function rowFactory(model, d, db) {
-    "use strict";
     var row = Object.create(setRowPrototype(model, d, db)),
         data = {}; // private own data
 
@@ -74,10 +75,10 @@ function rowFactory(model, d, db) {
     // generate child extensions
     // keep link dynamic (no pre-calculation)
     if (model.extendedBy) {
-        model.extendedBy.forEach(function (ext) {
+        model.extendedBy.forEach(function(ext) {
             // add getter for the child row
             Object.defineProperty(row, ext.table.tableName, {
-                get: function () {
+                get: function() {
                     return db[ext.table.tableName].get(data[ext.localField]);
                 },
                 enumerable: true
@@ -88,12 +89,12 @@ function rowFactory(model, d, db) {
     // add aggregates to row
     // keep link dynamic (no pre-calculation)
     if (model.aggregates) {
-        model.aggregates.forEach(function (agg) {
+        model.aggregates.forEach(function(agg) {
             // use alias as property name, fallback to foreign table name
             if (agg.cardinality === "many") {
                 Object.defineProperty(row, agg.alias || agg.table.tableName, {
-                    get: function () {
-                        return db[agg.table.tableName].get().filter(function (d) {
+                    get: function() {
+                        return db[agg.table.tableName].get().filter(function(d) {
                             return d[agg.foreignField] === this[agg.localField];
                         }, this);
                     },
@@ -101,7 +102,7 @@ function rowFactory(model, d, db) {
                 });
             } else {
                 Object.defineProperty(row, agg.alias || agg.table.tableName, {
-                    get: function () {
+                    get: function() {
                         return db[agg.table.tableName].get(data[agg.localField]) || null;
                     },
                     enumerable: true

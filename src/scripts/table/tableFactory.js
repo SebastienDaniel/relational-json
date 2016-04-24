@@ -1,3 +1,5 @@
+"use strict";
+
 var buildAliasMap = require("../model/buildAliasMap"),
     ImmDictionary = require("./Dictionary"),
     get = require("./get"),
@@ -13,7 +15,6 @@ var buildAliasMap = require("../model/buildAliasMap"),
  */
 
 module.exports = function tableFactory(model, env) {
-    "use strict";
     var context = Object.freeze({
         env: env, // settings of the relational-json instance
         model: model, // table's model instance
@@ -32,7 +33,7 @@ module.exports = function tableFactory(model, env) {
          * if 1 argument is provided, it returns that row object
          * if many arguments are provided, it returns an array containing those row objects
          */
-        get: function () {
+        get: function() {
             return get(arguments, context.rows);
         },
 
@@ -44,7 +45,7 @@ module.exports = function tableFactory(model, env) {
          * @param {object} d - data bundle, must contain all required fields
          * @returns {object} row instance created
          */
-        post: function (d) {
+        post: function(d) {
             return post(context, d);
         },
 
@@ -57,8 +58,8 @@ module.exports = function tableFactory(model, env) {
          * @param {*} pkValue=d.primary - primary value to find row to modify
          * @returns {object} newly created row
          */
-        put: function (d, pkValue) {
-            return put(context, pkValue, d)
+        put: function(d, pkValue) {
+            return put(context, pkValue, d);
         },
 
         /**
@@ -69,7 +70,7 @@ module.exports = function tableFactory(model, env) {
          * @param {*} id - primary field value of row to delete
          * @returns {object} deleted row
          */
-        delete: function (id) {
+        delete: function(id) {
             return remove(context, id);
         },
 
@@ -105,11 +106,11 @@ module.exports = function tableFactory(model, env) {
                 /**
                  * @name Table#meta.primary
                  * @type {string}
-                 * 
+                 *
                  * @summary alias of Table.meta.pk
                  */
                 primary: {
-                    value: this.pk
+                    value: model.primary
                 },
 
                 /**

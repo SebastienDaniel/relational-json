@@ -1,3 +1,5 @@
+"use strict";
+
 var tableFactory = require("./table/tableFactory");
 
 /**
@@ -9,7 +11,6 @@ var tableFactory = require("./table/tableFactory");
  * @returns {Object} - relational-json instance (Tables)
  */
 module.exports = function buildDatabase(modelGraph, env) {
-    "use strict";
     // create db tables
     Object.keys(modelGraph).forEach(function(key) {
         env.db[key] = tableFactory(modelGraph[key], env);

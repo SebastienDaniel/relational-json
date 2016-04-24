@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * @private
  * @summary adds own and ancestor aggregate relations to alias map
@@ -8,7 +10,7 @@
 function mapRelations(obj, model) {
     // add own aggregates
     if (model.aggregates) {
-        model.aggregates.forEach(function (agg) {
+        model.aggregates.forEach(function(agg) {
             obj[agg.alias] = agg.table.tableName;
         });
     }
@@ -29,7 +31,6 @@ function mapRelations(obj, model) {
  * @returns {object} map of prop:tableName for each relation
  */
 module.exports = function buildAliasMap(model) {
-    "use strict";
     var o = {};
 
     // add immediate parent
@@ -43,5 +44,5 @@ module.exports = function buildAliasMap(model) {
             o[ext.table.tableName] = ext.table.tableName;
         });
     }
-    return mapRelations(o, model)
+    return mapRelations(o, model);
 };

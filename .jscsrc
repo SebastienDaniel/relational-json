@@ -1,5 +1,7 @@
 {
-    "disallowDanglingUnderscores": true,
+    "disallowDanglingUnderscores": {
+        "allExcept": ["_data"]
+    },
     "disallowEmptyBlocks": true,
     "disallowKeywords": [
         "with",

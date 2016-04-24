@@ -1,3 +1,5 @@
+"use strict";
+
 var buildDatabase = require("./buildDatabase"),
     compileEnvironment = require("./compileEnvironment"),
     //validateSchema = require("./validateSchema"),

@@ -1,3 +1,5 @@
+"use strict";
+
 var recursiveDelete = require("./recursiveDelete");
 
 module.exports = function remove(c, id) {

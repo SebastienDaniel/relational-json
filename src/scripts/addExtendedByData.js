@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * @private
  * Uses schema "extends" information to add "extendedBy" information
@@ -12,7 +14,6 @@ module.exports = function addExtendedByData(schema) {
 
         // scan each "extends" relation
         if (ext) {
-
             // find target table's extendedBy map or create it
             if (!schema[ext.table].extendedBy || typeof schema[ext.table].extendedBy !== "object") {
                 schema[ext.table].extendedBy = {};

@@ -1,3 +1,9 @@
+"use strict";
+
+function Dictionary() {
+    this._data = {};
+}
+
 Dictionary.prototype = {
     all: function() {
         return Object.keys(this._data).map(function(key) {
@@ -42,9 +48,5 @@ Dictionary.prototype = {
         return !!this._data[key];
     }
 };
-
-function Dictionary() {
-    this._data = {};
-}
 
 module.exports = Dictionary;

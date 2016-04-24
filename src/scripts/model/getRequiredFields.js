@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * @private
  * @summary compiles an array of all required field names to create a data object
@@ -7,8 +9,6 @@
  * @returns {Array}
  */
 module.exports = function getRequiredFields(model, type) {
-    "use strict";
-
     // get models' own required fields
     var req = model.listFields().filter(function(field) {
         return field.isRequired();
