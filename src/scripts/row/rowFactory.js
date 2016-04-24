@@ -1,4 +1,11 @@
 /**
+ * @typedef {object} Row
+ * @summary Immutable javascript object stored within a Table
+ * @property prototype - another Table row, if in a extends relation, otherwise `null`
+ */
+
+/**
+ * @private
  * Looks for an existing DB entry related to new row,
  * based on ID and extends information
  * @param model
@@ -29,13 +36,14 @@ function setRowPrototype(model, d, db) {
 }
 
 /**
+ * @private
  * compiles a row (object) based on its model & relations
  * own data (model.listFields()) are hidden, and a public, read-only interface is created for that data.
  * relations are dynamically mapped and data is requested on-demand.
  * @param model
  * @param d
  * @param db
- * @returns {Object}
+ * @returns {Row}
  */
 function rowFactory(model, d, db) {
     "use strict";

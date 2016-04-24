@@ -1,3 +1,13 @@
+/**
+ * @private
+ * @alias addRelations
+ * @summary Adds relations to other tables in the rJSON db
+ * 
+ * @param {JSON} schema - schema used to build rJSON db
+ * @param {object} dynamicModel - hashmap of Models
+ * @param {object} model - Model object to add relations to
+ * @returns {object} Model object, enhanced with relations
+ */
 module.exports = function addRelations(schema, dynamicModel, model) {
     schema = schema[model.tableName];
 
@@ -16,9 +26,11 @@ module.exports = function addRelations(schema, dynamicModel, model) {
     // add links to children models
     if (schema.extendedBy) {
         Object.defineProperty(model, "extendedBy", {
-            value: schema.extendedBy.map(function(ext) {
+            value: Object.keys(schema.extendedBy).map(function(key) {
+                var ext = schema.extendedBy[key];
+
                 return {
-                    table: dynamicModel[ext.table],
+                    table: dynamicModel[key],
                     localField: ext.localField,
                     foreignField: ext.foreignField
                 };

@@ -1,10 +1,11 @@
 var expect = require("chai").expect,
     schema = require("../data/mixed-graph.json"),
     Model = require("../../src/scripts/model/Model"),
+    addExtendedByData = require("../../src/scripts/addExtendedByData"),
     buildModelGraph = require("../../src/scripts/model/buildModelGraph");
 
 describe("buildModelGraph()", function() {
-    var m = buildModelGraph(schema);
+    var m = buildModelGraph(addExtendedByData(schema));
 
     it("should create a model object for each schema key", function() {
         Object.keys(m).forEach(function(key) {

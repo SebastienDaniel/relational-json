@@ -3,7 +3,8 @@ var grf = require("../../src/scripts/model/getRequiredFields"),
     expect = require("chai").expect,
     compileModel = require("../../src/scripts/model/buildModelGraph"),
     graph = require("../data/mixed-graph.json"),
-    model = compileModel(graph);
+    addExtendedByData = require("../../src/scripts/addExtendedByData"),
+    model = compileModel(addExtendedByData(graph));
 
 describe("getRequiredFields()", function() {
     it("should return own required field names, ignoring extends & aggregates", function() {

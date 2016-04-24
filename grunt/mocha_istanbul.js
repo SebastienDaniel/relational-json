@@ -1,5 +1,5 @@
 module.exports = {
     coverage: {
-        src: "test"
+        src: "test/**"
     }
 };

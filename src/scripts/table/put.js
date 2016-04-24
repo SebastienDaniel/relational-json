@@ -10,6 +10,7 @@ function mergeRows(row, newO) {
 }
 
 /**
+ * @private
  * assumes that ALL possible fields are ALWAYS present on a row
  * scans based on current row, to find applicable keys
  * @param c

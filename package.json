@@ -40,6 +40,7 @@
     "grunt-contrib-jshint": "^0.11.3",
     "grunt-exec": "^0.4.6",
     "grunt-jscs": "^1.8.0",
+    "grunt-jsdoc-to-markdown": "^1.2.1",
     "grunt-mocha-istanbul": "^3.0.1",
     "istanbul": "^0.4.3",
     "load-grunt-config": "^0.19.1",

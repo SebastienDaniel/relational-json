@@ -1,6 +1,14 @@
 var Model = require("./Model"),
     addRelations = require("./addRelations");
 
+/**
+ * @alias buildModelGraph
+ * @private
+ * 
+ * @summary compiles the Model graph based on provided schema
+ * @param {JSON} schema - JSON-like notation for the schema
+ * @returns {Object} - Model graph
+ */
 module.exports = function buildModelGraph(schema) {
     // first pass, create model instances
     var dynamicModel = Object.create(null, {});

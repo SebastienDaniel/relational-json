@@ -1,4 +1,5 @@
 /**
+ * @private
  * Attempts to validate data formats based on MySQL requirements & best-practices.
  * @param {object} field - field-portion of the model
  * @param {*} value - value to test against field's dataType

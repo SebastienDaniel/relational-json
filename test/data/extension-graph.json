@@ -19,14 +19,7 @@
         "writable": true
       }
     },
-    "primary": "id",
-    "extendedBy": [
-      {
-        "table": "ExternalEntity",
-        "foreignField": "entity_id",
-        "localField": "id"
-      }
-    ]
+    "primary": "id"
   },
   "ExternalEntity": {
     "fields": {
@@ -75,19 +68,7 @@
       "table": "Entity",
       "localField": "entity_id",
       "foreignField": "id"
-    },
-    "extendedBy": [
-      {
-        "table": "Organization",
-        "foreignField": "entity_id",
-        "localField": "entity_id"
-      },
-      {
-        "table": "Person",
-        "foreignField": "entity_id",
-        "localField": "entity_id"
-      }
-    ]
+    }
   },
   "Organization": {
     "fields": {

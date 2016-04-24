@@ -3,7 +3,8 @@ var bam = require("../../src/scripts/model/buildAliasMap"),
     expect = require("chai").expect,
     compileModel = require("../../src/scripts/model/buildModelGraph"),
     graph = require("../data/mixed-graph.json"),
-    model = compileModel(graph);
+    addExtendedByData = require("../../src/scripts/addExtendedByData"),
+    model = compileModel(addExtendedByData(graph));
 
 describe("getAliasMap", function() {
     it("should have own aggregate relations", function() {

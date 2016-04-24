@@ -2,10 +2,11 @@ var chai = require("chai"),
     expect = chai.expect,
     graph = require("../data/no-relation-graph.json"),
     compileModel = require("../../src/scripts/model/buildModelGraph"),
+    addExtendedByData = require("../../src/scripts/addExtendedByData"),
     tf = require("../../src/scripts/table/tableFactory");
 
 var db = {},
-    model = compileModel(graph);
+    model = compileModel(addExtendedByData(graph));
 
 // create table 1
 var t1 = db["Person"] = tf(model["Person"], {

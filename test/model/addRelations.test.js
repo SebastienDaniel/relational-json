@@ -4,12 +4,13 @@ var expect = require("chai").expect,
     extensionSchema = require("../data/extension-graph.json"),
     addRelations = require("../../src/scripts/model/addRelations"),
     Model = require("../../src/scripts/model/Model"),
+    addExtendedByData = require("../../src/scripts/addExtendedByData"),
     buildModelGraph = require("../../src/scripts/model/buildModelGraph");
 
 describe("addRelations()", function() {
-    var flatModel = buildModelGraph(flatSchema),
-        extensionModel = buildModelGraph(extensionSchema),
-        aggregateModel = buildModelGraph(aggregateSchema);
+    var flatModel = buildModelGraph(addExtendedByData(flatSchema)),
+        extensionModel = buildModelGraph(addExtendedByData(extensionSchema)),
+        aggregateModel = buildModelGraph(addExtendedByData(aggregateSchema));
 
     it("should not change Model instances if they have no relations", function() {
         Object.keys(flatModel).forEach(function(key) {

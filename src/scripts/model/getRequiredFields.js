@@ -1,5 +1,6 @@
 /**
- * compiles an array of all required field names to create a data object
+ * @private
+ * @summary compiles an array of all required field names to create a data object
  * for the provided table model
  * @param {object} model - table model to scan
  * @param {object} [type] - "own" or "all"

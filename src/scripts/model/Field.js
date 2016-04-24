@@ -6,7 +6,7 @@ function Field(n, f) {
     // basics
     this.name = n;
     this.dataType = f.dataType;
-    this.allowNull = f.allowNull;
+    this.allowNull = f.allowNull || false;
     if (f.defaultValue !== undefined) {
         this.defaultValue = f.defaultValue;
     } else if (f.allowNull) {
