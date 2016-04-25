@@ -1,7 +1,7 @@
 "use strict";
 
 var buildAliasMap = require("../model/buildAliasMap"),
-    ImmDictionary = require("./Dictionary"),
+    Dictionary = require("./Dictionary"),
     get = require("./get"),
     put = require("./put"),
     post = require("./post"),
@@ -18,7 +18,7 @@ module.exports = function tableFactory(model, env) {
     var context = Object.freeze({
         env: env, // settings of the relational-json instance
         model: model, // table's model instance
-        rows: new ImmDictionary() // table's private data dictionary
+        rows: new Dictionary() // table's private data dictionary
     });
 
     return Object.freeze({
