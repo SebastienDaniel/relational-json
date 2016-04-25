@@ -1,5 +1,5 @@
 # Getting started
-## Install relational-json
+### Install relational-json
 
 `npm install relational-json --save`
 
@@ -12,6 +12,7 @@ and you create a db based on a schema you provide:
 
 `var db = rJSON(schema);`
 
+----------------------------
 
 ### How it works
 Relational-json wraps your primitive data (*strings, numbers, booleans*) in an immutable & relational structure. The format is just like JSON, except your data can reference other parts of your data tree. This is done dynamically, thanks to ES5 object getters & setters.
@@ -31,6 +32,8 @@ when parts of your data are related to other parts of your data. When you update
 
 ## Limitation
 Because of it's referential nature, `JSON.stringify()` does not work as expected. (*we provide a simple utility, which entirely mitigates the issue*)
+
+------------------------------
 
 ## The schema
 Relational-json expects a javascript-object schema representing the data tree you wish to use. Below is a break down of the schema notation:
@@ -180,6 +183,8 @@ db.Client.get(2);
 }
 */
 ```
+
+-------------------------------
 
 ## Typedefs
 
