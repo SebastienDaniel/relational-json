@@ -27,7 +27,6 @@ module.exports = function tableFactory(model, env) {
          * @name Table#get
          *
          * @summary returns row data matching the provided arguments on their primary field value
-         * @params list of primary key values to return
          * @returns {object|object[]}
          * if no argument is provided, it returns an array of all data within the table.
          * if 1 argument is provided, it returns that row object
