@@ -76,71 +76,37 @@ module.exports = function tableFactory(model, env) {
 
         /**
          * @name Table#meta
+         * @type {object}
          *
+         * @property {string} name - Table's property key in the relational-json database
+         * @property {string} pk - name of the Table's primary field
+         * @property {string} primary - alias of Table.meta.pk
+         * @property {object} aliasMap - hashmap of the the table's rows' properties pointing to other tables in the relational-json database
+         * @property {string[]} ownRequiredFields - list of all own required fields, which must have a value at all times
+         * @property {string[]} allRequiredFields - list of all required fields, including own & ancestors' required fields
          * @summary partial interface into the Table's inner details
          */
         meta: Object.freeze(
             Object.create(null, {
-                /**
-                 * @name Table#meta.name
-                 * @type string
-                 *
-                 * @summary Table's property key in the relational-json database
-                 */
                 name: {
                     value: model.tableName,
                     enumerable: true
                 },
-
-                /**
-                 * @name Table#meta.pk
-                 * @type {string}
-                 *
-                 * @summary name of the Table's primary field
-                 */
                 pk: {
                     value: model.primary,
                     enumerable: true
                 },
-
-                /**
-                 * @name Table#meta.primary
-                 * @type {string}
-                 *
-                 * @summary alias of Table.meta.pk
-                 */
                 primary: {
                     value: model.primary
                 },
-
-                /**
-                 * @name Table#meta.aliasMap
-                 * @type object
-                 *
-                 * @summary hashmap of the the table's rows' properties pointing to other tables in the relational-json database
-                 */
                 aliasMap: {
                     value: Object.freeze(buildAliasMap(model)),
                     enumerable: true
                 },
-
-                /**
-                 * @name Table#meta.ownRequiredFields
-                 * @type {string[]}
-                 *
-                 * @summary list of all own required fields, which must have a value at all times
-                 */
                 ownRequiredFields: {
                     value: model.getRequiredFields("own"),
                     enumerable: true
                 },
-
-                /**
-                 * @name Table#meta.allRequiredFields
-                 * @type {string[]}
-                 *
-                 * @summary list of all required fields, including own & ancestors' required fields
-                 */
                 allRequiredFields: {
                     value: model.getRequiredFields("all"),
                     enumerable: true

@@ -31,7 +31,9 @@ when parts of your data are related to other parts of your data. When you update
 5. It makes no environment assumptions (*can be used in browser, on node, etc.*)
 
 ## Limitation
-Because of it's referential nature, `JSON.stringify()` does not work as expected. (*we provide a simple utility, which entirely mitigates the issue*)
+Because of it's referential nature, `JSON.stringify()` does not work as expected. This is due to *infinite nesting*, which makes you
+jump from prototype to child and back again, infinitely, if you don't control the data traversal.
+(*we provide a simple utility, which entirely mitigates the issue*)
 
 ------------------------------
 
@@ -70,7 +72,7 @@ Relational-json expects a javascript-object schema representing the data tree yo
 ### Schema relations
 #### extends
 Extends is an **inheritance** pattern. It signifies that the table is the *child* of another table. Concretely, every row object created in this table will use a row object from the parent table as **prototype**.
-The `extends` relationship is also reflected in the parent tables' rows, which will contain a property to the child row. This will allow you to traverse your data in both directions (*up ancestors, down children*).
+The `extends` relationship is also reflected in the parent tables' rows, which will contain a property to the child row. This will allow you to traverse your data trees in both directions (*up and down*).
 
 **extends example**
 ```js
@@ -129,7 +131,7 @@ db.Vehicle.get(1);
 ```
 
 #### aggregates
-This a composite relation between tables, not inheritance-based. Concretely, if table A "aggregates" table B, rows from table A will have a property pointing to one (*object*) or many (*array*) rows from table B, based on the relations cardinality.
+This a composite relation between tables, not inheritance-based. Concretely, if table A "aggregates" table B, rows from table A will have a property pointing to one row (*object*) or many rows (*array*) from table B, based on the relations cardinality.
 Unlike `extends`, aggregate does not affect the prototype chain.
 
 **aggregates example (single)**

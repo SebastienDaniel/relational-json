@@ -31,7 +31,9 @@ when parts of your data are related to other parts of your data. When you update
 5. It makes no environment assumptions (*can be used in browser, on node, etc.*)
 
 ## Limitation
-Because of it's referential nature, `JSON.stringify()` does not work as expected. (*we provide a simple utility, which entirely mitigates the issue*)
+Because of it's referential nature, `JSON.stringify()` does not work as expected. This is due to *infinite nesting*, which makes you
+jump from prototype to child and back again, infinitely, if you don't control the data traversal.
+(*we provide a simple utility, which entirely mitigates the issue*)
 
 ------------------------------
 
@@ -70,7 +72,7 @@ Relational-json expects a javascript-object schema representing the data tree yo
 ### Schema relations
 #### extends
 Extends is an **inheritance** pattern. It signifies that the table is the *child* of another table. Concretely, every row object created in this table will use a row object from the parent table as **prototype**.
-The `extends` relationship is also reflected in the parent tables' rows, which will contain a property to the child row. This will allow you to traverse your data in both directions (*up ancestors, down children*).
+The `extends` relationship is also reflected in the parent tables' rows, which will contain a property to the child row. This will allow you to traverse your data trees in both directions (*up and down*).
 
 **extends example**
 ```js
@@ -129,7 +131,7 @@ db.Vehicle.get(1);
 ```
 
 #### aggregates
-This a composite relation between tables, not inheritance-based. Concretely, if table A "aggregates" table B, rows from table A will have a property pointing to one (*object*) or many (*array*) rows from table B, based on the relations cardinality.
+This a composite relation between tables, not inheritance-based. Concretely, if table A "aggregates" table B, rows from table A will have a property pointing to one row (*object*) or many rows (*array*) from table B, based on the relations cardinality.
 Unlike `extends`, aggregate does not affect the prototype chain.
 
 **aggregates example (single)**
@@ -215,13 +217,7 @@ Each Table uses an internal Dictionary to store, retrieve and manipulate it's da
 Tables are essentially the interface through which you manipulate data.  
 
 * [Table](#Table) : <code>object</code>
-    * [.meta](#Table+meta)
-        * [.name](#Table+meta.name) : <code>string</code>
-        * [.pk](#Table+meta.pk) : <code>string</code>
-        * [.primary](#Table+meta.primary) : <code>string</code>
-        * [.aliasMap](#Table+meta.aliasMap) : <code>object</code>
-        * [.ownRequiredFields](#Table+meta.ownRequiredFields) : <code>Array.&lt;string&gt;</code>
-        * [.allRequiredFields](#Table+meta.allRequiredFields) : <code>Array.&lt;string&gt;</code>
+    * [.meta](#Table+meta) : <code>object</code>
     * [.get()](#Table+get) ⇒ <code>object</code> &#124; <code>Array.&lt;object&gt;</code>
     * [.post(d)](#Table+post) ⇒ <code>object</code>
     * [.put(d, pkValue)](#Table+put) ⇒ <code>object</code>
@@ -229,48 +225,20 @@ Tables are essentially the interface through which you manipulate data.
 
 <a name="Table+meta"></a>
 
-### table.meta
+### table.meta : <code>object</code>
 **Kind**: instance property of <code>[Table](#Table)</code>  
 **Summary**: partial interface into the Table's inner details  
+**Properties**
 
-* [.meta](#Table+meta)
-    * [.name](#Table+meta.name) : <code>string</code>
-    * [.pk](#Table+meta.pk) : <code>string</code>
-    * [.primary](#Table+meta.primary) : <code>string</code>
-    * [.aliasMap](#Table+meta.aliasMap) : <code>object</code>
-    * [.ownRequiredFields](#Table+meta.ownRequiredFields) : <code>Array.&lt;string&gt;</code>
-    * [.allRequiredFields](#Table+meta.allRequiredFields) : <code>Array.&lt;string&gt;</code>
+| Name | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | Table's property key in the relational-json database |
+| pk | <code>string</code> | name of the Table's primary field |
+| primary | <code>string</code> | alias of Table.meta.pk |
+| aliasMap | <code>object</code> | hashmap of the the table's rows' properties pointing to other tables in the relational-json database |
+| ownRequiredFields | <code>Array.&lt;string&gt;</code> | list of all own required fields, which must have a value at all times |
+| allRequiredFields | <code>Array.&lt;string&gt;</code> | list of all required fields, including own & ancestors' required fields |
 
-<a name="Table+meta.name"></a>
-
-#### meta.name : <code>string</code>
-**Kind**: static property of <code>[meta](#Table+meta)</code>  
-**Summary**: Table's property key in the relational-json database  
-<a name="Table+meta.pk"></a>
-
-#### meta.pk : <code>string</code>
-**Kind**: static property of <code>[meta](#Table+meta)</code>  
-**Summary**: name of the Table's primary field  
-<a name="Table+meta.primary"></a>
-
-#### meta.primary : <code>string</code>
-**Kind**: static property of <code>[meta](#Table+meta)</code>  
-**Summary**: alias of Table.meta.pk  
-<a name="Table+meta.aliasMap"></a>
-
-#### meta.aliasMap : <code>object</code>
-**Kind**: static property of <code>[meta](#Table+meta)</code>  
-**Summary**: hashmap of the the table's rows' properties pointing to other tables in the relational-json database  
-<a name="Table+meta.ownRequiredFields"></a>
-
-#### meta.ownRequiredFields : <code>Array.&lt;string&gt;</code>
-**Kind**: static property of <code>[meta](#Table+meta)</code>  
-**Summary**: list of all own required fields, which must have a value at all times  
-<a name="Table+meta.allRequiredFields"></a>
-
-#### meta.allRequiredFields : <code>Array.&lt;string&gt;</code>
-**Kind**: static property of <code>[meta](#Table+meta)</code>  
-**Summary**: list of all required fields, including own & ancestors' required fields  
 <a name="Table+get"></a>
 
 ### table.get() ⇒ <code>object</code> &#124; <code>Array.&lt;object&gt;</code>
