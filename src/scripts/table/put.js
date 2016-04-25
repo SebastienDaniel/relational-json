@@ -24,15 +24,13 @@ function shouldUpdate(c, oldO, newO) {
     /**
      * check if any OWN values from oldO differ from those of newO
      */
-    console.log(oldO);
     return Object.keys(oldO).some(function(key) {
-        console.log(key);
-        if (c.preprocessor) {
-            console.log(oldO[key] !== c.preprocessor(c.model.tableName, c.model.fields[key], newO[key]));
-            return oldO[key] !== c.preprocessor(c.model.tableName, c.model.fields[key], newO[key]);
-        } else {
-            console.log(oldO[key] !== newO[key]);
-            return oldO[key] !== newO[key];
+        if (oldO[key] !== undefined && typeof oldO[key] !== "object") {
+            if (c.preprocessor) {
+                return oldO[key] !== c.preprocessor(c.model.tableName, c.model.fields[key], newO[key]);
+            } else {
+                return oldO[key] !== newO[key];
+            }
         }
     });
 }
@@ -56,7 +54,7 @@ module.exports = function put(c, pkValue, d) {
             // can we lookup to parent?
             if (model.extends) {
                 current = Object.getPrototypeOf(current);
-                model = model.extends;
+                model = model.extends.table;
             } else {
                 // break loop
                 model = false;
@@ -69,11 +67,11 @@ module.exports = function put(c, pkValue, d) {
     // if differences have been detected
     if (update) {
         // dispatch delete to proper table
-        c.env.db[c.model.tableName].delete(current[c.model.primary]);
+        c.env.db[c.model.tableName].delete(current[model.primary]);
 
         // dispatch post to proper table
         return c.env.db[c.model.tableName].post(d);
     } else {
-        return current;
+        return c.rows.get(pkValue || d[c.model.primary]);
     }
 };

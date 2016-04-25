@@ -7,7 +7,6 @@ var db = rJSON(graph),
     t1 = db["Person"];
 
 describe("advanced table", function() {
-    /*
     describe("table.post()", function() {
         it("should allow data creation (post)", function() {
             var bob = t1.post({
@@ -86,9 +85,8 @@ describe("advanced table", function() {
             expect(db["Person"].get(1)).to.not.exist;
         });
     });
-    */
+
      describe("table.put()", function() {
-         /*
          t1.post({
              entity_id: 3,
              first_name: "bob",
@@ -134,7 +132,7 @@ describe("advanced table", function() {
              expect(db["Person"].get(7).first_name).to.eql("miley");
              expect(db["Entity"].get(7).deleted).to.eql(1);
          });
-            */
+
          it("shouldn't change the row if the data doesn't differ", function() {
              var p = db["Person"].post({
                      entity_id: 17,
