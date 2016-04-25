@@ -7,6 +7,7 @@ var db = rJSON(graph),
     t1 = db["Person"];
 
 describe("advanced table", function() {
+    /*
     describe("table.post()", function() {
         it("should allow data creation (post)", function() {
             var bob = t1.post({
@@ -55,6 +56,25 @@ describe("advanced table", function() {
             expect(db["ExternalEntity"].get(11).Person).to.eql(alice);
             expect(db["Person"].get(11).ExternalEntity).to.eql(parent);
         });
+        it("shouldn't create two children using same prototype parent", function() {
+            var p = db["Person"].post({
+                entity_id: 8,
+                first_name: "person",
+                last_name: "one",
+                gender: "m",
+                created_on: "2015-01-01T00:00:00Z",
+                created_by: 2
+            });
+
+            expect(function() {
+                return db["Organization"].post({
+                    entity_id: 8,
+                    name: "organization",
+                    created_on: "2015-01-01T00:00:00Z",
+                    created_by: 2
+                });
+            }).to.throw(Error);
+        });
     });
 
     describe("table.delete()", function() {
@@ -66,8 +86,9 @@ describe("advanced table", function() {
             expect(db["Person"].get(1)).to.not.exist;
         });
     });
-
+    */
      describe("table.put()", function() {
+         /*
          t1.post({
              entity_id: 3,
              first_name: "bob",
@@ -112,6 +133,20 @@ describe("advanced table", function() {
              db["Person"].put({entity_id:7, first_name:"miley", deleted:1});
              expect(db["Person"].get(7).first_name).to.eql("miley");
              expect(db["Entity"].get(7).deleted).to.eql(1);
+         });
+            */
+         it("shouldn't change the row if the data doesn't differ", function() {
+             var p = db["Person"].post({
+                     entity_id: 17,
+                     first_name: "kandice",
+                     last_name: "miller",
+                     gender: "m",
+                     created_on: "2015-01-01T00:00:00Z",
+                     created_by: 2
+                 }),
+                 p2 = db["Person"].put({entity_id: 17, first_name: "kandice"});
+
+             expect(p2).to.equal(p);
          });
      });
 });

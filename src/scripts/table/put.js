@@ -24,8 +24,16 @@ function shouldUpdate(c, oldO, newO) {
     /**
      * check if any OWN values from oldO differ from those of newO
      */
+    console.log(oldO);
     return Object.keys(oldO).some(function(key) {
-        return oldO[key] !== (c.preprocessor ? c.preprocessor(c.model.tableName, c.model.fields[key], newO[key]) : newO);
+        console.log(key);
+        if (c.preprocessor) {
+            console.log(oldO[key] !== c.preprocessor(c.model.tableName, c.model.fields[key], newO[key]));
+            return oldO[key] !== c.preprocessor(c.model.tableName, c.model.fields[key], newO[key]);
+        } else {
+            console.log(oldO[key] !== newO[key]);
+            return oldO[key] !== newO[key];
+        }
     });
 }
 
@@ -47,7 +55,7 @@ module.exports = function put(c, pkValue, d) {
         if (!shouldUpdate(c, current, d)) {
             // can we lookup to parent?
             if (model.extends) {
-                current = current.prototype;
+                current = Object.getPrototypeOf(current);
                 model = model.extends;
             } else {
                 // break loop
@@ -61,10 +69,10 @@ module.exports = function put(c, pkValue, d) {
     // if differences have been detected
     if (update) {
         // dispatch delete to proper table
-        c.env.db[model.tableName].delete(current[c.model.primary]);
+        c.env.db[c.model.tableName].delete(current[c.model.primary]);
 
         // dispatch post to proper table
-        return c.env.db[model.tableName].post(d);
+        return c.env.db[c.model.tableName].post(d);
     } else {
         return current;
     }
