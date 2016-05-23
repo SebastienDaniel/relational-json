@@ -7,7 +7,7 @@ module.exports = function post(c, d) {
         row;
 
     // make sure pk is unique
-    if (c.rows.has(d[c.model.primary])) {
+    if (c.rows.hasKey(d[c.model.primary])) {
         throw Error("provided " + c.model.primary + ": " + d[c.model.primary] + " is already in use in " + c.model.tableName);
     }
 
@@ -38,7 +38,7 @@ module.exports = function post(c, d) {
         throw Error("data creation rejected for table " + c.model.tableName + ", mandatory fields not provided:\n" + missingFields.join(", ") + "\nfrom data: " + JSON.stringify(d));
     } else {
         row = rowFactory(c.model, d, c.env.db);
-        c.rows.add(d[c.model.primary], row);
+        c.rows.set(d[c.model.primary], row);
     }
 
     return row;

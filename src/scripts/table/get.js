@@ -6,7 +6,7 @@ module.exports = function get(args, rows) {
         i;
 
     if (aL === 0) {
-        return rows.all();
+        return rows.getAllData();
     } else if (aL === 1) {
         return rows.get(args[0]);
     } else {

@@ -1,7 +1,7 @@
 "use strict";
 
 var buildAliasMap = require("../model/buildAliasMap"),
-    Dictionary = require("./Dictionary"),
+    dictionary = require("./dictionaryFactory"),
     get = require("./get"),
     put = require("./put"),
     post = require("./post"),
@@ -16,10 +16,10 @@ var buildAliasMap = require("../model/buildAliasMap"),
 
 module.exports = function tableFactory(model, env) {
     var context = Object.freeze({
-        env: env, // settings of the relational-json instance
-        model: model, // table's model instance
-        rows: new Dictionary() // table's private data dictionary
-    });
+            env: env, // settings of the relational-json instance
+            model: model, // table's model instance
+            rows: dictionary() // table's private data dictionary
+        });
 
     return Object.freeze({
         /**
@@ -71,6 +71,25 @@ module.exports = function tableFactory(model, env) {
          */
         delete: function(id) {
             return remove(context, id);
+        },
+
+        /**
+         * @function
+         * @name Table#export
+         *
+         * @summary exports the Table's rows' own data
+         * @returns {object[]}
+         */
+        export: function() {
+            return context.rows._data.map(function(row) {
+                return Object.keys(row).reduce(function(o, key) {
+                    if (typeof row[key] !== "object") {
+                        o[key] = row[key];
+                    }
+
+                    return o;
+                }, {});
+            });
         },
 
         /**
