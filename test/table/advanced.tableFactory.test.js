@@ -82,6 +82,7 @@ describe("advanced table", function() {
 
     describe("table.delete()", function() {
         it("should remove row and row's children, but not ancestors", function() {
+            db["ExternalEntity"].delete(1);
             expect(db["Entity"].get(1)).to.exist;
             expect(db["ExternalEntity"].get(1)).to.not.exist;
             expect(db["Person"].get(1)).to.not.exist;

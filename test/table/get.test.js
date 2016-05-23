@@ -1,11 +1,11 @@
 var expect = require("chai").expect,
-    dictionary = require("../../src/scripts/table/Dictionary"),
+    dictionary = require("../../src/scripts/table/dictionaryFactory"),
     get = require("../../src/scripts/table/get"),
-    mockData = new dictionary();
+    mockData = dictionary();
 
-mockData.add(1, {name: "org1"});
-mockData.add(2, {name: "org2"});
-mockData.add(3, {name: "org3"});
+mockData.set(1, {name: "org1"});
+mockData.set(2, {name: "org2"});
+mockData.set(3, {name: "org3"});
 
 describe("get()", function() {
     it("should return Array of all data rows, when no argument is provided", function() {
