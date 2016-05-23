@@ -1,6 +1,7 @@
 "use strict";
 
 /**
+ * @alias getRequiredFields
  * @private
  * @summary compiles an array of all required field names to create a data object
  * for the provided table model

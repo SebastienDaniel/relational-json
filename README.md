@@ -222,6 +222,7 @@ Tables are essentially the interface through which you manipulate data.
     * [.post(d)](#Table+post) ⇒ <code>object</code>
     * [.put(d, pkValue)](#Table+put) ⇒ <code>object</code>
     * [.delete(id)](#Table+delete) ⇒ <code>object</code>
+    * [.export()](#Table+export) ⇒ <code>Array.&lt;object&gt;</code>
 
 <a name="Table+meta"></a>
 
@@ -247,7 +248,6 @@ Tables are essentially the interface through which you manipulate data.
 **Returns**: <code>object</code> &#124; <code>Array.&lt;object&gt;</code> - if no argument is provided, it returns an array of all data within the table.
 if 1 argument is provided, it returns that row object
 if many arguments are provided, it returns an array containing those row objects  
-**Params**: list of primary key values to return  
 <a name="Table+post"></a>
 
 ### table.post(d) ⇒ <code>object</code>
@@ -282,3 +282,8 @@ if many arguments are provided, it returns an array containing those row objects
 | --- | --- | --- |
 | id | <code>\*</code> | primary field value of row to delete |
 
+<a name="Table+export"></a>
+
+### table.export() ⇒ <code>Array.&lt;object&gt;</code>
+**Kind**: instance method of <code>[Table](#Table)</code>  
+**Summary**: exports the Table's rows' own data  
