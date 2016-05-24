@@ -11,7 +11,7 @@ module.exports = function dictionaryFactory() {
 
         // if dataContainer.length !== dictionary data length, re-populate the dataContainer
         if (dataContainer.length !== data.length) {
-            // reset container length
+            // reset contents in-place
             dataContainer.splice(0);
 
             // add current data
@@ -24,17 +24,21 @@ module.exports = function dictionaryFactory() {
     };
 
     d.set = function setExtension(key, value) {
-        // change dataContainer reference
-        dataContainer = [];
+        var res = Object.getPrototypeOf(d).set.call(d, key, value);
 
-        return Object.getPrototypeOf(d).set.call(d, key, value);
+        // change dataContainer reference
+        dataContainer = dataContainer.concat();
+
+        return res;
     };
 
     d.remove = function removeExtension(key) {
-        // change dataContainer reference
-        dataContainer = [];
+        var res = Object.getPrototypeOf(d).remove.call(d, key);
 
-        return Object.getPrototypeOf(d).remove.call(d, key);
+        // change dataContainer reference
+        dataContainer = dataContainer.concat();
+
+        return res;
     };
 
     return d;
