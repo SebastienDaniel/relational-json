@@ -3,16 +3,18 @@ var Dictionary = require("sebastiendaniel-adt/dictionary");
 
 module.exports = function dictionaryFactory() {
     var d = new Dictionary(),
-        dataContainer = [];
+        dataContainer = [],
+        hasChanged;
 
     // add immutable getter method
     d.getAllData = function getAllData() {
         var data = this.getValues();
 
         // if dataContainer.length !== dictionary data length, re-populate the dataContainer
-        if (dataContainer.length !== data.length) {
+        if (hasChanged) {
+            hasChanged = false;
             // reset contents in-place
-            dataContainer.splice(0);
+            dataContainer = [];
 
             // add current data
             data.forEach(function(value) {
@@ -27,7 +29,7 @@ module.exports = function dictionaryFactory() {
         var res = Object.getPrototypeOf(d).set.call(d, key, value);
 
         // change dataContainer reference
-        dataContainer = dataContainer.concat();
+        hasChanged = true;
 
         return res;
     };
@@ -36,7 +38,7 @@ module.exports = function dictionaryFactory() {
         var res = Object.getPrototypeOf(d).remove.call(d, key);
 
         // change dataContainer reference
-        dataContainer = dataContainer.concat();
+        hasChanged = true;
 
         return res;
     };
