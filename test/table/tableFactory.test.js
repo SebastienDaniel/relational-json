@@ -101,8 +101,7 @@ describe("table.get()", function() {
         expect(t1.get(1).first_name).to.eql("bob");
 
         t1.get().splice(0, 1);
-        expect(t1.get()).to.have.length(3);
-        expect(t1.get()[0].first_name).to.eql("bob");
+        expect(t1.get()).to.have.length(2);
     });
 
     it("should be referentially stable", function() {
