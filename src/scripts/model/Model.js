@@ -3,6 +3,14 @@
 var Field = require("./Field"),
     getRequiredFields = require("./getRequiredFields");
 
+/**
+ * @typedef model
+ * @param {string} primary - primary field name
+ * @param {object} fields - field objects
+ * @param {string} tableName
+ */
+
+
 function Model(tn, schema) {
     Object.defineProperty(this, "primary", {
         value: schema.primary,
@@ -25,6 +33,12 @@ function Model(tn, schema) {
 }
 
 Model.prototype = Object.create(Object, {
+    /**
+     * @name model#getRequiredFields
+     * @function
+     * @params {[string=own]} type - all or own required fields
+     * @returns {array}
+     */
     getRequiredFields: {
         value: function(type) {
             type = type === "all" ? "all" : "own";
@@ -33,6 +47,13 @@ Model.prototype = Object.create(Object, {
         },
         enumerable: true
     },
+
+    /**
+     * @name model#listFields
+     * @function
+     * @summary returns an array of the models' fields
+     * @return {field[]}
+     */
     listFields: {
         value: function() {
             return Object.keys(this.fields).map(function(f) {

@@ -2,6 +2,15 @@
 
 var validateDataType = require("../row/validateDataType");
 
+/**
+ * @typedef {object} field
+ * @param {string} name
+ * @param {string} dataType
+ * @param {boolean} allowNull
+ * @param {boolean|string|number|null} [defaultValue]
+ */
+
+
 function Field(n, f) {
     // basics
     this.name = n;
@@ -18,9 +27,23 @@ function Field(n, f) {
 }
 
 Field.prototype = {
+    /**
+     * @name field#isRequired
+     * @function
+     * @summary tests if the field is required when creating a row
+     * @returns {boolean}
+     */
     isRequired: function() {
         return !this.allowNull && !this.hasOwnProperty("defaultValue");
     },
+
+    /**
+     * @name field#validateData
+     * @function
+     * @summary validates the provided value against the fields dataType
+     * @param {*} value
+     * @returns {boolean}
+     */
     validateData: function(value) {
         return validateDataType(this, value);
     }
