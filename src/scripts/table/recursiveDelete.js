@@ -6,10 +6,10 @@ function recursiveDelete(target, model, db) {
     // delete child from its table
     if (model.extendedBy) {
         model.extendedBy.forEach(function(ext) {
-            var t = db[ext.table.tableName].get(target[ext.localField]);
+            var t = db[ext.model.tableName].get(target[ext.localField]);
 
             if (t) {
-                db[ext.table.tableName].delete(t[ext.foreignField] || target[ext.localField]);
+                db[ext.model.tableName].delete(t[ext.foreignField] || target[ext.localField]);
             }
         });
     }

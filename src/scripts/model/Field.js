@@ -1,6 +1,6 @@
 "use strict";
 
-var validateDataType = require("../row/validateDataType");
+var validateDataType = require("./validateDataType");
 
 /**
  * @typedef {object} field
@@ -10,16 +10,20 @@ var validateDataType = require("../row/validateDataType");
  * @param {boolean|string|number|null} [defaultValue]
  */
 
+/**
+ * @param {string} fieldName
+ * @param {object} fieldSchema
+ * @returns {field}
+ * @constructor
+ */
+function Field(fieldName, fieldSchema) {
+    this.name = fieldName;
+    this.dataType = fieldSchema.dataType;
+    this.allowNull = fieldSchema.allowNull || false;
 
-function Field(n, f) {
-    // basics
-    this.name = n;
-    this.dataType = f.dataType;
-    this.allowNull = f.allowNull || false;
-    if (f.defaultValue !== undefined) {
-        this.defaultValue = f.defaultValue;
-    } else if (f.allowNull) {
-        // TODO: should warn user about this case during schema validation
+    if (fieldSchema.defaultValue !== undefined) {
+        this.defaultValue = fieldSchema.defaultValue;
+    } else if (fieldSchema.allowNull === true) {
         this.defaultValue = null;
     }
 
@@ -40,7 +44,7 @@ Field.prototype = {
     /**
      * @name field#validateData
      * @function
-     * @summary validates the provided value against the fields dataType
+     * @summary validates the provided value against the field's dataType
      * @param {*} value
      * @returns {boolean}
      */

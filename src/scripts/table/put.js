@@ -1,5 +1,6 @@
 "use strict";
 
+// registers ALL the hierarchical data
 function mergeRows(row, newO) {
     var o = Object.create(null, {}),
         k;
@@ -13,7 +14,7 @@ function mergeRows(row, newO) {
 
 /**
  * @private
- * assumes that ALL possible fields are ALWAYS present on a row
+ * @summary assumes that ALL possible fields are ALWAYS present on a row
  * scans based on current row, to find applicable keys
  * @param c
  * @param oldO
@@ -54,7 +55,7 @@ module.exports = function put(c, pkValue, d) {
             // can we lookup to parent?
             if (model.extends) {
                 current = Object.getPrototypeOf(current);
-                model = model.extends.table;
+                model = model.extends.model;
             } else {
                 // break loop
                 model = false;

@@ -10,16 +10,20 @@ var Field = require("./Field"),
  * @param {string} tableName
  */
 
-
-function Model(tn, schema) {
+/**
+ * @param {string} tableName
+ * @param {object} tableSchema
+ * @constructor
+ */
+function Model(tableName, tableSchema) {
     Object.defineProperty(this, "primary", {
-        value: schema.primary,
+        value: tableSchema.primary,
         enumerable: true
     });
 
     Object.defineProperty(this, "fields", {
-        value: Object.keys(schema.fields).reduce(function(obj, field) {
-            obj[field] = new Field(field, schema.fields[field]);
+        value: Object.keys(tableSchema.fields).reduce(function(obj, field) {
+            obj[field] = new Field(field, tableSchema.fields[field]);
 
             return obj;
         }, {}),
@@ -27,7 +31,7 @@ function Model(tn, schema) {
     });
 
     Object.defineProperty(this, "tableName", {
-        value: tn,
+        value: tableName,
         enumerable: true
     });
 }
@@ -37,7 +41,7 @@ Model.prototype = Object.create(Object, {
      * @name model#getRequiredFields
      * @function
      * @params {[string=own]} type - all or own required fields
-     * @returns {array}
+     * @returns {Array}
      */
     getRequiredFields: {
         value: function(type) {

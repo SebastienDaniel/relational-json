@@ -68,10 +68,11 @@ describe("relational-json, immutability", function() {
         mem = db.Person.get(1);
 
         // modify parent
-        //db.ExternalEntity.put({entity_id: 1, created_on: "2017-01-01T12:00:00Z"});
+        db.ExternalEntity.put({entity_id: 1, created_on: "2017-01-01T12:00:00Z"});
 
         //console.log(dbMapper(db));
-        console.log(db.ExternalEntity.meta.aliasMap);
+        console.log(db.Person.get()[0]);
+        console.log(db.Person.get(1));
 
         expect(db.Person.get()[0]).to.equal(mem);
         expect(db.Person.get(1)).to.not.equal(mem);

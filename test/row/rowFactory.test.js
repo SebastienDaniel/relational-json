@@ -30,7 +30,7 @@ describe("rowFactory()", function() {
             }
         }),
         data = {id: 1, name: "bob", created_on: "2015-01-01T00:00:00Z"},
-        row = rf(model.Table1, data, {});
+        row = rf(model.Table1, {}, data);
 
     it("should create a row object", function() {
         expect(row).to.exist;

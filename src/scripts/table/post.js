@@ -6,12 +6,11 @@ module.exports = function post(c, d) {
     var missingFields = [],
         row;
 
-    // make sure pk is unique
     if (c.rows.hasKey(d[c.model.primary])) {
         throw Error("provided " + c.model.primary + ": " + d[c.model.primary] + " is already in use in " + c.model.tableName);
     }
 
-    // make sure all fields are respected
+    // make sure own fields are respected
     c.model.listFields().forEach(function(field) {
         var key = field.name;
 
@@ -35,9 +34,9 @@ module.exports = function post(c, d) {
 
     // throw if any fields are missing
     if (missingFields.length > 0) {
-        throw Error("data creation rejected for table " + c.model.tableName + ", mandatory fields not provided:\n" + missingFields.join(", ") + "\nfrom data: " + JSON.stringify(d));
+        throw Error("data creation rejected for table " + c.model.tableName + ", mandatory fields not provided:\n" + missingFields.join(", ") + "\nfrom data:\n" + JSON.stringify(d));
     } else {
-        row = rowFactory(c.model, d, c.env.db);
+        row = rowFactory(c.model, c.env.db, d);
         c.rows.set(d[c.model.primary], row);
     }
 

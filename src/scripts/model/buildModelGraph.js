@@ -4,19 +4,18 @@ var Model = require("./Model"),
     addRelations = require("./addRelations");
 
 /**
- * @alias buildModelGraph
  * @private
  * @summary compiles the Model graph based on provided schema
  * @param {JSON} schema - JSON-like notation for the schema
  * @returns {Object} - Model graph
  */
-module.exports = function buildModelGraph(schema) {
+function buildModelGraph(schema) {
     // first pass, create model instances
-    var dynamicModel = Object.create(null, {});
+    var dynamicModel = Object.keys(schema).reduce(function(obj, key) {
+        obj[key] = new Model(key, schema[key]);
 
-    Object.keys(schema).forEach(function(key) {
-        dynamicModel[key] = new Model(key, schema[key]);
-    });
+        return obj;
+    }, Object.create(null, {}));
 
     // second pass, enhance models with relations
     Object.keys(dynamicModel).forEach(function(key) {
@@ -24,4 +23,6 @@ module.exports = function buildModelGraph(schema) {
     });
 
     return Object.freeze(dynamicModel);
-};
+}
+
+module.exports = buildModelGraph;

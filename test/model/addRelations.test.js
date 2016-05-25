@@ -27,14 +27,14 @@ describe("addRelations()", function() {
         expect(extensionModel["ExternalEntity"].extendedBy.length).to.eql(2);
 
         expect(extensionModel["ExternalEntity"].extends).to.exist;
-        expect(extensionModel["ExternalEntity"].extends.table).to.be.instanceof(Model);
-        expect(extensionModel["ExternalEntity"].extends.table.tableName).to.eql("Entity");
+        expect(extensionModel["ExternalEntity"].extends.model).to.be.instanceof(Model);
+        expect(extensionModel["ExternalEntity"].extends.model.tableName).to.eql("Entity");
 
         expect(extensionModel["ExternalEntity"].aggregates).to.not.exist;
 
         expect(extensionModel["Entity"].extendedBy).to.exist;
         extensionModel["Entity"].extendedBy.forEach(function(ext) {
-            expect(ext.table).to.be.instanceof(Model);
+            expect(ext.model).to.be.instanceof(Model);
         });
     });
 
@@ -44,8 +44,8 @@ describe("addRelations()", function() {
         expect(aggregateModel["Entity"].aggregates).to.be.instanceof(Array);
 
         aggregateModel["Entity"].aggregates.forEach(function(agg) {
-            expect(agg.table).to.be.instanceof(Model);
-            expect(agg.table.tableName).to.exist;
+            expect(agg.model).to.be.instanceof(Model);
+            expect(agg.model.tableName).to.exist;
         });
     });
 });

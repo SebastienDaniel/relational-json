@@ -1,4 +1,4 @@
-var vdt = require("../../src/scripts/row/validateDataType"),
+var vdt = require("../../src/scripts/model/validateDataType"),
     chai = require("chai"),
     expect = require("chai").expect,
     graph = require("../data/types-graph.json");
@@ -17,10 +17,10 @@ describe("validateDataType", function() {
     });
 
     it("should validate date", function() {
-        expect(vdt(graph.Person.fields.birthdate, "2015")).to.be.false;
-        expect(vdt(graph.Person.fields.birthdate, "2015-01")).to.be.false;
-        expect(vdt(graph.Person.fields.birthdate, "2015-01-00")).to.be.false;
-        expect(vdt(graph.Person.fields.birthdate, "0000-00-00")).to.be.false;
+        expect(vdt(graph.Person.fields.birthdate, "2015")).to.be.true;
+        expect(vdt(graph.Person.fields.birthdate, "2015-01")).to.be.true;
+        expect(vdt(graph.Person.fields.birthdate, "2015-13")).to.be.false;
+        expect(vdt(graph.Person.fields.birthdate, "0000-00-32")).to.be.false;
         expect(vdt(graph.Person.fields.birthdate, "2015-01-01")).to.be.true;
     });
 
@@ -34,12 +34,15 @@ describe("validateDataType", function() {
     });
 
     it("should validate datetime", function() {
-        expect(vdt(graph.Person.fields.hired, "2015-01-01T12:00:00")).to.be.false;
-        expect(vdt(graph.Person.fields.hired, "2015-01-01 12:00:00")).to.be.false;
+        expect(vdt(graph.Person.fields.hired, "2015-01-01T12:00:00")).to.be.true;
+        expect(vdt(graph.Person.fields.hired, "2015-01-01T12:00:60")).to.be.false;
+        expect(vdt(graph.Person.fields.hired, "2015-01-01T12:61:00")).to.be.false;
+        expect(vdt(graph.Person.fields.hired, "2015-01-01T25:00:00")).to.be.false;
+        expect(vdt(graph.Person.fields.hired, "2015-01-01 12:00:00")).to.be.true;
         expect(vdt(graph.Person.fields.hired, "2015-12-20")).to.be.true;
-        expect(vdt(graph.Person.fields.hired, "2015-01 12:00:00")).to.be.false;
-        expect(vdt(graph.Person.fields.hired, "2015-01-01 12:00")).to.be.false;
-        expect(vdt(graph.Person.fields.hired, "2015 12:00")).to.be.false;
+        expect(vdt(graph.Person.fields.hired, "2015-01 12:00:00")).to.be.true;
+        expect(vdt(graph.Person.fields.hired, "2015-01-01 12:00")).to.be.true;
+        expect(vdt(graph.Person.fields.hired, "2015 12:00")).to.be.true;
         expect(vdt(graph.Person.fields.hired, "2015")).to.be.true;
 
         expect(vdt(graph.Person.fields.hired, "2015-01-01T12:00:00Z")).to.be.true;
