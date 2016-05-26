@@ -1,11 +1,11 @@
 var getChild = require("./getChild");
 
-function getFurthestChild(db, model, row) {
+function getFurthestChild(model, db, row) {
     "use strict";
-    var child = getChild(db, model, row);
+    var child = getChild(model, db, row);
 
     if (child) {
-        return getFurthestChild(db, child.model, child.row);
+        return getFurthestChild(child.model, db, child.row);
     } else {
         return {
             model: model,

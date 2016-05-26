@@ -1,4 +1,4 @@
-function getChild(db, model, row) {
+function getChild(model, db, row) {
     "use strict";
     var res = {
         row: undefined,
