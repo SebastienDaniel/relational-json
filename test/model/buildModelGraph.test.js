@@ -1,8 +1,8 @@
 var expect = require("chai").expect,
     schema = require("../data/mixed-graph.json"),
-    Model = require("../../src/scripts/model/Model"),
-    addExtendedByData = require("../../src/scripts/addExtendedByData"),
-    buildModelGraph = require("../../src/scripts/model/buildModelGraph");
+    Model = require("../../src/scripts/buildModel/Model"),
+    addExtendedByData = require("../../src/scripts/buildModel/addExtendedByToSchema"),
+    buildModelGraph = require("../../src/scripts/buildModel");
 
 describe("buildModelGraph()", function() {
     var m = buildModelGraph(addExtendedByData(schema));

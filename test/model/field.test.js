@@ -1,5 +1,5 @@
 var expect = require("chai").expect,
-    Field = require("../../src/scripts/model/Field"),
+    Field = require("../../src/scripts/buildModel/Model/Field"),
     schema = require("../data/mixed-graph");
 
 describe("Field", function() {

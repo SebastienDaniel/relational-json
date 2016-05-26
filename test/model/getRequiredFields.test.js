@@ -1,9 +1,9 @@
-var grf = require("../../src/scripts/model/getRequiredFields"),
+var grf = require("../../src/scripts/buildModel/Model/getRequiredFields"),
     chai = require("chai"),
     expect = require("chai").expect,
-    compileModel = require("../../src/scripts/model/buildModelGraph"),
+    compileModel = require("../../src/scripts/buildModel"),
     graph = require("../data/mixed-graph.json"),
-    addExtendedByData = require("../../src/scripts/addExtendedByData"),
+    addExtendedByData = require("../../src/scripts/buildModel/addExtendedByToSchema"),
     model = compileModel(addExtendedByData(graph));
 
 describe("getRequiredFields()", function() {

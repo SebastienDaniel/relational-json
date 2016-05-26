@@ -2,10 +2,10 @@ var expect = require("chai").expect,
     aggregateSchema = require("../data/aggregation-graph.json"),
     flatSchema = require("../data/no-relation-graph.json"),
     extensionSchema = require("../data/extension-graph.json"),
-    addRelations = require("../../src/scripts/model/addRelations"),
-    Model = require("../../src/scripts/model/Model"),
-    addExtendedByData = require("../../src/scripts/addExtendedByData"),
-    buildModelGraph = require("../../src/scripts/model/buildModelGraph");
+    addRelations = require("../../src/scripts/buildModel/addRelationsToModel"),
+    Model = require("../../src/scripts/buildModel/Model"),
+    addExtendedByData = require("../../src/scripts/buildModel/addExtendedByToSchema"),
+    buildModelGraph = require("../../src/scripts/buildModel");
 
 describe("addRelations()", function() {
     var flatModel = buildModelGraph(addExtendedByData(flatSchema)),
