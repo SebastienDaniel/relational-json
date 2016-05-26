@@ -1,7 +1,7 @@
 var chai = require("chai"),
     expect = chai.expect,
     mixedSchema = require("../data/mixed-graph.json"),
-    compileModel = require("../../src/scripts/model/buildModelGraph"),
+    compileModel = require("../../src/scripts/buildModel"),
     rf = require("../../src/scripts/row/rowFactory"),
     fullApp = require("../../src/scripts/index.js");
 

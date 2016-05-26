@@ -1,4 +1,4 @@
-var vdt = require("../../src/scripts/model/validateDataType"),
+var vdt = require("../../src/scripts/buildModel/Model/validateDataType"),
     chai = require("chai"),
     expect = require("chai").expect,
     graph = require("../data/types-graph.json");
