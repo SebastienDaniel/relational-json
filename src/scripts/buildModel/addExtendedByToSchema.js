@@ -6,7 +6,7 @@
  * which is needed by the Model parser
  * @param {object} schema
  */
-module.exports = function addExtendedByData(schema) {
+module.exports = function addExtendedByToSchema(schema) {
     var keys = Object.keys(schema);
 
     keys.forEach(function(key) {
