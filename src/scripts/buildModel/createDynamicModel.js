@@ -1,8 +1,9 @@
-var addRelationsToModel = require("./addRelations"),
+var addRelationsToModel = require("./addRelationsToModel"),
     Model = require("./Model");
 
 function createDynamicModel(schema) {
-    // create the dynamicModel
+    "use strict";
+
     var dynamicModel = Object.keys(schema).reduce(function(dm, key) {
         dm[key] = new Model(key, schema[key]);
 
