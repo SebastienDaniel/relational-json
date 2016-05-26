@@ -90,7 +90,7 @@ function rowFactory(model, db, data) {
             if (agg.cardinality === "many") {
                 Object.defineProperty(row, agg.alias || agg.model.tableName, {
                     get: function() {
-                        return db[agg.model.tableName].getAllData().filter(function(d) {
+                        return db[agg.model.tableName].get().filter(function(d) {
                             return d[agg.foreignField] === this[agg.localField];
                         }, this);
                     },

@@ -1,40 +1,53 @@
 "use strict";
 
-var rowFactory = require("../row/rowFactory");
+var rowFactory = require("./rowFactory");
 
-module.exports = function post(c, d) {
+function throwFieldError(tableName, missing, invalid) {
+    throw new Error("Unable to create row in " + tableName + ", the following errors were found:\n" + missing.reduce(function(str, field) {
+            str += "\nmissing field: " + field.name;
+
+            return str;
+        }, "") + invalid.reduce(function(str, field) {
+            str += "\ninvalid data: " + field.name + " expected: " + field.dataType;
+
+            return str;
+        }, "")
+    );
+}
+
+function reportMissingMandatoryFields(model, d) {
     var missingFields = [],
-        row;
-    
-    // make sure own fields are respected
-    c.model.listFields().forEach(function(field) {
-        var key = field.name;
+        invalidFields = [];
 
-        // make sure all required fields are provided
-        if (field.isRequired() && d[key] === undefined) {
-            missingFields.push(key);
+    model.listFields().forEach(function(field) {
+        if (field.isRequired() && d[field.name] === undefined) {
+            missingFields.push(field);
         }
 
-        // make sure all fields respect their datatype
-        if (d[key]) {
-            // pipe through preprocessor, if available
-            if (c.env.preprocessor) {
-                d[key] = c.env.preprocessor(c.model.tableName, field, d[key]);
-            }
-
-            if (!field.validateData(d[key])) {
-                throw Error("Provided data " + d[key] + "\nis not compatible with " + c.model.tableName + "." + key + "\nexpected datatype: " + field.dataType);
+        if (d[field.name] !== undefined) {
+            if (!field.validateData(d[field.name])) {
+                invalidFields.push(field);
             }
         }
     });
 
-    // throw if any fields are missing
-    if (missingFields.length > 0) {
-        throw Error("data creation rejected for table " + c.model.tableName + ", mandatory fields not provided:\n" + missingFields.join(", ") + "\nfrom data:\n" + JSON.stringify(d));
-    } else {
-        row = rowFactory(c.model, c.env.db, d);
-        c.rows.set(d[c.model.primary], row);
+    if (missingFields.length > 0 || invalidFields.length > 0) {
+        throwFieldError(model.tableName, missingFields, invalidFields);
     }
+}
 
-    return row;
+/**
+ * POST only validates that everything is in order.
+ * The row creation is actually done by the rowFactory
+ * @param model
+ * @param db
+ * @param d
+ * @returns {Row|*}
+ */
+module.exports = function post(model, db, d) {
+    reportMissingMandatoryFields(model, d);
+
+    //db[model.tableName].set(d[model.primary], row);
+
+    return rowFactory(model, db, d);
 };

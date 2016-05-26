@@ -1,6 +1,7 @@
 "use strict";
 
-var buildAliasMap = require("./buildAliasMap"),
+var buildAliasMap = require("../buildModel/Model/buildAliasMap"),
+    dictionaryFactory = require("./dictionaryFactory"),
     get = require("./get"),
     put = require("./put"),
     post = require("./post"),
@@ -14,14 +15,7 @@ var buildAliasMap = require("./buildAliasMap"),
  */
 
 module.exports = function tableFactory(model, db) {
-    /*
-    var context = Object.freeze({
-            env: env, // settings of the relational-json instance
-            model: model, // table's model instance
-            rows: dictionary() // table's private data dictionary
-        });
-    */
-    var tableData = db[model.tableName];
+    var tableData = dictionaryFactory();
 
     return Object.freeze({
         /**
@@ -47,10 +41,15 @@ module.exports = function tableFactory(model, db) {
          * @returns {object} row instance created
          */
         post: function(d) {
-            if (tabeData.hasKey(d[model.primary])) {
+            var row;
+
+            if (tableData.hasKey(d[model.primary])) {
                 throw Error("provided " + model.primary + ": " + d[model.primary] + " is already in use in " + model.tableName);
             } else {
-                return post(context, d);
+                row = post(model, db, d);
+                tableData.set(row[model.primary], row);
+
+                return row
             }
         },
 
@@ -64,7 +63,16 @@ module.exports = function tableFactory(model, db) {
          * @returns {object} newly created row
          */
         put: function(d, pkValue) {
-            return put(context, pkValue, d);
+            if (tableData.hasKey(pkValue || d[model.primary])) {
+                return put(
+                    model,
+                    db,
+                    tableData.get(pkValue || d[model.primary]),
+                    d
+                );
+            } else {
+                throw Error("Cannot update a non-existent Object, id: " + pkValue + " for table " + model.tableName);
+            }
         },
 
         /**
@@ -76,8 +84,11 @@ module.exports = function tableFactory(model, db) {
          * @returns {object} deleted row
          */
         delete: function(id) {
-            if (tableData.hasKey(id)) {
-                return remove(model, db, tableData.get(id));
+            var target = tableData.get(id);
+
+            if (target) {
+                tableData.remove(id);
+                return remove(model, db, target);
             } else {
                 throw Error("Cannot delete non existent object id: " + id + " in " + model.tableName);
             }

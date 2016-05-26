@@ -1,21 +1,21 @@
 "use strict";
 
 var mergePutDataWithRowData = require("./mergePutDataWithRowData"),
-    getFurthestAncestor = require("./getFurthestAncestor"),
-    getFurthestChild = require("./getFurthestChild"),
-    getChild = require("./getChild"),
-    dataDiffers = require("./dataDiffers");
+    getFurthestAncestor = require("../utils/getFurthestAncestor"),
+    getFurthestChild = require("../utils/getFurthestChild"),
+    getChild = require("../utils/getChild"),
+    dataDiffers = require("../utils/dataDiffers");
 
-function getChangeRoot(c, model, row, d) {
+function getChangeRoot(model, db, row, d) {
     var next;
 
-    if (dataDiffers(c, row, d)) {
+    if (dataDiffers(row, d)) {
         return {
             model: model,
             row: row
         };
     } else {
-        next = getChild(c.env.db, model, row);
+        next = getChild(db, model, row);
 
         if (next) {
             return getChangeRoot(next.model, next.row, d);
@@ -23,35 +23,28 @@ function getChangeRoot(c, model, row, d) {
     }
 }
 
-module.exports = function put(c, pkValue, d) {
-    var current = c.rows.get(pkValue || d[c.model.primary]),
-        changeRoot,
+module.exports = function put(model, db, row, d) {
+    var changeRoot,
         furthestChild;
 
-    if (!current) {
-        throw Error("Cannot update a non-existent Object, id: " + pkValue);
-    } else {
-        d = mergePutDataWithRowData(current, d);
-        changeRoot = getChangeRoot(
-            c,
-            c.model,
-            getFurthestAncestor(c.model, current).row,
-            d
-        );
-    }
+    d = mergePutDataWithRowData(row, d);
+    changeRoot = getChangeRoot(
+        db,
+        model,
+        getFurthestAncestor(model, row).row,
+        d
+    );
 
     // if differences have been detected
     if (changeRoot) {
-        console.log("changeRoot");
-        console.log(changeRoot.row);
-        furthestChild = getFurthestChild(c.env.db, changeRoot.model, changeRoot.row);
+        furthestChild = getFurthestChild(changeRoot.model, db, changeRoot.row);
 
         // recursively delete from the first change point
-        c.env.db[changeRoot.model.tableName].delete(changeRoot.row[changeRoot.model.primary]);
+        db[changeRoot.model.tableName].delete(changeRoot.row[changeRoot.model.primary]);
 
         // dispatch post to furthest child in inheritance chain
-        return c.env.db[furthestChild.model.tableName].post(d);
+        return db[furthestChild.model.tableName].post(d);
     } else {
-        return c.rows.get(pkValue || d[c.model.primary]);
+        return row;
     }
 };

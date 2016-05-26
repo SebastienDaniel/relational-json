@@ -13,7 +13,7 @@ function recursiveDelete(model, db, target) {
     var next = getFurthestChild(model, db, target);
 
     // delete rows from child upwards until target has been deleted
-    while (db[model.tableName].hasKey(target[model.primary])) {
+    while (next.model !== model) {
         next = getParent(
             next.model,
             db[next.model.tableName].delete(next.row[next.model.primary])

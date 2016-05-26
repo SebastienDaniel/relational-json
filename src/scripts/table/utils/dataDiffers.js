@@ -7,15 +7,11 @@
  * @param newO
  * @returns {boolean}
  */
-function dataDiffers(c, oldO, newO) {
+function dataDiffers(oldO, newO) {
     "use strict";
     return Object.keys(oldO).some(function(key) {
         if (oldO[key] !== undefined && typeof oldO[key] !== "object") {
-            if (c.preprocessor) {
-                return oldO[key] !== c.preprocessor(c.model.tableName, c.model.fields[key], newO[key]);
-            } else {
-                return oldO[key] !== newO[key];
-            }
+            return oldO[key] !== newO[key];
         }
     });
 }
