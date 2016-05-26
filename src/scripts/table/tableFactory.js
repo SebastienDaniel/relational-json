@@ -1,7 +1,6 @@
 "use strict";
 
-var buildAliasMap = require("../model/buildAliasMap"),
-    dictionary = require("./dictionaryFactory"),
+var buildAliasMap = require("./buildAliasMap"),
     get = require("./get"),
     put = require("./put"),
     post = require("./post"),
@@ -14,12 +13,15 @@ var buildAliasMap = require("../model/buildAliasMap"),
  * Tables are essentially the interface through which you manipulate data.
  */
 
-module.exports = function tableFactory(model, env) {
+module.exports = function tableFactory(model, db) {
+    /*
     var context = Object.freeze({
             env: env, // settings of the relational-json instance
             model: model, // table's model instance
             rows: dictionary() // table's private data dictionary
         });
+    */
+    var tableData = db[model.tableName];
 
     return Object.freeze({
         /**
@@ -33,7 +35,7 @@ module.exports = function tableFactory(model, env) {
          * if many arguments are provided, it returns an array containing those row objects
          */
         get: function() {
-            return get(arguments, context.rows);
+            return get(arguments, tableData);
         },
 
         /**
@@ -45,7 +47,11 @@ module.exports = function tableFactory(model, env) {
          * @returns {object} row instance created
          */
         post: function(d) {
-            return post(context, d);
+            if (tabeData.hasKey(d[model.primary])) {
+                throw Error("provided " + model.primary + ": " + d[model.primary] + " is already in use in " + model.tableName);
+            } else {
+                return post(context, d);
+            }
         },
 
         /**
@@ -70,26 +76,11 @@ module.exports = function tableFactory(model, env) {
          * @returns {object} deleted row
          */
         delete: function(id) {
-            return remove(context, id);
-        },
-
-        /**
-         * @function
-         * @name Table#export
-         *
-         * @summary exports the Table's rows' own data
-         * @returns {object[]}
-         */
-        export: function() {
-            return context.rows._data.map(function(row) {
-                return Object.keys(row).reduce(function(o, key) {
-                    if (typeof row[key] !== "object") {
-                        o[key] = row[key];
-                    }
-
-                    return o;
-                }, {});
-            });
+            if (tableData.hasKey(id)) {
+                return remove(model, db, tableData.get(id));
+            } else {
+                throw Error("Cannot delete non existent object id: " + id + " in " + model.tableName);
+            }
         },
 
         /**

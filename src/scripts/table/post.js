@@ -5,11 +5,7 @@ var rowFactory = require("../row/rowFactory");
 module.exports = function post(c, d) {
     var missingFields = [],
         row;
-
-    if (c.rows.hasKey(d[c.model.primary])) {
-        throw Error("provided " + c.model.primary + ": " + d[c.model.primary] + " is already in use in " + c.model.tableName);
-    }
-
+    
     // make sure own fields are respected
     c.model.listFields().forEach(function(field) {
         var key = field.name;
