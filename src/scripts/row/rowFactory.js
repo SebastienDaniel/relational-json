@@ -18,7 +18,7 @@ function setRowPrototype(model, db, data) {
     var parent;
 
     if (model.extends) {
-        if (db[model.extends.model.tableName].get(data[model.primary])) {
+        if (db[model.extends.model.tableName].get(data[model.extends.localField])) {
             // use updated parent (if necessary), otherwise current parent
             parent = db[model.extends.model.tableName].put(data, data[model.extends.localField]);
         } else {
