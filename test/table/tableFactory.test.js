@@ -1,16 +1,16 @@
 var chai = require("chai"),
     expect = chai.expect,
     graph = require("../data/no-relation-graph.json"),
-    compileModel = require("../../src/scripts/model/buildModelGraph"),
-    addExtendedByData = require("../../src/scripts/addExtendedByData"),
+    compileModel = require("../../src/scripts/buildModel"),
+    addExtendedByData = require("../../src/scripts/buildModel/addExtendedByToSchema"),
     tf = require("../../src/scripts/table/tableFactory"),
+    buildDatabase = require("../../src/scripts/buildDatabase"),
     model = compileModel(addExtendedByData(graph));
 
 describe("tableFactory()", function() {
-    var db = {},
-        t1 = db["Person"] = tf(model["Person"], {
-            db: db
-        });
+    var db = buildDatabase(model),
+        t1 = db["Person"] = tf(model["Person"], db);
+
     it("should create a Table", function() {
         expect(t1).to.exist;
         expect(t1).have.ownProperty("get");
@@ -34,10 +34,8 @@ describe("tableFactory()", function() {
 });
 
 describe("table.post()", function() {
-    var db = {},
-        t1 = db["Person"] = tf(model["Person"], {
-            db: db
-        });
+    var db = buildDatabase(model),
+        t1 = db["Person"] = tf(model["Person"], db);
 
     it("should allow data creation (post)", function() {
         var bob = t1.post({entity_id: 1, first_name: "bob", last_name: "builder", gender: "m", created_on: "2015-01-01T00:00:00Z"});
@@ -62,10 +60,8 @@ describe("table.post()", function() {
 });
 
 describe("table.get()", function() {
-    var db = {},
-        t1 = db["Person"] = tf(model["Person"], {
-            db: db
-        });
+    var db = buildDatabase(model),
+        t1 = db["Person"] = tf(model["Person"], db);
 
     var bob = t1.post({entity_id: 1, first_name: "bob", last_name: "builder", gender: "m", created_on: "2015-01-01T00:00:00Z"});
 
@@ -110,10 +106,8 @@ describe("table.get()", function() {
 });
 
 describe("table.put()", function() {
-    var db = {},
-        t1 = db["Person"] = tf(model["Person"], {
-            db: db
-        });
+    var db = buildDatabase(model),
+        t1 = db["Person"] = tf(model["Person"], db);
 
     var bob = t1.post({entity_id: 1, first_name: "bob", last_name: "builder", gender: "m", created_on: "2015-01-01T00:00:00Z"});
 
@@ -138,10 +132,8 @@ describe("table.put()", function() {
 
 describe("table.delete()", function() {
     it("should remove an entry and return it", function() {
-        var db = {},
-            t1 = db["Person"] = tf(model["Person"], {
-                db: db
-            });
+        var db = buildDatabase(model),
+            t1 = db["Person"] = tf(model["Person"], db);
 
         var bob = t1.post({entity_id: 1, first_name: "bob", last_name: "builder", gender: "m", created_on: "2015-01-01T00:00:00Z"});
         var bob2 = t1.post({entity_id: 2, first_name: "bob2", last_name: "builder", gender: "m", created_on: "2015-01-01T00:00:00Z"});
@@ -157,10 +149,8 @@ describe("table.delete()", function() {
     });
 
     it("should break referential equality", function() {
-        var db = {},
-            t1 = db["Person"] = tf(model["Person"], {
-                db: db
-            }),
+        var db = buildDatabase(model),
+            t1 = db["Person"] = tf(model["Person"], db),
             bob = t1.post({entity_id: 1, first_name: "bob", last_name: "builder", gender: "m", created_on: "2015-01-01T00:00:00Z"}),
             bob2 = t1.post({entity_id: 2, first_name: "bob2", last_name: "builder", gender: "m", created_on: "2015-01-01T00:00:00Z"}),
             d = t1.get();

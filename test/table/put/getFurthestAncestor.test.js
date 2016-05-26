@@ -1,7 +1,7 @@
 var expect = require("chai").expect,
-    model = require("../../../src/scripts/model/buildModelGraph"),
+    model = require("../../../src/scripts/buildModel"),
     schema = require("../../data/extension-graph.json"),
-    gfa = require("../../../src/scripts/table/put/getFurthestAncestor");
+    gfa = require("../../../src/scripts/table/utils/getFurthestAncestor");
 
 describe("table.put.getFurthestAncestor", function() {
     it("should return object with 'model' & 'row' properties", function() {

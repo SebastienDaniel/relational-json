@@ -1,8 +1,8 @@
 var expect = require("chai").expect,
-    model = require("../../../src/scripts/model/buildModelGraph"),
+    model = require("../../../src/scripts/buildModel"),
     schema = require("../../data/extension-graph.json"),
     rJSON = require("../../../src/scripts/index.js"),
-    getChild = require("../../../src/scripts/table/put/getChild");
+    getChild = require("../../../src/scripts/table/utils/getChild");
 
 describe("table.put.getChild", function() {
     it("should progressively return the child of a prototype row", function() {
