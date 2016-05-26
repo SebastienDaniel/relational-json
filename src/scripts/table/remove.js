@@ -1,19 +1,26 @@
 "use strict";
 
-var recursiveDelete = require("./recursiveDelete");
+var getFurthestChild = require("./utils/getFurthestChild"),
+    getParent = require("./utils/getParent");
 
-module.exports = function remove(c, id) {
-    var val = c.rows.get(id);
+/**
+ * deletes from furthestChild, all the way up to self
+ * @param model
+ * @param db
+ * @param target
+ */
+function recursiveDelete(model, db, target) {
+    var next = getFurthestChild(model, db, target);
 
-    if (val) {
-        // jumps from table to table, eliminating youngest child and up
-        recursiveDelete(c.rows.get(id), c.model, c.env.db);
-
-        // eliminate self
-        c.rows.remove(id);
-
-        return val;
-    } else {
-        throw Error("Cannot delete non existent object id: " + id + "\nin " + c.model.tableName);
+    // delete rows from child upwards until target has been deleted
+    while (db[model.tableName].hasKey(target[model.primary])) {
+        next = getParent(
+            next.model,
+            db[next.model.tableName].delete(next.row[next.model.primary])
+        );
     }
-};
+
+    return target;
+}
+
+module.exports = recursiveDelete;
