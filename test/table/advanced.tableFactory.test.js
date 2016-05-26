@@ -31,6 +31,7 @@ describe("advanced table", function() {
             expect(db["ExternalEntity"].get(1)).to.exist;
             expect(db["ExternalEntity"].get(1).created_on).to.eql(db["Person"].get(1).created_on);
         });
+
         it("should not create children when creating a middle-man ancestor", function() {
             var ext = db["ExternalEntity"].post({
                 entity_id: 11,
@@ -43,6 +44,7 @@ describe("advanced table", function() {
             expect(db["Person"].get(11)).to.not.exist;
             expect(db["Organization"].get(11)).to.not.exist;
         });
+
         it("should allow progressive creation of children", function() {
             var alice = db["Person"].post({
                     entity_id: 11,
