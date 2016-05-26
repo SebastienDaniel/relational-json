@@ -1,20 +1,17 @@
 "use strict";
 
-var buildDatabase = require("./buildDatabase"),
-    compileEnvironment = require("./compileEnvironment"),
-    //validateSchema = require("./validateSchema"),
-    addExtendedByData = require("./addExtendedByData"),
-    buildModelGraph = require("./model/buildModelGraph");
+var buildModel = require("./buildModel"),
+    tableFactory = require("./table/tableFactory");
 
-module.exports = function(schema, options) {
-    schema = addExtendedByData(schema);
+module.exports = function(schema) {
+    var model = buildModel(schema);
 
-    return buildDatabase(
-        buildModelGraph(
-            //validateSchema(schema)
-            schema
-        ),
-        compileEnvironment(options)
+    return Object.freeze(
+        Object.keys(model).reduce(function(tables, key) {
+            tables[key] = tableFactory(model[key], tables);
+
+            return tables;
+        }, Object.create(null))
     );
 };
 
