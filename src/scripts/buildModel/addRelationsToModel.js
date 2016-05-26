@@ -25,8 +25,6 @@
  * @returns {object} Model object, enhanced with relations
  */
 function addRelationsToModel(schema, dynamicModel) {
-    schema = schema[model.tableName];
-
     Object.keys(schema).forEach(function(key) {
         var staticModel = schema[key],
             model = dynamicModel[key];
@@ -40,9 +38,9 @@ function addRelationsToModel(schema, dynamicModel) {
              */
             Object.defineProperty(model, "extends", {
                 value: {
-                    model: dynamicModel[schema.extends.table],
-                    localField: schema.extends.localField,
-                    foreignField: schema.extends.foreignField
+                    model: dynamicModel[staticModel.extends.table],
+                    localField: staticModel.extends.localField,
+                    foreignField: staticModel.extends.foreignField
                 },
                 enumerable: true
             });
@@ -56,8 +54,8 @@ function addRelationsToModel(schema, dynamicModel) {
              * @summary adds dynamic link to the models' child models
              */
             Object.defineProperty(model, "extendedBy", {
-                value: Object.keys(schema.extendedBy).map(function(key) {
-                    var ext = schema.extendedBy[key];
+                value: Object.keys(staticModel.extendedBy).map(function(key) {
+                    var ext = staticModel.extendedBy[key];
 
                     return {
                         model: dynamicModel[key],
@@ -77,7 +75,7 @@ function addRelationsToModel(schema, dynamicModel) {
              * @summary adds dynamic link to the models' aggregate models
              */
             Object.defineProperty(model, "aggregates", {
-                value: schema.aggregates.map(function(agg) {
+                value: staticModel.aggregates.map(function(agg) {
                     return {
                         model: dynamicModel[agg.table],
                         alias: agg.alias,
@@ -90,7 +88,7 @@ function addRelationsToModel(schema, dynamicModel) {
             });
         }
     });
-    
+
     return dynamicModel;
 }
 
