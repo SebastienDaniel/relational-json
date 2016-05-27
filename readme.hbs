@@ -20,9 +20,10 @@ and you create a db based on a schema you provide:
 Relational-json wraps your primitive data (*strings, numbers, booleans*) in an immutable & relational structure. The format is just like JSON, except your data can reference other parts of your data tree. This is done dynamically, thanks to ES5 object getters & setters.
 Each object created inside relational-json is "pure", in the sense that it has no native prototype. This allows us to leverage JavaScripts prototypical inheritance in very elegant ways.
 
+relational-json is JSON with conscience.
+
 ### Why use it
-When building web applications, odds are your data will be in JSON format, even if not, it will still most likely be stored in javascript objects & arrays. This can quickly become problematic
-when parts of your data are related to other parts of your data. When you update a value, you have to make sure the change propagates everywhere. Relational-json makes all of that simpler:
+When building web applications you'll be dealing with a wide variety of data and multiple data sources. Managing application state updates can quickly become problematic, especially when certain data branches rely on other branches. When you update a value, you have to make sure the change propagates everywhere. Relational-json makes all of that simpler:
 
 1. It eliminates data duplication
 2. It simplifies data updates (*you only ever need to modify data in 1 place, since there are no duplicates*)
@@ -40,7 +41,7 @@ Also, relational-json is IE9+ compatible, but **cannot be shimmed or polyfilled*
 ------------------------------
 
 ## The schema
-Relational-json expects a javascript-object schema representing the data tree you wish to use. Below is a break down of the schema notation:
+Relational-json expects a javascript-object schema representing the data tree you wish to use. Below is a full break down of the schema notation:
 
 ```js
 {
@@ -83,8 +84,8 @@ tableName: {
 
 ### Schema relations
 #### extends
-Extends is an **inheritance** pattern. It signifies that the table is the *child* of another table. Concretely, every row object created in this table will use a row object from the parent table as **prototype**.
-The `extends` relationship is also reflected in the parent tables' rows, which will contain a property to the child row. This will allow you to traverse your data trees in both directions (*up and down*).
+Extends is an **inheritance** pattern. It signifies that a table's rows are the *child* of another table's rows. Concretely, every row object created in this table will use a row object from a parent table as **prototype**.
+The `extends` relationship is also reflected in the parent tables' rows, which will contain a property to the child row. This will allow you to traverse your data trees in both directions (*up ancestors and down descendants*).
 
 **extends example**
 ```js
@@ -143,7 +144,7 @@ db.Vehicle.get(1);
 ```
 
 #### aggregates
-This a composite relation between tables, not inheritance-based. Concretely, if table A "aggregates" table B, rows from table A will have a property pointing to one row (*object*) or many rows (*array*) from table B, based on the relations cardinality.
+This is a composite relation between tables, not inheritance-based. Concretely, if table A "aggregates" table B, rows from table A will have a property pointing to one row (*object*) or many rows (*array*) from table B, based on the relations cardinality.
 Unlike `extends`, aggregate does not affect the prototype chain.
 
 **aggregates example (single)**
