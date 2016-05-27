@@ -18,7 +18,7 @@ and you create a db based on a schema you provide:
 Relational-json wraps your primitive data (*strings, numbers, booleans*) in an immutable & relational structure. The format is just like JSON, except your data can reference other parts of your data tree. This is done dynamically, thanks to ES5 object getters & setters.
 Each object created inside relational-json is "pure", in the sense that it has no native prototype. This allows us to leverage JavaScripts prototypical inheritance in very elegant ways.
 
-*IMPORTANT: that means relational-json is IE9+ compatible, but **cannot be shimmed or polyfilled** for older browsers.*
+_IMPORTANT: that means relational-json is IE9+ compatible, but **cannot be shimmed or polyfilled** for older browsers._
 
 ### Why use it
 When building web applications, odds are your data will be in JSON format, even if not, it will still most likely be stored in javascript objects & arrays. This can quickly become problematic
@@ -34,6 +34,8 @@ when parts of your data are related to other parts of your data. When you update
 Because of it's referential nature, `JSON.stringify()` does not work as expected. This is due to *infinite nesting*, which makes you
 jump from prototype to child and back again, infinitely, if you don't control the data traversal.
 (*we provide a simple utility, which entirely mitigates the issue*)
+
+Also, relational-json is IE9+ compatible, but **cannot be shimmed or polyfilled** for older browsers.
 
 ------------------------------
 
@@ -69,6 +71,16 @@ Relational-json expects a javascript-object schema representing the data tree yo
 }
 ```
 
+Table fields can also be written in shorthand. This creates a field that has *no defaultValue* and *cannot be null*:
+```
+tableName: {
+    fields: {
+        id: "integer",
+        name: "string"
+    }
+}
+```
+
 ### Schema relations
 #### extends
 Extends is an **inheritance** pattern. It signifies that the table is the *child* of another table. Concretely, every row object created in this table will use a row object from the parent table as **prototype**.
@@ -80,18 +92,18 @@ var schema = {
     Vehicle: {
         primary: "id",
         fields: {
-            id: {allowNull: false, dataType: "integer"},
-            year: {allowNull: false, dataType: "integer"},
-            maker: {allowNull: true, dataType: "string"}
+            id: "integer",
+            year: "integer",
+            maker: { allowNull: true, dataType: "string" }
         }
     },
     Car: {
         primary: "id",
         fields: {
-            id: {allowNull: false, dataType: "integer"},
-            model: {allowNull: false, dataType: "string"}
+            id: "integer",
+            model: "string"
         },
-        extends: {table: "Vehicle", localField: "id", foreignField: "id"}
+        extends: { table: "Vehicle", localField: "id", foreignField: "id" }
     }
 };
 
@@ -140,20 +152,20 @@ var schema = {
     Vehicle: {
         primary: "id",
         fields: {
-            id: {allowNull: false, dataType: "integer"},
-            year: {allowNull: false, dataType: "integer"},
-            maker: {allowNull: true, dataType: "string"}
+            id: "integer",
+            year: "integer",
+            maker: { allowNull: true, dataType: "string" }
         }
     },
     Client: {
         primary: "id",
         fields: {
-            id: {allowNull: false, dataType: "integer"},
-            name: {allowNull: false, dataType: "string"},
-            vehicle_id: {allowNull: true, dataType: "integer"}
+            id: "integer",
+            name: "string",
+            vehicle_id: { allowNull: true, dataType: "integer" }
         },
         aggregates: [
-            {table: "Vehicle", alias: "Vehicle", localField: "vehicle_id", foreignField: "id", cardinality: "single"}
+            { table: "Vehicle", alias: "Vehicle", localField: "vehicle_id", foreignField: "id", cardinality: "single" }
         ]
     }
 };
