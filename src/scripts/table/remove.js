@@ -4,7 +4,8 @@ var getFurthestChild = require("./utils/getFurthestChild"),
     getParent = require("./utils/getParent");
 
 /**
- * deletes from furthestChild, all the way up to self
+ * @private
+ * @summary deletes from furthestChild, all the way up to self
  * @param model
  * @param db
  * @param target

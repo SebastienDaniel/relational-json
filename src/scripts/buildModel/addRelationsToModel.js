@@ -1,6 +1,7 @@
 "use strict";
 
 /**
+ * @private
  * @typedef {object} extensionRelation
  * @property {Table} table
  * @property {string} localField
@@ -8,6 +9,7 @@
  */
 
 /**
+ * @private
  * @typedef {object} aggregationRelation
  * @property {Table} table
  * @property {string} alias

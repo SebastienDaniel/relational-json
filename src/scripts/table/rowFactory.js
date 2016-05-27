@@ -1,6 +1,7 @@
 "use strict";
 
 /**
+ * @private
  * @typedef {object} Row
  * @summary Immutable javascript object stored within a Table
  * @property prototype - another Table row, if in a extends relation, otherwise `null`

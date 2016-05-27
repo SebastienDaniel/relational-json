@@ -188,26 +188,6 @@ db.Client.get(2);
 
 -------------------------------
 
-## Typedefs
-
-<dl>
-<dt><a href="#Row">Row</a> : <code>object</code></dt>
-<dd></dd>
-<dt><a href="#Table">Table</a> : <code>object</code></dt>
-<dd></dd>
-</dl>
-
-<a name="Row"></a>
-
-## Row : <code>object</code>
-**Kind**: global typedef  
-**Summary**: Immutable javascript object stored within a Table  
-**Properties**
-
-| Name | Description |
-| --- | --- |
-| prototype | another Table row, if in a extends relation, otherwise `null` |
-
 <a name="Table"></a>
 
 ## Table : <code>object</code>
@@ -222,7 +202,6 @@ Tables are essentially the interface through which you manipulate data.
     * [.post(d)](#Table+post) ⇒ <code>object</code>
     * [.put(d, pkValue)](#Table+put) ⇒ <code>object</code>
     * [.delete(id)](#Table+delete) ⇒ <code>object</code>
-    * [.export()](#Table+export) ⇒ <code>Array.&lt;object&gt;</code>
 
 <a name="Table+meta"></a>
 
@@ -282,8 +261,3 @@ if many arguments are provided, it returns an array containing those row objects
 | --- | --- | --- |
 | id | <code>\*</code> | primary field value of row to delete |
 
-<a name="Table+export"></a>
-
-### table.export() ⇒ <code>Array.&lt;object&gt;</code>
-**Kind**: instance method of <code>[Table](#Table)</code>  
-**Summary**: exports the Table's rows' own data  
