@@ -36,18 +36,18 @@ describe("table.put.getChild", function() {
 
         // start proper tests
         // first entry
-        expect(getChild(db, m.Person, db.Person.get(1))).to.be.undefined;
-        expect(getChild(db, m.ExternalEntity, db.ExternalEntity.get(1)).row).to.equal(db.Person.get(1));
-        expect(getChild(db, m.ExternalEntity, db.ExternalEntity.get(1)).model).to.equal(m.Person);
-        expect(getChild(db, m.Entity, db.Entity.get(1)).row).to.equal(db.ExternalEntity.get(1));
-        expect(getChild(db, m.Entity, db.Entity.get(1)).model).to.equal(m.ExternalEntity);
+        expect(getChild(m.Person, db, db.Person.get(1))).to.be.undefined;
+        expect(getChild(m.ExternalEntity, db, db.ExternalEntity.get(1)).row).to.equal(db.Person.get(1));
+        expect(getChild(m.ExternalEntity, db, db.ExternalEntity.get(1)).model).to.equal(m.Person);
+        expect(getChild(m.Entity, db, db.Entity.get(1)).row).to.equal(db.ExternalEntity.get(1));
+        expect(getChild(m.Entity, db, db.Entity.get(1)).model).to.equal(m.ExternalEntity);
 
         // second entry
-        expect(getChild(db, m.Person, db.Person.get(2))).to.be.undefined;
-        expect(getChild(db, m.ExternalEntity, db.ExternalEntity.get(2)).row).to.equal(db.Person.get(2));
-        expect(getChild(db, m.ExternalEntity, db.ExternalEntity.get(2)).model).to.equal(m.Person);
-        expect(getChild(db, m.Entity, db.Entity.get(2)).row).to.equal(db.ExternalEntity.get(2));
-        expect(getChild(db, m.Entity, db.Entity.get(2)).model).to.equal(m.ExternalEntity);
+        expect(getChild(m.Person, db, db.Person.get(2))).to.be.undefined;
+        expect(getChild(m.ExternalEntity, db, db.ExternalEntity.get(2)).row).to.equal(db.Person.get(2));
+        expect(getChild(m.ExternalEntity, db, db.ExternalEntity.get(2)).model).to.equal(m.Person);
+        expect(getChild(m.Entity, db, db.Entity.get(2)).row).to.equal(db.ExternalEntity.get(2));
+        expect(getChild(m.Entity, db, db.Entity.get(2)).model).to.equal(m.ExternalEntity);
     });
 
     it("should return undefined if no child exists", function() {

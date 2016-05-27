@@ -40,7 +40,8 @@ describe("table.post() - inheritance", function() {
             first_name: "bob",
             last_name: "builder",
             gender: "m",
-            created_on: "2015-01-01T00:00:00Z"
+            created_on: "2015-01-01T00:00:00Z",
+            created_by: 1
         });
 
         expect(db.Person.get(1)).to.exist;
@@ -68,9 +69,9 @@ describe("table.post() - inheritance", function() {
         });
         expect(db.Entity.get(2)).to.exist;
         expect(db.Entity.get(2).deleted).to.eql(0);
-        expect(db.ExternalEntity.get(1)).to.exist;
-        expect(db.ExternalEntity.get(1).created_on).to.eql("2016-01-01T00:00:00Z");
-        expect(db.ExternalEntity.get(1).deleted).to.eql(0);
+        expect(db.ExternalEntity.get(2)).to.exist;
+        expect(db.ExternalEntity.get(2).created_on).to.eql("2016-01-01T00:00:00Z");
+        expect(db.ExternalEntity.get(2).deleted).to.eql(0);
 
         db.Person.post({
             entity_id: 2,
@@ -80,9 +81,9 @@ describe("table.post() - inheritance", function() {
         });
         expect(db.Entity.get(2)).to.exist;
         expect(db.Entity.get(2).deleted).to.eql(0);
-        expect(db.ExternalEntity.get(1)).to.exist;
-        expect(db.ExternalEntity.get(1).created_on).to.eql("2016-01-01T00:00:00Z");
-        expect(db.ExternalEntity.get(1).deleted).to.eql(0);
+        expect(db.ExternalEntity.get(2)).to.exist;
+        expect(db.ExternalEntity.get(2).created_on).to.eql("2016-01-01T00:00:00Z");
+        expect(db.ExternalEntity.get(2).deleted).to.eql(0);
         expect(db.Person.get(2)).to.exist;
         expect(db.Person.get(2).first_name).to.eql("mike");
         expect(db.Person.get(2).deleted).to.eql(0);

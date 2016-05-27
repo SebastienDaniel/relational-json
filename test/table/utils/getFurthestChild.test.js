@@ -4,8 +4,8 @@ var expect = require("chai").expect,
     rJSON = require("../../../src/scripts/index.js"),
     getChild = require("../../../src/scripts/table/utils/getFurthestChild");
 
-describe("table.put.getYoungestChild", function() {
-    it("should progressively return the child of a prototype row", function() {
+describe("table.put.getFurthestChild", function() {
+    it("should always return the furthest child of a row, otherwise itself", function() {
         var db = rJSON(schema),
             m = model(schema);
 
@@ -35,12 +35,12 @@ describe("table.put.getYoungestChild", function() {
         expect(db.Person.get(1).first_name).to.eql("seb");
 
         // start proper tests
-        expect(getChild(db, m.Person, db.Person.get(1))).to.equal(db.Person.get(1));
-        expect(getChild(db, m.ExternalEntity, db.ExternalEntity.get(1))).to.equal(db.Person.get(1));
-        expect(getChild(db, m.Entity, db.Entity.get(1))).to.equal(db.Person.get(1));
+        expect(getChild(m.Person, db, db.Person.get(1)).row).to.equal(db.Person.get(1));
+        expect(getChild(m.ExternalEntity, db, db.ExternalEntity.get(1)).row).to.equal(db.Person.get(1));
+        expect(getChild(m.Entity, db, db.Entity.get(1)).row).to.equal(db.Person.get(1));
 
-        expect(getChild(db, m.Person, db.Person.get(2))).to.equal(db.Person.get(2));
-        expect(getChild(db, m.ExternalEntity, db.ExternalEntity.get(2))).to.equal(db.Person.get(2));
-        expect(getChild(db, m.Entity, db.Entity.get(2))).to.equal(db.Person.get(2));
+        expect(getChild(m.Person, db, db.Person.get(2)).row).to.equal(db.Person.get(2));
+        expect(getChild(m.ExternalEntity, db, db.ExternalEntity.get(2)).row).to.equal(db.Person.get(2));
+        expect(getChild(m.Entity, db, db.Entity.get(2)).row).to.equal(db.Person.get(2));
     });
 });
