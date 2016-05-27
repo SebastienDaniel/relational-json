@@ -18,7 +18,13 @@ var validateDataType = require("./validateDataType");
  */
 function Field(fieldName, fieldSchema) {
     this.name = fieldName;
-    this.dataType = fieldSchema.dataType;
+
+    if (typeof fieldSchema === "string") {
+        this.dataType = fieldSchema;
+    } else {
+        this.dataType = fieldSchema.dataType;
+    }
+
     this.allowNull = fieldSchema.allowNull || false;
 
     if (fieldSchema.defaultValue !== undefined) {
