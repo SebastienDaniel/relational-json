@@ -1,3 +1,5 @@
+**relational-json** makes working with complex data simpler than ever.
+
 # Getting started
 ### Install relational-json
 
@@ -17,8 +19,6 @@ and you create a db based on a schema you provide:
 ### How it works
 Relational-json wraps your primitive data (*strings, numbers, booleans*) in an immutable & relational structure. The format is just like JSON, except your data can reference other parts of your data tree. This is done dynamically, thanks to ES5 object getters & setters.
 Each object created inside relational-json is "pure", in the sense that it has no native prototype. This allows us to leverage JavaScripts prototypical inheritance in very elegant ways.
-
-_IMPORTANT: that means relational-json is IE9+ compatible, but **cannot be shimmed or polyfilled** for older browsers._
 
 ### Why use it
 When building web applications, odds are your data will be in JSON format, even if not, it will still most likely be stored in javascript objects & arrays. This can quickly become problematic
