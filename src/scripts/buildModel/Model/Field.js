@@ -49,7 +49,7 @@ Field.prototype = {
      * @returns {boolean}
      */
     validateData: function(value) {
-        return validateDataType(this, value === undefined ? this.defaultValue : value);
+        return validateDataType(this, value);
     }
 };
 
