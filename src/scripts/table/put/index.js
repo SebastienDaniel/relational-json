@@ -15,29 +15,33 @@ function getChangeRoot(model, db, row, d) {
             row: row
         };
     } else {
-        next = getChild(db, model, row);
+        next = getChild(model, db, row);
 
         if (next) {
-            return getChangeRoot(next.model, next.row, d);
+            return getChangeRoot(next.model, db, next.row, d);
         }
     }
 }
 
 module.exports = function put(model, db, row, d) {
     var changeRoot,
-        furthestChild;
+        furthestChild,
+        furthestAncestor = getFurthestAncestor(model, row);
 
     d = mergePutDataWithRowData(row, d);
     changeRoot = getChangeRoot(
+        furthestAncestor.model,
         db,
-        model,
-        getFurthestAncestor(model, row).row,
+        furthestAncestor.row,
         d
     );
 
     // if differences have been detected
     if (changeRoot) {
         furthestChild = getFurthestChild(changeRoot.model, db, changeRoot.row);
+
+        // update the data bundle to respect child data
+        d = mergePutDataWithRowData(furthestChild.row, d);
 
         // recursively delete from the first change point
         db[changeRoot.model.tableName].delete(changeRoot.row[changeRoot.model.primary]);

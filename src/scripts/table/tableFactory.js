@@ -40,16 +40,16 @@ module.exports = function tableFactory(model, db) {
          * @param {object} d - data bundle, must contain all required fields
          * @returns {object} row instance created
          */
-        post: function(d) {
+        post: function(d, pkValue) {
             var row;
 
-            if (tableData.hasKey(d[model.primary])) {
+            if (tableData.hasKey(pkValue || d[model.primary])) {
                 throw Error("provided " + model.primary + ": " + d[model.primary] + " is already in use in " + model.tableName);
             } else {
                 row = post(model, db, d);
                 tableData.set(row[model.primary], row);
 
-                return row
+                return row;
             }
         },
 

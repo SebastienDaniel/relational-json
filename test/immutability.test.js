@@ -53,7 +53,7 @@ describe("relational-json, immutability", function() {
 
     it("should provide hierarchical immutability on PUT operations", function() {
         var db = rjson(schema),
-            mem;
+            mems = {};
 
         // create initial data
         db.Person.post({
@@ -65,16 +65,31 @@ describe("relational-json, immutability", function() {
             created_by: 2
         });
 
-        mem = db.Person.get(1);
+        mems.person = db.Person.get(1);
 
         // modify parent
         db.ExternalEntity.put({entity_id: 1, created_on: "2017-01-01T12:00:00Z"});
 
-        //console.log(dbMapper(db));
-        console.log(db.Person.get()[0]);
-        console.log(db.Person.get(1));
+        expect(db.Person.get(1)).to.not.equal(mems.person);
+        expect(db.Person.get(1).first_name).to.eql("seb");
 
-        expect(db.Person.get()[0]).to.equal(mem);
-        expect(db.Person.get(1)).to.not.equal(mem);
+        expect(db.ExternalEntity.get(1)).to.not.equal(mems.externalEntity);
+        expect(db.ExternalEntity.get(1).created_on).to.eql("2017-01-01T12:00:00Z");
+
+        mems.person = db.Person.get(1);
+        mems.externalEntity = db.ExternalEntity.get(1);
+        mems.entity = db.Entity.get(1);
+
+        // modify furthest parent
+        db.Entity.put({id:1, deleted:1});
+
+        expect(db.Person.get(1)).to.not.equal(mems.person);
+        expect(db.Person.get(1).first_name).to.eql("seb");
+
+        expect(db.ExternalEntity.get(1)).to.not.equal(mems.externalEntity);
+        expect(db.ExternalEntity.get(1).created_on).to.eql("2017-01-01T12:00:00Z");
+
+        expect(db.Entity.get(1)).to.not.equal(mems.entity);
+        expect(db.Entity.get(1).deleted).to.eql(1);
     });
 });

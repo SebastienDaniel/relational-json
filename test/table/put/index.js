@@ -51,12 +51,13 @@ describe("table.put()", function() {
         expect(db.Entity.get(1).deleted).to.eql(1);
         expect(db.ExternalEntity.get(1).created_on).to.eql("2015-01-01T12:00:00Z");
 
-        db.Entity.put({id: 1, deleted: 0});
+        db.Entity.put({deleted: 0}, 1);
         expect(db.Entity.get(1).deleted).to.eql(0);
         expect(db.ExternalEntity.get(1).created_on).to.eql("2015-01-01T12:00:00Z");
 
         db.ExternalEntity.put({created_on:"2016-01-01T12:00:00Z"}, 1);
-        expect(db.Entity.get(1).deleted).to.eql(1);
+        expect(db.Entity.get(1).deleted).to.eql(0);
         expect(db.ExternalEntity.get(1).created_on).to.eql("2016-01-01T12:00:00Z");
+
     });
 });
