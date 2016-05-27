@@ -2,7 +2,6 @@ var expect = require("chai").expect,
     rJSON = require("../../../src/scripts/index.js");
 
 describe("table.put()", function() {
-    /*
     it("should allow editing non-hierarchical entries", function() {
         var schema = require("../../data/no-relation-graph.json"),
             db = rJSON(schema);
@@ -28,7 +27,7 @@ describe("table.put()", function() {
         expect(db.Organization.get(1).name).to.eql("Hansoo");
         expect(db.Person.get(2).first_name).to.eql("Yakuza");
     });
-*/
+
     it("should allow editing of hierarchical entries", function() {
         var schema = require("../../data/extension-graph.json"),
             db = rJSON(schema);
