@@ -6,9 +6,10 @@ describe("Field", function() {
     it("should create a Field instance", function() {
         expect(new Field("id", schema["Entity"].fields.id)).to.be.instanceof(Field);
     });
+
     it("should contain props: \n\tname\n\tdataType\n\tallowNull", function() {
         var f = new Field("created_on", schema["ExternalEntity"].fields.created_on);
-
+        
         expect(f).to.have.property("name");
         expect(f.name).to.eql("created_on");
 
@@ -18,6 +19,7 @@ describe("Field", function() {
         expect(f).to.have.property("allowNull");
         expect(f.allowNull).to.eql(false);
     });
+
     it("should set a default value of 'null' when allowNull === true, but no defaultValue is provided", function() {
         var f = new Field("created_on", {
                 "allowNull": false,
@@ -63,6 +65,7 @@ describe("Field.isRequired()", function() {
 
         expect(f.isRequired()).to.be.true;
     });
+
     it("should return false for unrequired fields", function() {
         var f = new Field("created_on", {
                 "allowNull": false,
