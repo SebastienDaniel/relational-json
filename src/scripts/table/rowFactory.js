@@ -1,5 +1,3 @@
-"use strict";
-
 /**
  * @private
  * @typedef {object} Row
@@ -16,19 +14,24 @@
  * @param db
  */
 function setRowPrototype(model, db, data) {
-    var parent;
+    let parent;
 
     if (model.extends) {
-        if (db[model.extends.model.tableName].get(data[model.extends.localField])) {
+        const parentTable = db[model.extends.model.tableName];
+        const commonValue = data[model.extends.localField];
+        const parentRow = parentTable.get(commonValue)
+
+        if (parentRow) {
             // use updated parent (if necessary), otherwise current parent
-            parent = db[model.extends.model.tableName].put(data, data[model.extends.localField]);
+            parent = parentTable.put(data, commonValue);
         } else {
             // make sure parent values match row values on their extension field
-            data[model.extends.foreignField] = data[model.extends.localField];
+            data[model.extends.foreignField] = commonValue;
 
             // create new parent from provided data
-            parent = db[model.extends.model.tableName].post(data);
+            parent = parentTable.post(data);
         }
+
         return parent;
     } else {
         return null;
@@ -46,12 +49,12 @@ function setRowPrototype(model, db, data) {
  * @returns {Row}
  */
 function rowFactory(model, db, data) {
-    var row = Object.create(setRowPrototype(model, db, data)),
-        privateData = {};
+    const row = Object.create(setRowPrototype(model, db, data));
+    const privateData = {};
 
     // generate public row field descriptors
     model.listFields().forEach(function(field) {
-        var key = field.name;
+        const key = field.name;
 
         if (model.extends && model.extends.localField === key) {
             // create field "getter" for common parent-child data

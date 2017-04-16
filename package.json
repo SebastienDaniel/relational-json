@@ -46,6 +46,7 @@
     "mocha": "^2.4.5"
   },
   "dependencies": {
+    "ramda": "^0.23.0",
     "sebastiendaniel-adt": "^2.0.2"
   }
 }

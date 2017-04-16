@@ -1,5 +1,3 @@
-"use strict";
-
 /**
  * @private
  * @typedef {object} extensionRelation
@@ -27,46 +25,46 @@
  * @returns {object} Model object, enhanced with relations
  */
 function addRelationsToModel(schema, dynamicModel) {
-    Object.keys(schema).forEach(function(key) {
-        var staticModel = schema[key],
-            model = dynamicModel[key];
+    const tableNames = Object.keys(schema);
+
+    tableNames.forEach((tableName) => {
+        const staticModel = schema[tableName];
+        const model = dynamicModel[tableName];
 
         // add dynamic link to parent model
         if (staticModel.extends) {
+            const parentTable = staticModel.extends;
+
             /**
              * @name model#extends
              * @type extensionRelation
              * @summary adds a relation from the child model to its parent model
              */
-            Object.defineProperty(model, "extends", {
-                value: {
-                    model: dynamicModel[staticModel.extends.table],
-                    localField: staticModel.extends.localField,
-                    foreignField: staticModel.extends.foreignField
-                },
-                enumerable: true
-            });
+            model.extends = {
+                model: dynamicModel[parentTable.table],
+                localField: parentTable.localField,
+                foreignField: parentTable.foreignField
+            }
         }
 
         // add links to children models
         if (staticModel.extendedBy) {
+            const childTableNames = staticModel.extendedBy;
             /**
              * @name model#extendedBy
              * @type extensionRelation[]
              * @summary adds dynamic link to the models' child models
              */
-            Object.defineProperty(model, "extendedBy", {
-                value: Object.keys(staticModel.extendedBy).map(function(key) {
-                    var ext = staticModel.extendedBy[key];
+            model.extendedBy = Object.keys(childTableNames)
+                .map((tableName) => {
+                    const childTable = staticModel.extendedBy[tableName];
 
                     return {
-                        model: dynamicModel[key],
-                        localField: ext.localField,
-                        foreignField: ext.foreignField
+                        model: dynamicModel[tableName],
+                        localField: childTable.localField,
+                        foreignField: childTable.foreignField
                     };
-                }),
-                enumerable: true
-            });
+                });
         }
 
         // add links to aggregate models
@@ -76,18 +74,16 @@ function addRelationsToModel(schema, dynamicModel) {
              * @type aggregationRelation[]
              * @summary adds dynamic link to the models' aggregate models
              */
-            Object.defineProperty(model, "aggregates", {
-                value: staticModel.aggregates.map(function(agg) {
+            model.aggregates = staticModel.aggregates
+                .map((aggregate) => {
                     return {
-                        model: dynamicModel[agg.table],
-                        alias: agg.alias,
-                        cardinality: agg.cardinality,
-                        localField: agg.localField,
-                        foreignField: agg.foreignField
+                        model: dynamicModel[aggregate.table],
+                        alias: aggregate.alias,
+                        cardinality: aggregate.cardinality,
+                        localField: aggregate.localField,
+                        foreignField: aggregate.foreignField
                     };
-                }),
-                enumerable: true
-            });
+                });
         }
     });
 

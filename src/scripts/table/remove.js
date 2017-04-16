@@ -1,7 +1,5 @@
-"use strict";
-
-var getFurthestChild = require("./utils/getFurthestChild"),
-    getParent = require("./utils/getParent");
+const getFurthestChild = require("./utils/getFurthestChild");
+const getParent = require("./utils/getParent");
 
 /**
  * @private
@@ -11,13 +9,15 @@ var getFurthestChild = require("./utils/getFurthestChild"),
  * @param target
  */
 function recursiveDelete(model, db, target) {
-    var next = getFurthestChild(model, db, target);
+    let nextRow = getFurthestChild(model, db, target);
 
     // delete rows from child upwards until target has been deleted
-    while (next.model !== model) {
-        next = getParent(
-            next.model,
-            db[next.model.tableName].delete(next.row[next.model.primary])
+    while (nextRow.model !== model) {
+        const nextTable = db[nextRow.model.tableName];
+
+        nextRow = getParent(
+            nextRow.model,
+            nextTable.delete(nextRow.row[nextRow.model.primary])
         );
     }
 

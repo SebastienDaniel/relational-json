@@ -1,39 +1,38 @@
-var determineFieldType = require("./determineFieldType");
+const determineFieldType = require("./determineFieldType");
 
 function verifyAggregates(schema, key) {
-    "use strict";
-    var table = schema[key];
+    const table = schema[key];
 
     if (table.aggregates) {
-        return table.aggregates.every(function(agg) {
-            var foreignTable = schema[agg.table],
-                localField = table.fields[agg.localField],
-                foreignField = foreignTable ? foreignTable.fields[agg.foreignField] : undefined;
+        return table.aggregates.every((aggregate) => {
+            const foreignTable = schema[aggregate.table];
+            const localField = table.fields[aggregate.localField];
+            const foreignField = foreignTable ? foreignTable.fields[aggregate.foreignField] : undefined;
 
             if (!localField) {
-                throw new ReferenceError("Table " + key + " aggregates with " + agg.table + " on non-existent localField: " + agg.localField);
+                throw new ReferenceError("Table " + key + " aggregates with " + aggregate.table + " on non-existent localField: " + aggregate.localField);
             }
 
             if (!foreignTable) {
-                throw new ReferenceError("Table " + key + " aggregates " + agg.table + " on non-existent table: " + agg.table);
+                throw new ReferenceError("Table " + key + " aggregates " + aggregate.table + " on non-existent table: " + aggregate.table);
             }
 
             if (!foreignField) {
-                throw new ReferenceError("Table " + key + " aggregates with " + agg.table + " on non-existent foreignField: " + agg.foreignField);
+                throw new ReferenceError("Table " + key + " aggregates with " + aggregate.table + " on non-existent foreignField: " + aggregate.foreignField);
             }
 
             if (determineFieldType(localField) !== determineFieldType(foreignField)) {
-                throw new TypeError("Table " + key + " aggregates with " + agg.table + " on incompatible field types:\nlocalField: " + determineFieldType(localField) + "\nforeignField: " + determineFieldType(foreignField));
+                throw new TypeError("Table " + key + " aggregates with " + aggregate.table + " on incompatible field types:\nlocalField: " + determineFieldType(localField) + "\nforeignField: " + determineFieldType(foreignField));
             }
 
-            if (["single", "many"].indexOf(agg.cardinality) === -1) {
-                throw new TypeError("Table " + key + " has an invalid aggregation cardinality with " + agg.table + "\nexpected: 'single' or 'many'\nprovided: " + agg.cardinality);
+            if (["single", "many"].indexOf(aggregate.cardinality) === -1) {
+                throw new TypeError("Table " + key + " has an invalid aggregation cardinality with " + aggregate.table + "\nexpected: 'single' or 'many'\nprovided: " + aggregate.cardinality);
             }
 
             if (Object.keys(table.fields).some(function(fieldName) {
-                    return fieldName === agg.alias;
+                    return fieldName === aggregate.alias;
                 })) {
-                throw Error("Table " + key + " has a conflicting aggregation alias with " + agg.table + "\nalias: " + agg.alias + " exists as " + key + " field");
+                throw Error("Table " + key + " has a conflicting aggregation alias with " + aggregate.table + "\nalias: " + aggregate.alias + " exists as " + key + " field");
             }
 
             return true;

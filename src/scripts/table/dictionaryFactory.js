@@ -1,13 +1,12 @@
-"use strict";
-var Dictionary = require("sebastiendaniel-adt/dictionary");
+const Dictionary = require("sebastiendaniel-adt/dictionary");
 
 module.exports = function dictionaryFactory() {
-    var d = new Dictionary(),
-        dataContainer = [],
-        hasChanged;
+    const dictionary = new Dictionary();
+    let dataContainer = [];
+    let hasChanged;
 
     // add immutable getter method
-    d.getAllData = function getAllData() {
+    dictionary.getAllData = function getAllData() {
         var data = this.getValues();
 
         // if dataContainer.length !== dictionary data length, re-populate the dataContainer
@@ -25,23 +24,23 @@ module.exports = function dictionaryFactory() {
         return dataContainer;
     };
 
-    d.set = function setExtension(key, value) {
-        var res = Object.getPrototypeOf(d).set.call(d, key, value);
+    dictionary.set = function setExtension(key, value) {
+        var result = Object.getPrototypeOf(dictionary).set.call(dictionary, key, value);
 
         // change dataContainer reference
         hasChanged = true;
 
-        return res;
+        return result;
     };
 
-    d.remove = function removeExtension(key) {
-        var res = Object.getPrototypeOf(d).remove.call(d, key);
+    dictionary.remove = function removeExtension(key) {
+        var result = Object.getPrototypeOf(dictionary).remove.call(dictionary, key);
 
         // change dataContainer reference
         hasChanged = true;
 
-        return res;
+        return result;
     };
 
-    return d;
+    return dictionary;
 };

@@ -1,15 +1,18 @@
 function getChild(model, db, row) {
-    "use strict";
-    var res = {
+    const res = {
         row: undefined,
         model: undefined
     };
 
     if (model.extendedBy) {
-        if (model.extendedBy.some(function(ext) {
-            if (db[ext.model.tableName].get(row[ext.localField])) {
-                res.model = ext.model;
-                res.row = db[ext.model.tableName].get(row[ext.localField]);
+        if (model.extendedBy.some(function(childModel) {
+            const childTable = db[childModel.model.tableName];
+            const localFieldName = childModel.localField;
+            const child = childTable.get(row[localFieldName]);
+
+            if (child) {
+                res.model = childModel.model;
+                res.row = child;
                 return true;
             }
         })) {

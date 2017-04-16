@@ -1,9 +1,10 @@
 function verifyTablePrimaryField(schema, key) {
-    "use strict";
-    var table = schema[key];
+    const table = schema[key];
 
-    if (table.primary && typeof table.primary === "string") {
-        if (table.fields[table.primary]) {
+    if (typeof table.primary === "string") {
+        const hasPrimaryFieldDefined = table.fields[table.primary];
+        
+        if (hasPrimaryFieldDefined) {
             return true;
         } else {
             throw new ReferenceError("Primary key '" + table.primary + "' of table '" + key + "' is not present in the table's fields");

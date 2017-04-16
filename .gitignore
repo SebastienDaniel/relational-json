@@ -229,5 +229,5 @@ dump.json
 dump
 src/scripts/sql-parsers/
 src/sql/
-
+*.sublime-*
 

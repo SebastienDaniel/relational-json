@@ -1,16 +1,12 @@
-var determineFieldType = require("./determineFieldType");
+const determineFieldType = require("./determineFieldType");
 
 function verifyExtends(schema, key) {
-    "use strict";
-    var table = schema[key],
-        foreignTable,
-        localField,
-        foreignField;
+    const table = schema[key];
 
     if (table.extends) {
-        foreignTable = schema[table.extends.table];
-        localField = table.fields[table.extends.localField];
-        foreignField = foreignTable ? foreignTable.fields[table.extends.foreignField] : undefined;
+        const foreignTable = schema[table.extends.table];
+        const localField = table.fields[table.extends.localField];
+        const foreignField = foreignTable ? foreignTable.fields[table.extends.foreignField] : undefined;
 
         if (!localField) {
             throw new ReferenceError("Table " + key + " extends " + table.extends.table + " with non-existent localField: " + table.extends.localField);

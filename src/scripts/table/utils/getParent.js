@@ -1,9 +1,11 @@
 function getParent(model, row) {
-    "use strict";
     if (model.extends) {
+    	const parentModel = model.extends.model;
+    	const parentRow = Object.getPrototypeOf(row);
+    	
         return {
-            model: model.extends.model,
-            row: Object.getPrototypeOf(row)
+            model: parentModel,
+            row: parentRow
         };
     }
 }

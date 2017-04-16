@@ -1,11 +1,9 @@
-"use strict";
-
-var buildAliasMap = require("../buildModel/Model/buildAliasMap"),
-    dictionaryFactory = require("./dictionaryFactory"),
-    get = require("./get"),
-    put = require("./put"),
-    post = require("./post"),
-    remove = require("./remove");
+const buildAliasMap = require("../buildModel/Model/buildAliasMap");
+const dictionaryFactory = require("./dictionaryFactory");
+const put = require("./put");
+const post = require("./post");
+const remove = require("./remove");
+const r = require('ramda');
 
 /**
  * @typedef {object} Table
@@ -15,7 +13,7 @@ var buildAliasMap = require("../buildModel/Model/buildAliasMap"),
  */
 
 module.exports = function tableFactory(model, db) {
-    var tableData = dictionaryFactory();
+    const tableData = dictionaryFactory();
 
     return Object.freeze({
         /**
@@ -28,8 +26,23 @@ module.exports = function tableFactory(model, db) {
          * if 1 argument is provided, it returns that row object
          * if many arguments are provided, it returns an array containing those row objects
          */
-        get: function() {
-            return get(arguments, tableData);
+        get: function get() {
+            const aL = arguments ? arguments.length : 0;
+
+            if (aL === 0) {
+                return tableData.getAllData();
+            } else if (aL === 1) {
+                return tableData.get(arguments[0]);
+            } else {
+                let a = [];
+                let i;
+
+                for (i = 0; i < aL; i++) {
+                    a.push(tableData.get(arguments[i]));
+                }
+
+                return a;
+            }
         },
 
         /**
@@ -43,11 +56,11 @@ module.exports = function tableFactory(model, db) {
         post: function(d, pkValue) {
             var row;
 
-            if (tableData.hasKey(pkValue || d[model.primary])) {
-                throw Error("provided " + model.primary + ": " + d[model.primary] + " is already in use in " + model.tableName);
+            if (tableData.hasKey(pkValue || d[this.meta.primary])) {
+                throw Error("provided " + this.meta.primary + ": " + d[this.meta.primary] + " is already in use in " + model.tableName);
             } else {
                 row = post(model, db, d);
-                tableData.set(row[model.primary], row);
+                tableData.set(row[this.meta.primary], row);
 
                 return row;
             }
@@ -63,15 +76,15 @@ module.exports = function tableFactory(model, db) {
          * @returns {object} newly created row
          */
         put: function(d, pkValue) {
-            if (tableData.hasKey(pkValue || d[model.primary])) {
+            if (tableData.hasKey(pkValue || d[this.meta.primary])) {
                 return put(
                     model,
                     db,
-                    tableData.get(pkValue || d[model.primary]),
+                    tableData.get(pkValue || d[this.meta.primary]),
                     d
                 );
             } else {
-                throw Error("Cannot update a non-existent Object, id: " + pkValue + " for table " + model.tableName);
+                throw Error("Cannot update a non-existent Object, id: " + pkValue + " for table " + this.meta.name);
             }
         },
 
@@ -84,13 +97,13 @@ module.exports = function tableFactory(model, db) {
          * @returns {object} deleted row
          */
         delete: function(id) {
-            var target = tableData.get(id);
+            const target = tableData.get(id);
 
             if (target) {
                 tableData.remove(id);
                 return remove(model, db, target);
             } else {
-                throw Error("Cannot delete non existent object id: " + id + " in " + model.tableName);
+                throw Error("Cannot delete non existent object id: " + id + " in " + this.meta.name);
             }
         },
 

@@ -1,9 +1,11 @@
 function getFurthestAncestor(model, row) {
-    "use strict";
     if (model.extends) {
+        const parentModel = model.extends.model;
+        const parentRow = Object.getPrototypeOf(row);
+        
         return getFurthestAncestor(
-            model.extends.model,
-            Object.getPrototypeOf(row)
+            parentModel,
+            parentRow
         );
     } else {
         if (Object.getPrototypeOf(row) !== null) {

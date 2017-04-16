@@ -20,7 +20,7 @@ function reportMissingMandatoryFields(model, d) {
         invalidFields = [];
 
     model.listFields().forEach(function(field) {
-        if (field.isRequired() && d[field.name] === undefined) {
+        if (field.isRequired && d[field.name] === undefined) {
             missingFields.push(field);
         }
 
