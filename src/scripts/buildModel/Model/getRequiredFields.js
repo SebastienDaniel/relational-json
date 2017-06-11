@@ -8,22 +8,22 @@
  */
 function getRequiredFields(model, type) {
     // get models' own required fields
-    var req = model.listFields()
+	var req = model.listFields()
         .filter((field) => field.isRequired)
         .map((field) => field.name);
 
-    if (type === "all" && model.extends) {
+	if (type === 'all' && model.extends) {
         // add ancestors' requirements
-        const parentModel = model.extends.model;
-        req = req.concat(getRequiredFields(parentModel, "all"));
+		const parentModel = model.extends.model;
+		req = req.concat(getRequiredFields(parentModel, 'all'));
 
         // remove the parent<->child extension field,
         // it can be inferred at data creation time
-        const foreignField = model.extends.foreignField;
-        req.splice(req.indexOf(foreignField), 1);
-    }
+		const foreignField = model.extends.foreignField;
+		req.splice(req.indexOf(foreignField), 1);
+	}
 
-    return req;
+	return req;
 }
 
 module.exports = getRequiredFields;

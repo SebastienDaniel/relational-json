@@ -1,6 +1,6 @@
-const r = require("ramda");
-const addExtendedByToSchema = require("./addExtendedByToSchema");
-const createDynamicModel = require("./createDynamicModel");
+const r = require('ramda');
+const addExtendedByToSchema = require('./addExtendedByToSchema');
+const createDynamicModel = require('./createDynamicModel');
 
 /**
  * @private

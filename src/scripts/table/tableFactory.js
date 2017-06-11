@@ -1,8 +1,8 @@
-const buildAliasMap = require("../buildModel/Model/buildAliasMap");
-const dictionaryFactory = require("./dictionaryFactory");
-const put = require("./put");
-const post = require("./post");
-const remove = require("./remove");
+const buildAliasMap = require('../buildModel/Model/buildAliasMap');
+const dictionaryFactory = require('./dictionaryFactory');
+const put = require('./put');
+const post = require('./post');
+const remove = require('./remove');
 const r = require('ramda');
 
 /**
@@ -13,9 +13,9 @@ const r = require('ramda');
  */
 
 module.exports = function tableFactory(model, db) {
-    const tableData = dictionaryFactory();
+	const tableData = dictionaryFactory();
 
-    return Object.freeze({
+	return Object.freeze({
         /**
          * @function
          * @name Table#get
@@ -26,24 +26,24 @@ module.exports = function tableFactory(model, db) {
          * if 1 argument is provided, it returns that row object
          * if many arguments are provided, it returns an array containing those row objects
          */
-        get: function get() {
-            const aL = arguments ? arguments.length : 0;
+		get: function get() {
+			const aL = arguments ? arguments.length : 0;
 
-            if (aL === 0) {
-                return tableData.getAllData();
-            } else if (aL === 1) {
-                return tableData.get(arguments[0]);
-            } else {
-                let a = [];
-                let i;
+			if (aL === 0) {
+				return tableData.getAllData();
+			} else if (aL === 1) {
+				return tableData.get(arguments[0]);
+			} else {
+				let a = [];
+				let i;
 
-                for (i = 0; i < aL; i++) {
-                    a.push(tableData.get(arguments[i]));
-                }
+				for (i = 0; i < aL; i++) {
+					a.push(tableData.get(arguments[i]));
+				}
 
-                return a;
-            }
-        },
+				return a;
+			}
+		},
 
         /**
          * @function
@@ -53,18 +53,18 @@ module.exports = function tableFactory(model, db) {
          * @param {object} d - data bundle, must contain all required fields
          * @returns {object} row instance created
          */
-        post: function(d, pkValue) {
-            var row;
+		post: function(d, pkValue) {
+			var row;
 
-            if (tableData.hasKey(pkValue || d[this.meta.primary])) {
-                throw Error("provided " + this.meta.primary + ": " + d[this.meta.primary] + " is already in use in " + model.tableName);
-            } else {
-                row = post(model, db, d);
-                tableData.set(row[this.meta.primary], row);
+			if (tableData.hasKey(pkValue || d[this.meta.primary])) {
+				throw Error('provided ' + this.meta.primary + ': ' + d[this.meta.primary] + ' is already in use in ' + model.tableName);
+			} else {
+				row = post(model, db, d);
+				tableData.set(row[this.meta.primary], row);
 
-                return row;
-            }
-        },
+				return row;
+			}
+		},
 
         /**
          * @function
@@ -75,18 +75,18 @@ module.exports = function tableFactory(model, db) {
          * @param {*} pkValue=d.primary - primary value to find row to modify
          * @returns {object} newly created row
          */
-        put: function(d, pkValue) {
-            if (tableData.hasKey(pkValue || d[this.meta.primary])) {
-                return put(
+		put: function(d, pkValue) {
+			if (tableData.hasKey(pkValue || d[this.meta.primary])) {
+				return put(
                     model,
                     db,
                     tableData.get(pkValue || d[this.meta.primary]),
                     d
                 );
-            } else {
-                throw Error("Cannot update a non-existent Object, id: " + pkValue + " for table " + this.meta.name);
-            }
-        },
+			} else {
+				throw Error('Cannot update a non-existent Object, id: ' + pkValue + ' for table ' + this.meta.name);
+			}
+		},
 
         /**
          * @function
@@ -96,16 +96,16 @@ module.exports = function tableFactory(model, db) {
          * @param {*} id - primary field value of row to delete
          * @returns {object} deleted row
          */
-        delete: function(id) {
-            const target = tableData.get(id);
+		delete: function(id) {
+			const target = tableData.get(id);
 
-            if (target) {
-                tableData.remove(id);
-                return remove(model, db, target);
-            } else {
-                throw Error("Cannot delete non existent object id: " + id + " in " + this.meta.name);
-            }
-        },
+			if (target) {
+				tableData.remove(id);
+				return remove(model, db, target);
+			} else {
+				throw Error('Cannot delete non existent object id: ' + id + ' in ' + this.meta.name);
+			}
+		},
 
         /**
          * @name Table#meta
@@ -119,32 +119,32 @@ module.exports = function tableFactory(model, db) {
          * @property {string[]} allRequiredFields - list of all required fields, including own & ancestors' required fields
          * @summary partial interface into the Table's inner details
          */
-        meta: Object.freeze(
+		meta: Object.freeze(
             Object.create(null, {
-                name: {
-                    value: model.tableName,
-                    enumerable: true
-                },
-                pk: {
-                    value: model.primary,
-                    enumerable: true
-                },
-                primary: {
-                    value: model.primary
-                },
-                aliasMap: {
-                    value: Object.freeze(buildAliasMap(model)),
-                    enumerable: true
-                },
-                ownRequiredFields: {
-                    value: model.getRequiredFields("own"),
-                    enumerable: true
-                },
-                allRequiredFields: {
-                    value: model.getRequiredFields("all"),
-                    enumerable: true
-                }
-            })
+	name: {
+		value: model.tableName,
+		enumerable: true
+	},
+	pk: {
+		value: model.primary,
+		enumerable: true
+	},
+	primary: {
+		value: model.primary
+	},
+	aliasMap: {
+		value: Object.freeze(buildAliasMap(model)),
+		enumerable: true
+	},
+	ownRequiredFields: {
+		value: model.getRequiredFields('own'),
+		enumerable: true
+	},
+	allRequiredFields: {
+		value: model.getRequiredFields('all'),
+		enumerable: true
+	}
+})
         )
-    });
+	});
 };

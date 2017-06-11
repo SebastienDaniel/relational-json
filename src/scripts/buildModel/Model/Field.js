@@ -1,5 +1,5 @@
 const r = require('ramda');
-const validateDataType = require("./validateDataType");
+const validateDataType = require('./validateDataType');
 
 /**
  * @typedef {object} field
@@ -16,23 +16,23 @@ const validateDataType = require("./validateDataType");
  * @constructor
  */
 class Field {
-    constructor(fieldName, fieldSchema) {
-        this.name = fieldName;
-        this.allowNull = !!fieldSchema.allowNull;
+	constructor(fieldName, fieldSchema) {
+		this.name = fieldName;
+		this.allowNull = !!fieldSchema.allowNull;
 
         // allow shorthand field types (i.e. field:type )
-        this.dataType = r.type(fieldSchema) === "String" ?
-            fieldSchema :
-            fieldSchema.dataType;
+		this.dataType = r.type(fieldSchema) === 'String'
+            ? fieldSchema
+            : fieldSchema.dataType;
 
-        if (fieldSchema.hasOwnProperty("defaultValue")) {
-            this.defaultValue = fieldSchema.defaultValue;
-        } else if (this.allowNull) {
-            this.defaultValue = null;
-        }
+		if (fieldSchema.hasOwnProperty('defaultValue')) {
+			this.defaultValue = fieldSchema.defaultValue;
+		} else if (this.allowNull) {
+			this.defaultValue = null;
+		}
 
-        this.isRequired = !this.allowNull && !this.hasOwnProperty("defaultValue")
-    }
+		this.isRequired = !this.allowNull && !this.hasOwnProperty('defaultValue');
+	}
 
     /**
      * @name field#validateData
@@ -41,9 +41,9 @@ class Field {
      * @param {*} value
      * @returns {boolean}
      */
-    validateData(value) {
-        return validateDataType(this, value);
-    }
+	validateData(value) {
+		return validateDataType(this, value);
+	}
 }
 
 module.exports = Field;

@@ -8,11 +8,11 @@
  * @returns {boolean}
  */
 function dataDiffers(oldObject, newObject) {
-    return Object.keys(oldObject).some(function(key) {
-        if (oldObject[key] !== undefined && typeof oldObject[key] !== "object") {
-            return oldObject[key] !== newObject[key];
-        }
-    });
+	return Object.keys(oldObject).some(function(key) {
+		if (oldObject[key] !== undefined && typeof oldObject[key] !== 'object') {
+			return oldObject[key] !== newObject[key];
+		}
+	});
 }
 
 module.exports = dataDiffers;

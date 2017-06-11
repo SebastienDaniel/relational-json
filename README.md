@@ -211,7 +211,7 @@ Tables are essentially the interface through which you manipulate data.
 
 * [Table](#Table) : <code>object</code>
     * [.meta](#Table+meta) : <code>object</code>
-    * [.get()](#Table+get) ⇒ <code>object</code> &#124; <code>Array.&lt;object&gt;</code>
+    * [.get()](#Table+get) ⇒ <code>object</code> \| <code>Array.&lt;object&gt;</code>
     * [.post(d)](#Table+post) ⇒ <code>object</code>
     * [.put(d, pkValue)](#Table+put) ⇒ <code>object</code>
     * [.delete(id)](#Table+delete) ⇒ <code>object</code>
@@ -219,7 +219,7 @@ Tables are essentially the interface through which you manipulate data.
 <a name="Table+meta"></a>
 
 ### table.meta : <code>object</code>
-**Kind**: instance property of <code>[Table](#Table)</code>  
+**Kind**: instance property of [<code>Table</code>](#Table)  
 **Summary**: partial interface into the Table's inner details  
 **Properties**
 
@@ -234,16 +234,16 @@ Tables are essentially the interface through which you manipulate data.
 
 <a name="Table+get"></a>
 
-### table.get() ⇒ <code>object</code> &#124; <code>Array.&lt;object&gt;</code>
-**Kind**: instance method of <code>[Table](#Table)</code>  
+### table.get() ⇒ <code>object</code> \| <code>Array.&lt;object&gt;</code>
+**Kind**: instance method of [<code>Table</code>](#Table)  
 **Summary**: returns row data matching the provided arguments on their primary field value  
-**Returns**: <code>object</code> &#124; <code>Array.&lt;object&gt;</code> - if no argument is provided, it returns an array of all data within the table.
+**Returns**: <code>object</code> \| <code>Array.&lt;object&gt;</code> - if no argument is provided, it returns an array of all data within the table.
 if 1 argument is provided, it returns that row object
 if many arguments are provided, it returns an array containing those row objects  
 <a name="Table+post"></a>
 
 ### table.post(d) ⇒ <code>object</code>
-**Kind**: instance method of <code>[Table](#Table)</code>  
+**Kind**: instance method of [<code>Table</code>](#Table)  
 **Summary**: creates a new row of data  
 **Returns**: <code>object</code> - row instance created  
 
@@ -254,7 +254,7 @@ if many arguments are provided, it returns an array containing those row objects
 <a name="Table+put"></a>
 
 ### table.put(d, pkValue) ⇒ <code>object</code>
-**Kind**: instance method of <code>[Table](#Table)</code>  
+**Kind**: instance method of [<code>Table</code>](#Table)  
 **Summary**: modifies a data row, by re-creating the row merged with the new data  
 **Returns**: <code>object</code> - newly created row  
 
@@ -266,7 +266,7 @@ if many arguments are provided, it returns an array containing those row objects
 <a name="Table+delete"></a>
 
 ### table.delete(id) ⇒ <code>object</code>
-**Kind**: instance method of <code>[Table](#Table)</code>  
+**Kind**: instance method of [<code>Table</code>](#Table)  
 **Summary**: recursively deletes the target row and it's children (if any)  
 **Returns**: <code>object</code> - deleted row  
 

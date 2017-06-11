@@ -7,19 +7,19 @@
  */
 function mapRelations(obj, model) {
     // add own aggregates
-    if (Array.isArray(model.aggregates)) {
-        model.aggregates.forEach(function(aggregate) {
-            obj[aggregate.alias] = aggregate.model.tableName;
-        });
-    }
+	if (Array.isArray(model.aggregates)) {
+		model.aggregates.forEach(function(aggregate) {
+			obj[aggregate.alias] = aggregate.model.tableName;
+		});
+	}
 
     // continue looping into parents
-    if (model.extends) {
-        const nextModel = model.extends.model;
-        mapRelations(obj, nextModel);
-    }
+	if (model.extends) {
+		const nextModel = model.extends.model;
+		mapRelations(obj, nextModel);
+	}
 
-    return obj;
+	return obj;
 }
 
 /**
@@ -29,22 +29,22 @@ function mapRelations(obj, model) {
  * @returns {object} map of prop:tableName for each relation
  */
 function buildAliasMap(model) {
-    var o = {};
+	var o = {};
 
     // add immediate parent
-    if (model.extends) {
-        const parentTableName = model.extends.model.tableName;
-        o[parentTableName] = parentTableName;
-    }
+	if (model.extends) {
+		const parentTableName = model.extends.model.tableName;
+		o[parentTableName] = parentTableName;
+	}
 
     // add own children
-    if (Array.isArray(model.extendedBy)) {
-        model.extendedBy.forEach(function(childTable) {
-            const childTableName = childTable.model.tableName;
-            o[childTableName] = childTableName;
-        });
-    }
-    return mapRelations(o, model);
+	if (Array.isArray(model.extendedBy)) {
+		model.extendedBy.forEach(function(childTable) {
+			const childTableName = childTable.model.tableName;
+			o[childTableName] = childTableName;
+		});
+	}
+	return mapRelations(o, model);
 }
 
 module.exports = buildAliasMap;

@@ -1,22 +1,19 @@
-"use strict";
-
-const buildModel = require("./buildModel");
-const tableFactory = require("./table/tableFactory");
-const schemaValidator = require("./schemaValidator");
+const buildModel = require('./buildModel');
+const tableFactory = require('./table/tableFactory');
+const schemaValidator = require('./schemaValidator');
 
 module.exports = function createRelationalJSONDB(schema) {
-    let model;
+	let model;
 
-    if (schemaValidator(schema)) {
-        model = buildModel(schema);
+	if (schemaValidator(schema)) {
+		model = buildModel(schema);
 
-        return Object.freeze(
-            Object.keys(model).reduce((db, key) => {
-                db[key] = tableFactory(model[key], db);
+		return Object.freeze(
+			Object.keys(model).reduce((db, key) => {
+				db[key] = tableFactory(model[key], db);
 
-                return db;
-            }, Object.create(null))
-        );
-    }
+				return db;
+			}, Object.create(null))
+		);
+	}
 };
-

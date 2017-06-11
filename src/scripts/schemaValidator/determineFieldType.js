@@ -1,5 +1,5 @@
 function determineFieldType(field) {
-    return typeof field === "string" ? field : field.dataType;
+	return typeof field === 'string' ? field : field.dataType;
 }
 
 module.exports = determineFieldType;

@@ -1,5 +1,5 @@
-const Field = require("./Field");
-const getRequiredFields = require("./getRequiredFields");
+const Field = require('./Field');
+const getRequiredFields = require('./getRequiredFields');
 
 /**
  * @typedef model
@@ -14,19 +14,19 @@ const getRequiredFields = require("./getRequiredFields");
  * @constructor
  */
 class Model {
-    constructor(tableName, tableSchema) {
-        const fields = Object.keys(tableSchema.fields);
+	constructor(tableName, tableSchema) {
+		const fields = Object.keys(tableSchema.fields);
 
-        this.tableName = tableName;
-        this.primary = tableSchema.primary;
-        this.fields = fields.reduce((obj, field) => {
-            const fieldSchema = tableSchema.fields[field];
+		this.tableName = tableName;
+		this.primary = tableSchema.primary;
+		this.fields = fields.reduce((obj, field) => {
+			const fieldSchema = tableSchema.fields[field];
 
-            obj[field] = new Field(field, fieldSchema);
+			obj[field] = new Field(field, fieldSchema);
 
-            return obj;
-        }, {});
-    }
+			return obj;
+		}, {});
+	}
 
     /**
      * @name model#getRequiredFields
@@ -34,11 +34,11 @@ class Model {
      * @params {[string=own]} type - all or own required fields
      * @returns {Array}
      */
-    getRequiredFields(type) {
-        type = type === "all" ? "all" : "own";
+	getRequiredFields(type) {
+		type = type === 'all' ? 'all' : 'own';
 
-        return getRequiredFields(this, type);
-    }
+		return getRequiredFields(this, type);
+	}
 
     /**
      * @name model#listFields
@@ -46,9 +46,9 @@ class Model {
      * @summary returns an array of the models' fields
      * @return {field[]}
      */
-    listFields() {
-        return Object.keys(this.fields).map((f) => this.fields[f]);
-    }
+	listFields() {
+		return Object.keys(this.fields).map((f) => this.fields[f]);
+	}
 }
 
 module.exports = Model;
