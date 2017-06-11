@@ -13,7 +13,6 @@
     "mocha": true
   },
   "extends": "standard",
-  "plugins": ["import"],
   "rules": {
     "indent": [2, "tab"],
     "curly": [2, "all"],

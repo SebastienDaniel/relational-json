@@ -1,4 +1,4 @@
-var expect = require("chai").expect,
+zzvar expect = require("chai").expect,
     schema = require("../../data/mixed-graph.json"),
     rJSON = require("../../../src/scripts/index.js");
 
