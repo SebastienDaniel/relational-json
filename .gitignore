@@ -219,7 +219,6 @@ pip-log.txt
 ###########################
 node_modules/
 build/
-/build
 .idea/
 idea/
 doc/
@@ -227,7 +226,6 @@ doc/
 .komodoproject
 dump.json
 dump
-src/scripts/sql-parsers/
-src/sql/
 *.sublime-*
+coverage/
 
