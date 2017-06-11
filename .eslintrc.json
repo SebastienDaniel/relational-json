@@ -1,0 +1,29 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "impliedStrict": true
+    }
+  },
+  "env": {
+    "node": true,
+    "commonjs": true,
+    "es6": true,
+    "mocha": true
+  },
+  "extends": "standard",
+  "rules": {
+    "indent": [2, "tab"],
+    "curly": [2, "all"],
+    "no-tabs": 0,
+    "semi": [2, "always"],
+    "space-before-function-paren": [2, "never"]
+  },
+  "globals": {
+    "expect": true,
+    "sinon": true,
+    "sandbox": true,
+    "console": true
+  }
+}

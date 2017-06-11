@@ -1,6 +1,5 @@
-"use strict";
-
-var validateDataType = require("./validateDataType");
+const r = require('ramda');
+const validateDataType = require('./validateDataType');
 
 /**
  * @typedef {object} field
@@ -16,36 +15,24 @@ var validateDataType = require("./validateDataType");
  * @returns {field}
  * @constructor
  */
-function Field(fieldName, fieldSchema) {
-    this.name = fieldName;
+class Field {
+	constructor(fieldName, fieldSchema) {
+		this.name = fieldName;
+		this.allowNull = !!fieldSchema.allowNull;
 
-    if (typeof fieldSchema === "string") {
-        this.dataType = fieldSchema;
-    } else {
-        this.dataType = fieldSchema.dataType;
-    }
+        // allow shorthand field types (i.e. field:type )
+		this.dataType = r.type(fieldSchema) === 'String'
+            ? fieldSchema
+            : fieldSchema.dataType;
 
-    this.allowNull = fieldSchema.allowNull || false;
+		if (fieldSchema.hasOwnProperty('defaultValue')) {
+			this.defaultValue = fieldSchema.defaultValue;
+		} else if (this.allowNull) {
+			this.defaultValue = null;
+		}
 
-    if (fieldSchema.defaultValue !== undefined) {
-        this.defaultValue = fieldSchema.defaultValue;
-    } else if (fieldSchema.allowNull === true) {
-        this.defaultValue = null;
-    }
-
-    return Object.freeze(this);
-}
-
-Field.prototype = {
-    /**
-     * @name field#isRequired
-     * @function
-     * @summary tests if the field is required when creating a row
-     * @returns {boolean}
-     */
-    isRequired: function() {
-        return !this.allowNull && !this.hasOwnProperty("defaultValue");
-    },
+		this.isRequired = !this.allowNull && !this.hasOwnProperty('defaultValue');
+	}
 
     /**
      * @name field#validateData
@@ -54,9 +41,9 @@ Field.prototype = {
      * @param {*} value
      * @returns {boolean}
      */
-    validateData: function(value) {
-        return validateDataType(this, value);
-    }
-};
+	validateData(value) {
+		return validateDataType(this, value);
+	}
+}
 
 module.exports = Field;

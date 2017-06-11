@@ -1,5 +1,3 @@
-"use strict";
-
 /**
  * @private
  * @typedef {object} Row
@@ -16,23 +14,28 @@
  * @param db
  */
 function setRowPrototype(model, db, data) {
-    var parent;
+	let parent;
 
-    if (model.extends) {
-        if (db[model.extends.model.tableName].get(data[model.extends.localField])) {
+	if (model.extends) {
+		const parentTable = db[model.extends.model.tableName];
+		const commonValue = data[model.extends.localField];
+		const parentRow = parentTable.get(commonValue);
+
+		if (parentRow) {
             // use updated parent (if necessary), otherwise current parent
-            parent = db[model.extends.model.tableName].put(data, data[model.extends.localField]);
-        } else {
+			parent = parentTable.put(data, commonValue);
+		} else {
             // make sure parent values match row values on their extension field
-            data[model.extends.foreignField] = data[model.extends.localField];
+			data[model.extends.foreignField] = commonValue;
 
             // create new parent from provided data
-            parent = db[model.extends.model.tableName].post(data);
-        }
-        return parent;
-    } else {
-        return null;
-    }
+			parent = parentTable.post(data);
+		}
+
+		return parent;
+	} else {
+		return null;
+	}
 }
 
 /**
@@ -46,69 +49,69 @@ function setRowPrototype(model, db, data) {
  * @returns {Row}
  */
 function rowFactory(model, db, data) {
-    var row = Object.create(setRowPrototype(model, db, data)),
-        privateData = {};
+	const row = Object.create(setRowPrototype(model, db, data));
+	const privateData = {};
 
     // generate public row field descriptors
-    model.listFields().forEach(function(field) {
-        var key = field.name;
+	model.listFields().forEach(function(field) {
+		const key = field.name;
 
-        if (model.extends && model.extends.localField === key) {
+		if (model.extends && model.extends.localField === key) {
             // create field "getter" for common parent-child data
             // i.e. use parent data
-            privateData[key] = Object.getPrototypeOf(row)[model.extends.foreignField];
-        } else {
+			privateData[key] = Object.getPrototypeOf(row)[model.extends.foreignField];
+		} else {
             // set own data value
-            privateData[key] = data[key] !== undefined ? data[key] : field.defaultValue;
-        }
+			privateData[key] = data[key] !== undefined ? data[key] : field.defaultValue;
+		}
 
         // provide read-only access to own data
-        Object.defineProperty(row, key, {
-            value: privateData[key],
-            enumerable: true
-        });
-    });
+		Object.defineProperty(row, key, {
+			value: privateData[key],
+			enumerable: true
+		});
+	});
 
     // generate child extensions
     // keep link dynamic (no pre-calculation)
-    if (model.extendedBy) {
-        model.extendedBy.forEach(function(ext) {
+	if (model.extendedBy) {
+		model.extendedBy.forEach(function(ext) {
             // add getter for the child row
-            Object.defineProperty(row, ext.model.tableName, {
-                get: function() {
-                    return db[ext.model.tableName].get(privateData[ext.localField]);
-                },
-                enumerable: true
-            });
-        });
-    }
+			Object.defineProperty(row, ext.model.tableName, {
+				get: function() {
+					return db[ext.model.tableName].get(privateData[ext.localField]);
+				},
+				enumerable: true
+			});
+		});
+	}
 
     // add aggregates to row
     // keep link dynamic (no pre-calculation)
-    if (model.aggregates) {
-        model.aggregates.forEach(function(agg) {
+	if (model.aggregates) {
+		model.aggregates.forEach(function(agg) {
             // use alias as property name, fallback to foreign table name
-            if (agg.cardinality === "many") {
-                Object.defineProperty(row, agg.alias || agg.model.tableName, {
-                    get: function() {
-                        return db[agg.model.tableName].get().filter(function(d) {
-                            return d[agg.foreignField] === this[agg.localField];
-                        }, this);
-                    },
-                    enumerable: true
-                });
-            } else {
-                Object.defineProperty(row, agg.alias || agg.model.tableName, {
-                    get: function() {
-                        return db[agg.model.tableName].get(privateData[agg.localField]) || null;
-                    },
-                    enumerable: true
-                });
-            }
-        });
-    }
+			if (agg.cardinality === 'many') {
+				Object.defineProperty(row, agg.alias || agg.model.tableName, {
+					get: function() {
+						return db[agg.model.tableName].get().filter(function(d) {
+							return d[agg.foreignField] === this[agg.localField];
+						}, this);
+					},
+					enumerable: true
+				});
+			} else {
+				Object.defineProperty(row, agg.alias || agg.model.tableName, {
+					get: function() {
+						return db[agg.model.tableName].get(privateData[agg.localField]) || null;
+					},
+					enumerable: true
+				});
+			}
+		});
+	}
 
-    return Object.freeze(row);
+	return Object.freeze(row);
 }
 
 module.exports = rowFactory;

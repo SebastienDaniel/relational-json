@@ -17,11 +17,6 @@ describe("new Model()", function() {
         expect(m.tableName).to.eql("Person");
     });
 
-    it("properties should not be modifiable", function() {
-        m.tableName = "bob";
-        expect(m.tableName).to.eql("Person");
-    });
-
     it("should be extendable (new properties)", function() {
         m.source = "source";
         expect(m.source).to.eql("source");

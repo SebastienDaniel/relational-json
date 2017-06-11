@@ -7,13 +7,12 @@
  * @param newO
  * @returns {boolean}
  */
-function dataDiffers(oldO, newO) {
-    "use strict";
-    return Object.keys(oldO).some(function(key) {
-        if (oldO[key] !== undefined && typeof oldO[key] !== "object") {
-            return oldO[key] !== newO[key];
-        }
-    });
+function dataDiffers(oldObject, newObject) {
+	return Object.keys(oldObject).some(function(key) {
+		if (oldObject[key] !== undefined && typeof oldObject[key] !== 'object') {
+			return oldObject[key] !== newObject[key];
+		}
+	});
 }
 
 module.exports = dataDiffers;

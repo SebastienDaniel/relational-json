@@ -39,12 +39,11 @@ describe("Field", function() {
     it("should have Field.prototype methods", function() {
         var f = new Field("created_on", schema["ExternalEntity"].fields.created_on);
 
-        expect(f.isRequired).to.be.instanceof(Function);
         expect(f.validateData).to.be.instanceof(Function);
     });
 });
 
-describe("Field.isRequired()", function() {
+describe("Field.isRequired", function() {
     it("should return true for required fields", function() {
         var f = new Field("created_on", {
                 "allowNull": false,
@@ -63,7 +62,7 @@ describe("Field.isRequired()", function() {
                 "writable": true
             });
 
-        expect(f.isRequired()).to.be.true;
+        expect(f.isRequired).to.be.true;
     });
 
     it("should return false for unrequired fields", function() {
@@ -84,7 +83,7 @@ describe("Field.isRequired()", function() {
                 "writable": true
             });
 
-        expect(f2.isRequired()).to.be.false;
-        expect(f3.isRequired()).to.be.false;
+        expect(f2.isRequired).to.be.false;
+        expect(f3.isRequired).to.be.false;
     });
 });

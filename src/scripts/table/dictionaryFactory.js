@@ -1,47 +1,46 @@
-"use strict";
-var Dictionary = require("sebastiendaniel-adt/dictionary");
+const Dictionary = require('sebastiendaniel-adt/dictionary');
 
 module.exports = function dictionaryFactory() {
-    var d = new Dictionary(),
-        dataContainer = [],
-        hasChanged;
+	const dictionary = new Dictionary();
+	let dataContainer = [];
+	let hasChanged;
 
     // add immutable getter method
-    d.getAllData = function getAllData() {
-        var data = this.getValues();
+	dictionary.getAllData = function getAllData() {
+		var data = this.getValues();
 
         // if dataContainer.length !== dictionary data length, re-populate the dataContainer
-        if (hasChanged) {
-            hasChanged = false;
+		if (hasChanged) {
+			hasChanged = false;
             // reset contents in-place
-            dataContainer = [];
+			dataContainer = [];
 
             // add current data
-            data.forEach(function(value) {
-                dataContainer.push(value);
-            });
-        }
+			data.forEach(function(value) {
+				dataContainer.push(value);
+			});
+		}
 
-        return dataContainer;
-    };
+		return dataContainer;
+	};
 
-    d.set = function setExtension(key, value) {
-        var res = Object.getPrototypeOf(d).set.call(d, key, value);
-
-        // change dataContainer reference
-        hasChanged = true;
-
-        return res;
-    };
-
-    d.remove = function removeExtension(key) {
-        var res = Object.getPrototypeOf(d).remove.call(d, key);
+	dictionary.set = function setExtension(key, value) {
+		var result = Object.getPrototypeOf(dictionary).set.call(dictionary, key, value);
 
         // change dataContainer reference
-        hasChanged = true;
+		hasChanged = true;
 
-        return res;
-    };
+		return result;
+	};
 
-    return d;
+	dictionary.remove = function removeExtension(key) {
+		var result = Object.getPrototypeOf(dictionary).remove.call(dictionary, key);
+
+        // change dataContainer reference
+		hasChanged = true;
+
+		return result;
+	};
+
+	return dictionary;
 };

@@ -1,7 +1,5 @@
-"use strict";
-
-var Field = require("./Field"),
-    getRequiredFields = require("./getRequiredFields");
+const Field = require('./Field');
+const getRequiredFields = require('./getRequiredFields');
 
 /**
  * @typedef model
@@ -15,42 +13,32 @@ var Field = require("./Field"),
  * @param {object} tableSchema
  * @constructor
  */
-function Model(tableName, tableSchema) {
-    Object.defineProperty(this, "primary", {
-        value: tableSchema.primary,
-        enumerable: true
-    });
+class Model {
+	constructor(tableName, tableSchema) {
+		const fields = Object.keys(tableSchema.fields);
 
-    Object.defineProperty(this, "fields", {
-        value: Object.keys(tableSchema.fields).reduce(function(obj, field) {
-            obj[field] = new Field(field, tableSchema.fields[field]);
+		this.tableName = tableName;
+		this.primary = tableSchema.primary;
+		this.fields = fields.reduce((obj, field) => {
+			const fieldSchema = tableSchema.fields[field];
 
-            return obj;
-        }, {}),
-        enumerable: true
-    });
+			obj[field] = new Field(field, fieldSchema);
 
-    Object.defineProperty(this, "tableName", {
-        value: tableName,
-        enumerable: true
-    });
-}
+			return obj;
+		}, {});
+	}
 
-Model.prototype = Object.create(Object, {
     /**
      * @name model#getRequiredFields
      * @function
      * @params {[string=own]} type - all or own required fields
      * @returns {Array}
      */
-    getRequiredFields: {
-        value: function(type) {
-            type = type === "all" ? "all" : "own";
+	getRequiredFields(type) {
+		type = type === 'all' ? 'all' : 'own';
 
-            return getRequiredFields(this, type);
-        },
-        enumerable: true
-    },
+		return getRequiredFields(this, type);
+	}
 
     /**
      * @name model#listFields
@@ -58,14 +46,9 @@ Model.prototype = Object.create(Object, {
      * @summary returns an array of the models' fields
      * @return {field[]}
      */
-    listFields: {
-        value: function() {
-            return Object.keys(this.fields).map(function(f) {
-                return this.fields[f];
-            }, this);
-        },
-        enumerable: true
-    }
-});
+	listFields() {
+		return Object.keys(this.fields).map((f) => this.fields[f]);
+	}
+}
 
 module.exports = Model;
