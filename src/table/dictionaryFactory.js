@@ -1,4 +1,4 @@
-const Dictionary = require('sebastiendaniel-adt/dictionary');
+const Dictionary = require('../data-structures/dictionary');
 
 module.exports = function dictionaryFactory() {
     const dictionary = new Dictionary();
