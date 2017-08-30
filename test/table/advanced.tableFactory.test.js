@@ -1,9 +1,9 @@
-let chai = require('chai'),
+const chai = require('chai'),
     expect = chai.expect,
     graph = require('../data/mixed-graph.json'),
     rJSON = require('../../src/index');
 
-let db = rJSON(graph),
+const db = rJSON(graph),
     t1 = db['Person'];
 
 describe('advanced table', function() {

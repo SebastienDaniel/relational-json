@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-const Dictionary = require('../src/data-structures/dictionary');
+const Dictionary = require('../src/dataStructures/dictionary');
 
 describe('Dictionary', function() {
     const d = new Dictionary();
