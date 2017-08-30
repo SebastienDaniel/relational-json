@@ -1,4 +1,4 @@
-zzvar expect = require("chai").expect,
+var expect = require("chai").expect,
     schema = require("../../data/mixed-graph.json"),
     rJSON = require("../../../src/scripts/index.js");
 
@@ -8,18 +8,18 @@ describe("table.delete()", function() {
             t1 = db["Person"];
 
         var bob = t1.post({
-            entity_id: 1, 
-            first_name: "bob", 
-            last_name: "builder", 
-            gender: "m", 
+            entity_id: 1,
+            first_name: "bob",
+            last_name: "builder",
+            gender: "m",
             created_on: "2015-01-01T00:00:00Z",
             created_by:1
         });
         var bob2 = t1.post({
-            entity_id: 2, 
-            first_name: "bob2", 
-            last_name: "builder", 
-            gender: "m", 
+            entity_id: 2,
+            first_name: "bob2",
+            last_name: "builder",
+            gender: "m",
             created_on: "2015-01-01T00:00:00Z",
             created_by:1
         });
@@ -33,23 +33,23 @@ describe("table.delete()", function() {
             return val.entity_id !== 1 && val.first_name !== "molly";
         })).to.be.true;
     });
-    
+
     it("should break top-level referential equality", function() {
         var db = rJSON(schema),
             t1 = db["Person"],
             bob = t1.post({
-                entity_id: 1, 
-                first_name: "bob", 
-                last_name: "builder", 
-                gender: "m", 
+                entity_id: 1,
+                first_name: "bob",
+                last_name: "builder",
+                gender: "m",
                 created_on: "2015-01-01T00:00:00Z",
                 created_by:1
             }),
             bob2 = t1.post({
-                entity_id: 2, 
-                first_name: "bob2", 
-                last_name: "builder", 
-                gender: "m", 
+                entity_id: 2,
+                first_name: "bob2",
+                last_name: "builder",
+                gender: "m",
                 created_on: "2015-01-01T00:00:00Z",
                 created_by:1
             }),
