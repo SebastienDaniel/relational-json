@@ -1,150 +1,150 @@
-var expect = require("chai").expect,
-    verify = require("../../src/scripts/schemaValidator/verifyExtendsRelations");
+let expect = require('chai').expect,
+    verify = require('../../src/schemaValidator/verifyExtendsRelations');
 
-describe("schemaValidator.verifyExtendsRelations", function() {
-    it("should throw ReferenceError when extends.table cannot be found", function() {
-        var schema = {
+describe('schemaValidator.verifyExtendsRelations', function() {
+    it('should throw ReferenceError when extends.table cannot be found', function() {
+        const schema = {
             table1: {
-                primary: "id",
+                primary: 'id',
                 fields: {
-                    id: "integer"
+                    id: 'integer'
                 }
             },
             table2: {
-                primary: "id",
+                primary: 'id',
                 fields: {
-                    id: "integer",
-                    table1_id: "integer"
+                    id: 'integer',
+                    table1_id: 'integer'
                 },
                 extends: {
-                    table: "table3",
-                    localField: "table1_id",
-                    foreignField: "id"
+                    table: 'table3',
+                    localField: 'table1_id',
+                    foreignField: 'id'
                 }
             }
         };
 
         expect(function() {
-            return verify(schema, "table2");
+            return verify(schema, 'table2');
         }).to.throw(ReferenceError);
     });
 
-    it("should throw ReferenceError when extends.foreignField cannot be found on foreign table", function() {
-        var schema = {
+    it('should throw ReferenceError when extends.foreignField cannot be found on foreign table', function() {
+        const schema = {
             table1: {
-                primary: "id",
+                primary: 'id',
                 fields: {
-                    id: "integer"
+                    id: 'integer'
                 }
             },
             table2: {
-                primary: "id",
+                primary: 'id',
                 fields: {
-                    id: "integer",
-                    table1_id: "integer"
+                    id: 'integer',
+                    table1_id: 'integer'
                 },
                 extends: {
-                    table: "table1",
-                    localField: "table1_id",
-                    foreignField: "bad_id"
+                    table: 'table1',
+                    localField: 'table1_id',
+                    foreignField: 'bad_id'
                 }
             }
         };
 
         expect(function() {
-            return verify(schema, "table2");
+            return verify(schema, 'table2');
         }).to.throw(ReferenceError);
     });
 
-    it("should throw ReferenceError when extends.localField cannot be found on local table", function() {
-        var schema = {
+    it('should throw ReferenceError when extends.localField cannot be found on local table', function() {
+        const schema = {
             table1: {
-                primary: "id",
+                primary: 'id',
                 fields: {
-                    id: "integer"
+                    id: 'integer'
                 }
             },
             table2: {
-                primary: "id",
+                primary: 'id',
                 fields: {
-                    id: "integer",
-                    table1_id: "integer"
+                    id: 'integer',
+                    table1_id: 'integer'
                 },
                 extends: {
-                    table: "table1",
-                    localField: "bad_table1_id",
-                    foreignField: "id"
+                    table: 'table1',
+                    localField: 'bad_table1_id',
+                    foreignField: 'id'
                 }
             }
         };
 
         expect(function() {
-            return verify(schema, "table2");
+            return verify(schema, 'table2');
         }).to.throw(ReferenceError);
     });
 
-    it("should throw if localField dataType !== foreignField dataType", function() {
-        var schema = {
+    it('should throw if localField dataType !== foreignField dataType', function() {
+        const schema = {
             table1: {
-                primary: "id",
+                primary: 'id',
                 fields: {
-                    id: "integer"
+                    id: 'integer'
                 }
             },
             table2: {
-                primary: "id",
+                primary: 'id',
                 fields: {
-                    id: "integer",
-                    table1_id: "string"
+                    id: 'integer',
+                    table1_id: 'string'
                 },
                 extends: {
-                    table: "table1",
-                    localField: "table1_id",
-                    foreignField: "id"
+                    table: 'table1',
+                    localField: 'table1_id',
+                    foreignField: 'id'
                 }
             }
         };
 
         expect(function() {
-            return verify(schema, "table2");
+            return verify(schema, 'table2');
         }).to.throw(TypeError);
     });
 
-    it("should return true if all is good", function() {
-        var schema = {
+    it('should return true if all is good', function() {
+        const schema = {
             table1: {
-                primary: "id",
+                primary: 'id',
                 fields: {
-                    id: "integer"
+                    id: 'integer'
                 }
             },
             table2: {
-                primary: "id",
+                primary: 'id',
                 fields: {
-                    id: "integer",
-                    table1_id: "integer"
+                    id: 'integer',
+                    table1_id: 'integer'
                 },
                 extends: {
-                    table: "table1",
-                    localField: "table1_id",
-                    foreignField: "id"
+                    table: 'table1',
+                    localField: 'table1_id',
+                    foreignField: 'id'
                 }
             }
         };
 
-        expect(verify(schema, "table2")).to.eql(true);
+        expect(verify(schema, 'table2')).to.eql(true);
     });
 
-    it("should return true if table does not have an extends relation", function() {
-        var schema = {
+    it('should return true if table does not have an extends relation', function() {
+        const schema = {
             table1: {
-                primary: "id",
+                primary: 'id',
                 fields: {
-                    id: "integer"
+                    id: 'integer'
                 }
             }
         };
 
-        expect(verify(schema, "table1")).to.eql(true);
+        expect(verify(schema, 'table1')).to.eql(true);
     });
 });

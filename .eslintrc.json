@@ -1,6 +1,6 @@
 {
   "parserOptions": {
-    "ecmaVersion": 6,
+    "ecmaVersion": 8,
     "sourceType": "module",
     "ecmaFeatures": {
       "impliedStrict": true
@@ -9,21 +9,87 @@
   "env": {
     "node": true,
     "commonjs": true,
-    "es6": true,
-    "mocha": true
+    "mocha": true,
+    "browser": true
   },
-  "extends": "standard",
+  "extends": "eslint:recommended",
   "rules": {
-    "indent": [2, "tab"],
+    "arrow-parens": [1, "as-needed", {
+        "requireForBlockBody": true
+    }],
+    "arrow-spacing": [2, {"before": true, "after": true}],
+    "brace-style": [2, "1tbs"],
+    "eqeqeq": [2, "always", { "null": "ignore" }],
     "curly": [2, "all"],
-    "no-tabs": 0,
+    "dot-location": [1, "property"],
+    "global-require": 2,
+    "no-caller": 2,
+    "no-confusing-arrow": 2,
+    "no-console": 0,
+    "no-implicit-globals": 2,
+    "no-invalid-this": 2,
+    "no-label-var": 2,
+    "no-return-assign": 2,
+    "no-return-await": 2,
+    "no-self-compare": 2,
+    "no-shadow": 2,
+    "no-tabs": 2,
+    "no-undefined": 2,
+    "no-use-before-define": 2,
+    "no-useless-call": 2,
+    "no-useless-constructor": 2,
+    "no-useless-return": 2,
+    "no-var": 2,
+    "no-with": 2,
+    "prefer-const": 2,
+    "prefer-promise-reject-errors": 1,
+    "prefer-rest-params": 2,
+    "require-await": 2,
+    "valid-jsdoc": [1, {
+        "prefer": {
+            "return": "returns"
+        },
+        "preferType": {
+            "object": "object",
+            "array": "array",
+            "function": "function",
+            "string": "string",
+            "boolean": "boolean"
+        },
+        "requireReturn": false,
+        "requireReturnDescription": false,
+        "requireParamDescription": false
+    }],
+    "yoda": [2, "never"],
+    "key-spacing": 2,
+    "keyword-spacing": 2,
+    "max-params": [1, {"max": 3 }],
+    "new-parens": 2,
+    "newline-per-chained-call": 2,
+    "no-trailing-spaces": 2,
+    "quotes": [2, "single", { "avoidEscape": true }],
+    "require-jsdoc": 1,
     "semi": [2, "always"],
-    "space-before-function-paren": [2, "never"]
+    "semi-style": 2,
+    "space-before-blocks": 2,
+    "space-before-function-paren": [2, "never"],
+    "comma-spacing": 2,
+    "comma-dangle": 2,
+    "func-call-spacing": 2,
+    "indent": [2, 4, {
+      "SwitchCase": 1,
+      "MemberExpression": 1,
+      "ObjectExpression": "first",
+      "CallExpression": {
+        "arguments": "first"
+      }
+    }]
   },
   "globals": {
     "expect": true,
     "sinon": true,
     "sandbox": true,
-    "console": true
+    "console": true,
+    "Promise": true
   }
 }

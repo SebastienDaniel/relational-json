@@ -24,9 +24,8 @@
   "license": "MIT",
   "main": "src/scripts/index.js",
   "files": [
-    "src/scripts/",
-    ".jscsrc",
-    ".jshintrc",
+    "src/",
+    ".eslintrc.json",
     "Gruntfile.js",
     "grunt/",
     "license",
